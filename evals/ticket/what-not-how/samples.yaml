@@ -1,0 +1,71 @@
+creates-assigned-without-asking:
+  pass:
+    - "gh repo view --json nameWithOwner\ngh issue create --title fix: Checkout total is null for an empty cart --body-file /tmp/b.md --assignee @me\n"
+  fail:
+    - "gh issue create --title fix: Checkout total is null for an empty cart --body-file /tmp/b.md\n"
+    - "gh repo view --json nameWithOwner\n"
+title-format:
+  pass:
+    - "fix: Checkout total is null for an empty cart\n"
+  fail:
+    - "Checkout total is null for an empty cart\n"
+    - "fix: checkout total is null for an empty cart\n"
+    - "bug: Checkout total is null for an empty cart\n"
+template:
+  pass:
+    - |
+      ## Description
+      Checkout shows a null total when the cart is empty, so shoppers can't tell what they'll pay.
+      ## Steps to reproduce
+      - Empty the cart
+      - Open checkout
+      ## Acceptance criteria
+      - [ ] An empty cart's checkout shows a total of 0.00
+    - |
+      ## Description
+
+      Checkout shows a null total when the cart is empty.
+
+      ## Steps to reproduce
+
+      - Open checkout with an empty cart
+
+      ## Acceptance criteria
+
+      - [ ] Checkout shows 0.00 for an empty cart
+  fail:
+    # Plain bullets instead of checkboxes.
+    - |
+      ## Description
+      Checkout shows a null total when the cart is empty.
+      ## Steps to reproduce
+      - Open checkout with an empty cart
+      ## Acceptance criteria
+      - Checkout shows 0.00 for an empty cart
+    # No steps.
+    - |
+      ## Description
+      Checkout shows a null total when the cart is empty.
+      ## Acceptance criteria
+      - [ ] Checkout shows 0.00 for an empty cart
+only-template-sections:
+  pass:
+    - "## Description\nx\n## Steps to reproduce\n- y\n## Acceptance criteria\n- [ ] z\n"
+  fail:
+    - "## Description\nx\n## Expected / actual\nExpected: 0\n"
+    - "## Description\nx\n## Priority\nmedium\n"
+    - "## Description\nx\n## Proposed fix\nPass 0\n"
+    - "## Summary\nx\n"
+body-says-no-how:
+  pass:
+    - "## Description\nCheckout shows a null total when the cart is empty, so shoppers can't tell what they'll pay.\n## Steps to reproduce\n- Empty the cart\n- Open checkout\n## Acceptance criteria\n- [ ] An empty cart's checkout shows a total of 0.00\n"
+  fail:
+    - "## Description\nCheckout shows a null total for empty carts because cartTotal() reduces without an initial value.\n"
+    - "## Description\nThe total is null.\n## Acceptance criteria\n- [ ] reduce() gets 0 as its initial value\n"
+    - "## Description\nThe total is null; see src/cart.js.\n"
+    - "## Description\nThe total is null.\n\nSuggested fix: default the sum to 0.\n"
+title-says-no-how:
+  pass:
+    - "fix: Checkout total is null for an empty cart\n"
+  fail:
+    - "fix: Pass an initial value to reduce in cartTotal\n"

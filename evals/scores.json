@@ -18,6 +18,9 @@
     "research-fix-does-not-trigger": 1,
     "same-page-confirmation-returns-block": 1,
     "same-page-correction-not-confirmation": 1,
-    "same-page-first-reply": 1
+    "same-page-first-reply": 1,
+    "ticket-asks-tracker": 1,
+    "ticket-native-links": 1,
+    "ticket-what-not-how": 1
   }
 }

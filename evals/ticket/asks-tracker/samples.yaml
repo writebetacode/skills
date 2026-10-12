@@ -1,0 +1,14 @@
+creates-nothing:
+  pass:
+    - "gh repo view --json nameWithOwner --jq .nameWithOwner"
+  fail:
+    - "gh issue create --title 'fix: Accented searches find nothing' --body-file /tmp/b.md --assignee @me"
+    - "acli jira workitem create --project SHOP --type Bug --summary x --description-file /tmp/b.md"
+asks-offering-origin-host:
+  pass:
+    - "Which tracker should I file this in: GitHub (acme/shop)?"
+    - "File it on GitHub (acme/shop), or in GitLab or Jira?"
+  fail:
+    - "Filed: https://github.com/acme/shop/issues/9"
+    - "Which tracker should I use: GitLab or Jira?"
+    - "I'll file this on GitHub (acme/shop)."
