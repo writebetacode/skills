@@ -46,3 +46,14 @@ Cuts a semver release from conventional commits in two passes: first it drafts t
 #### wbc:ticket
 
 Creates, edits, comments on, links, assigns, closes or reopens GitHub and GitLab issues and Jira work items. Tickets say what was seen and why it matters, never how to fix it. Call it to file or update a ticket without leaving your session.
+
+#### wbc:review
+
+Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked.
+
+To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+
+```md
+## Related repos
+- acme/web (../web): imports `@acme/cart`; calls `/api/cart/*`
+```

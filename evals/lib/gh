@@ -1,8 +1,10 @@
 #!/bin/bash
 # Fake gh for evals; repo acme/shop. State in .fake-gh/ at the repo root:
-#   read:    merged-titles (one per line), checks (pass | fail | none), pr.json (the branch's PR), issue-<n> (title)
+#   read:    merged-titles (one per line), checks (pass | fail | none), pr.json (the branch's PR), issue-<n> (title),
+#            pr.diff, graphql.json (review threads; default none)
 #   written: calls.log (every call), pr-{title,assignee}, pr-body.md, merge-{method,subject}, merge-body.md,
-#            issue-{title,assignee}, issue-body.md
+#            issue-{title,assignee}, issue-body.md, pr-review-event, pr-comment.md,
+#            api-inputs.log (every --input file), api-fields.log (every @file field)
 # pr merge and --delete-branch act on origin (the local bare repo) like GitHub would, via plumbing:
 # the eval sandbox blocks the .git/hooks writes a clone makes.
 root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$PWD
@@ -12,15 +14,16 @@ printf 'gh %s\n' "$*" >> "$S/calls.log"
 die() { echo "$*" >&2; exit 1; }
 
 case "$1" in --version|version) echo "gh version 2.102.0 (fake)"; exit 0 ;; esac
-sub="$1 $2"
-shift 2
+if [ "$1" = api ]; then sub=api; shift; else sub="$1 $2"; shift 2; fi
 pos=()
 takes() { if [ -n "$v" ]; then printf '%s' "$v"; else printf '%s' "$2"; fi; }
+hmethod="" input="" event="" fields=()
 jq="" title="" subject="" body="" bodyfile="" base="" head="" assignee="" state="" method="" delete="" draft="" undo=""
 while [ $# -gt 0 ]; do
   a=$1 v=""
   case "$a" in --*=*) v=${a#*=}; a=${a%%=*} ;; esac
   case "$sub:$a" in
+    "api:-X") a=--method ;; "api:-F") a=--field ;; "api:-f") a=--raw-field ;;
     "pr merge:-t") a=--subject ;; "pr merge:-s") a=--squash ;; "pr merge:-m") a=--merge ;;
     "pr merge:-r") a=--rebase ;; "pr merge:-d") a=--delete-branch ;; "pr list:-s") a=--state ;;
     *:-t) a=--title ;; *:-F) a=--body-file ;; *:-b) a=--body ;; *:-B) a=--base ;; *:-H) a=--head ;;
@@ -36,7 +39,9 @@ while [ $# -gt 0 ]; do
     --head) head=$(takes "$@") ;;
     --assignee) assignee=$(takes "$@") ;;
     --state) state=$(takes "$@") ;;
-    --json|--limit|--interval|--label|--parent|--blocked-by|--blocking) : ;;
+    --json|--limit|--interval|--label|--parent|--blocked-by|--blocking|--paginate|--silent) : ;;
+    --method) hmethod=$(takes "$@") ;; --input) input=$(takes "$@") ;; --field|--raw-field) fields+=("$(takes "$@")") ;;
+    --approve) event=APPROVE ;; --request-changes) event=REQUEST_CHANGES ;; --comment) event=COMMENT ;;
     --squash) method=squash ;; --merge) method=merge ;; --rebase) method=rebase ;;
     --delete-branch) delete=1 ;; --draft) draft=1 ;; --undo) undo=1 ;;
     --watch|--fail-fast|--required) ;;
@@ -45,7 +50,7 @@ while [ $# -gt 0 ]; do
   esac
   if [ -z "$v" ]; then case "$a" in
     --jq|--title|--subject|--body|--body-file|--base|--head|--assignee|--state|--json|--limit|--interval|\
-    --label|--parent|--blocked-by|--blocking) shift ;;
+    --label|--parent|--blocked-by|--blocking|--method|--input|--field|--raw-field) shift ;;
   esac; fi
   shift
 done
@@ -63,6 +68,27 @@ case "$sub" in
     [ -f "$S/issue-${pos[0]}" ] || die "GraphQL: Could not resolve to an issue or pull request with the number of ${pos[0]}."
     jq -n --arg n "${pos[0]}" --arg t "$(cat "$S/issue-${pos[0]}")" --arg u "$URL" \
       '{number:($n|tonumber),title:$t,state:"OPEN",url:($u+"/issues/"+$n)}' | out ;;
+  "pr diff") cat "$S/pr.diff" ;;
+  "pr comment")
+    readbody > "$S/pr-comment.md"
+    echo "$URL/pull/7#issuecomment-303" ;;
+  "pr review")
+    printf '%s\n' "$event" > "$S/pr-review-event"
+    readbody >> "$S/pr-comment.md" ;;
+  api)
+    ep=${pos[0]}
+    m=$hmethod; [ -n "$m" ] || if [ -n "$input" ] || [ ${#fields[@]} -gt 0 ]; then m=POST; else m=GET; fi
+    [ -n "$input" ] && { if [ "$input" = - ]; then cat; else cat "$input"; fi; echo; } >> "$S/api-inputs.log"
+    for f in "${fields[@]}"; do case "$f" in *=@*) { cat "${f#*=@}"; echo; } >> "$S/api-fields.log" ;; esac; done
+    case "$m $ep" in
+      "POST graphql")
+        if [ -f "$S/graphql.json" ]; then out < "$S/graphql.json"
+        else echo '{"data":{"repository":{"pullRequest":{"reviewThreads":{"nodes":[]}}}}}' | out; fi ;;
+      "POST "*/pulls/*/reviews) jq -n --arg u "$URL" '{id:101,state:"COMMENTED",html_url:($u+"/pull/7#pullrequestreview-101")}' | out ;;
+      "POST "*/replies) jq -n --arg u "$URL" '{id:202,html_url:($u+"/pull/7#discussion_r202")}' | out ;;
+      "GET "*/comments|"GET "*/reviews) echo '[]' | out ;;
+      *) die "fake gh: unsupported api call: $m $ep" ;;
+    esac ;;
   "issue create")
     readbody > "$S/issue-body.md"
     printf '%s\n' "$title" > "$S/issue-title"

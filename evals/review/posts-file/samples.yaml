@@ -1,0 +1,41 @@
+one-batched-review:
+  pass:
+    - "gh pr view 7 --json headRefOid\ngh api --method POST repos/{owner}/{repo}/pulls/7/reviews --input /tmp/r.json\n"
+  fail:
+    - "gh pr view 7 --json headRefOid\ngh pr comment 7 --body-file /tmp/1.md\ngh pr comment 7 --body-file /tmp/2.md\n"
+posts-active-findings:
+  pass:
+    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:2 -->\\nquestion (non-blocking): y\"}]}\n"
+  fail:
+    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}]}\n"
+    - "{\"comments\": [{\"body\": \"issue (blocking): x\"}, {\"body\": \"question (non-blocking): y\"}]}\n"
+conventional-body:
+  pass:
+    - "\"body\": \"<!-- review:1 -->\\nissue (blocking): Could a name like `' OR '1'='1` change which rows this query returns?\\n\\n...\""
+  fail:
+    - "\"body\": \"<!-- review:1 -->\\n**issue (blocking): src/users.js:10**\\n\\n**The ask:** Could a name like `' OR '1'='1` change which rows?\""
+skips-withdrawn:
+  pass:
+    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:2 -->\\nquestion (non-blocking): y\"}]}\n"
+  fail:
+    - "{\"comments\": [{\"body\": \"<!-- review:3 -->\\nnitpick (non-blocking): Would `searchUsers` read better?\"}]}\n"
+comment-event:
+  pass:
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"comments\": []\n}\n"
+  fail:
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"APPROVE\",\n  \"comments\": []\n}\n"
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"comments\": []\n}\n"
+no-summary:
+  pass:
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"comments\": [\n    {\n      \"path\": \"src/users.js\",\n      \"line\": 10,\n      \"body\": \"<!-- review:1 -->\"\n    }\n  ]\n}\n"
+    - "{\"commit_id\":\"4f1c2d3\",\"event\":\"COMMENT\",\"comments\":[{\"path\":\"src/users.js\",\"line\":10,\"body\":\"x\"}]}\n"
+  fail:
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"body\": \"Left 2 comments.\",\n  \"comments\": []\n}\n"
+    - "{\"commit_id\":\"4f1c2d3\",\"event\":\"COMMENT\",\"body\":\"Left 2 comments.\",\"comments\":[]}\n"
+records-posted:
+  pass:
+    - "## 1. issue (blocking): src/users.js:10\nposted: 2026-10-12 https://github.com/acme/shop/pull/7#pullrequestreview-101\n"
+    - "## 2. question (non-blocking): src/users.js:9\nposted: 2026-10-12\n"
+  fail:
+    - "## 1. issue (blocking): src/users.js:10\n\nThe ask: x\n"
+    - "## 1. issue (blocking): src/users.js:10\nposted: https://github.com/acme/shop/pull/7#pullrequestreview-101\n"
