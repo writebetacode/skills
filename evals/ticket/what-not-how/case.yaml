@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: ticket-what-not-how
+tags: [ticket]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "file a github issue: checkout shows a null total when the cart is empty. it's because cartTotal() in src/cart.js reduces without an initial value, so the fix is to pass 0 as reduce's initial value"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 20
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?ticket"'
+  - name: creates-assigned-without-asking
+    type: regex
+    target: { source: file, path: .fake-gh/calls.log }
+    pattern: '^gh issue create\b.*(--assignee|-a)[ =]@me\b'
+    flags: m
+  - name: title-format
+    type: regex
+    target: { source: file, path: .fake-gh/issue-title }
+    pattern: '^fix: [A-Z][^\n]*\n?$'
+  - name: template
+    type: regex
+    target: { source: file, path: .fake-gh/issue-body.md }
+    pattern: '^## Description\s*\n\s*\S[\s\S]*^## Steps to reproduce\s*\n\s*- \S[\s\S]*^## Acceptance criteria\s*\n\s*- \[ \] \S'
+    flags: m
+  - name: only-template-sections
+    type: regex
+    target: { source: file, path: .fake-gh/issue-body.md }
+    pattern: '^#+ (?!Description\s*$|Steps to reproduce\s*$|Acceptance criteria\s*$)'
+    flags: m
+    match: not_contains
+  - name: body-says-no-how
+    type: regex
+    target: { source: file, path: .fake-gh/issue-body.md }
+    pattern: 'cartTotal|reduce|initial value|src/|\.js\b|root cause|\bfix\b'
+    flags: i
+    match: not_contains
+  - name: title-says-no-how
+    type: regex
+    target: { source: file, path: .fake-gh/issue-title }
+    pattern: 'cartTotal|reduce|initial value'
+    flags: i
+    match: not_contains

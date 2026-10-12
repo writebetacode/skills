@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: ticket-asks-tracker
+tags: [ticket]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "file a ticket: searching for 'café' finds nothing, but 'cafe' finds the café listings"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 15
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?ticket"'
+  - name: creates-nothing
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\b(gh issue create|glab issue create|acli jira workitem create)\b'
+    match: not_contains
+  - name: asks-offering-origin-host
+    type: regex
+    pattern: 'GitHub[^\n?]*\?'

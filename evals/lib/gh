@@ -1,7 +1,8 @@
 #!/bin/bash
 # Fake gh for evals; repo acme/shop. State in .fake-gh/ at the repo root:
 #   read:    merged-titles (one per line), checks (pass | fail | none), pr.json (the branch's PR), issue-<n> (title)
-#   written: calls.log (every call), pr-{title,assignee}, pr-body.md, merge-{method,subject}, merge-body.md
+#   written: calls.log (every call), pr-{title,assignee}, pr-body.md, merge-{method,subject}, merge-body.md,
+#            issue-{title,assignee}, issue-body.md
 # pr merge and --delete-branch act on origin (the local bare repo) like GitHub would, via plumbing:
 # the eval sandbox blocks the .git/hooks writes a clone makes.
 root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$PWD
@@ -23,7 +24,7 @@ while [ $# -gt 0 ]; do
     "pr merge:-t") a=--subject ;; "pr merge:-s") a=--squash ;; "pr merge:-m") a=--merge ;;
     "pr merge:-r") a=--rebase ;; "pr merge:-d") a=--delete-branch ;; "pr list:-s") a=--state ;;
     *:-t) a=--title ;; *:-F) a=--body-file ;; *:-b) a=--body ;; *:-B) a=--base ;; *:-H) a=--head ;;
-    *:-a) a=--assignee ;; *:-d) a=--draft ;; *:-q) a=--jq ;; *:-L) a=--limit ;;
+    *:-a) a=--assignee ;; *:-d) a=--draft ;; *:-q) a=--jq ;; *:-L) a=--limit ;; *:-l) a=--label ;;
   esac
   case "$a" in
     --jq) jq=$(takes "$@") ;;
@@ -35,7 +36,7 @@ while [ $# -gt 0 ]; do
     --head) head=$(takes "$@") ;;
     --assignee) assignee=$(takes "$@") ;;
     --state) state=$(takes "$@") ;;
-    --json|--limit|--interval) : ;;
+    --json|--limit|--interval|--label|--parent|--blocked-by|--blocking) : ;;
     --squash) method=squash ;; --merge) method=merge ;; --rebase) method=rebase ;;
     --delete-branch) delete=1 ;; --draft) draft=1 ;; --undo) undo=1 ;;
     --watch|--fail-fast|--required) ;;
@@ -43,7 +44,8 @@ while [ $# -gt 0 ]; do
     *) pos+=("$a") ;;
   esac
   if [ -z "$v" ]; then case "$a" in
-    --jq|--title|--subject|--body|--body-file|--base|--head|--assignee|--state|--json|--limit|--interval) shift ;;
+    --jq|--title|--subject|--body|--body-file|--base|--head|--assignee|--state|--json|--limit|--interval|\
+    --label|--parent|--blocked-by|--blocking) shift ;;
   esac; fi
   shift
 done
@@ -61,6 +63,11 @@ case "$sub" in
     [ -f "$S/issue-${pos[0]}" ] || die "GraphQL: Could not resolve to an issue or pull request with the number of ${pos[0]}."
     jq -n --arg n "${pos[0]}" --arg t "$(cat "$S/issue-${pos[0]}")" --arg u "$URL" \
       '{number:($n|tonumber),title:$t,state:"OPEN",url:($u+"/issues/"+$n)}' | out ;;
+  "issue create")
+    readbody > "$S/issue-body.md"
+    printf '%s\n' "$title" > "$S/issue-title"
+    printf '%s\n' "$assignee" > "$S/issue-assignee"
+    echo "$URL/issues/9" ;;
   "pr list")
     if [ "$state" = merged ] && [ -f "$S/merged-titles" ]; then
       jq -R . "$S/merged-titles" | jq -s 'to_entries | map({number:(.key+1),title:.value,state:"MERGED"})' | out
