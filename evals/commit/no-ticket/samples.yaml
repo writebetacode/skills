@@ -1,0 +1,234 @@
+never-stages:
+  pass:
+    - git status --short
+    - git diff --cached README.md
+    - |-
+      git commit -F - <<'EOF'
+      docs: Explain how to start the shop locally
+
+      - Moving to Node 20 broke the old install steps
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+      EOF
+    - 'git commit -m "fix -a flag parsing"'
+    - 'git commit --amend -m "x"'
+    - 'git commit --allow-empty -m "x"'
+    - git log --all --oneline
+    - |-
+      git commit -F - <<'EOF'
+      feat: drop -a support
+
+      - Stop -a from staging
+      EOF
+  fail:
+    - 'git commit -m "docs: x" -a'
+    - git -c core.autocrlf=false add README.md
+    - git -c user.name=x -C . add .
+    - git --no-pager add -p
+    - "git commit -q -m 'x' -a"
+    - 'git commit -m "x" --all'
+    - git add README.md
+    - git add -A
+    - cd "/tmp/e-1/work" && git add .
+    - git -C . add README.md
+    - git stage README.md
+    - 'git commit -qam "docs: x"'
+    - 'git commit -am "docs: x"'
+    - 'git commit --all -m "docs: x"'
+no-scope:
+  pass:
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: feat: Rename notes skill to upgrade-notes\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: fix: Name the notes skill after the upgrade\n"
+  fail:
+    # Commit failed: no new reflog line.
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: feat!: Rename notes skill to upgrade-notes\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: docs: Rename notes skill to upgrade-notes\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: refactor: Rename notes skill to upgrade-notes\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: feat(20): Rename notes skill to upgrade-notes\n"
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: feat(NODE-20): Rename notes skill to upgrade-notes\n"
+    # Lowercase summary.
+    - "0000000000000000000000000000000000000000 d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcommit (initial): docs: Add README\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac d74ea3e483411a8e909d1075a93259849e3739ac dev <dev@example.com> 1791812680 -0500\tcheckout: moving from main to notes-for-node-20\n\
+      d74ea3e483411a8e909d1075a93259849e3739ac 9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 dev <dev@example.com> 1791812680 -0500\tcommit: Add notes skill\n\
+      9598e7af28671a5d47c9bbcf0a2be11b8181a2b2 4c1f0e2d9b8a7c6d5e4f3a2b1c0d9e8f7a6b5c4d dev <dev@example.com> 1791812740 -0500\tcommit: feat: rename notes skill to upgrade-notes\n"
+subject-under-80:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally with npm start and where to open it in the browser
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+has-why-bullet:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+    - |
+      docs: Explain how to start the shop locally
+
+      New contributors couldn't find which port the app serves on.
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+max-5-bullets:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+      - Moving to Node 20 broke the old install steps
+      - The README was empty, so setup lived only in chat
+      - One command is enough; no env file needed yet
+      - Port 3000 matches the dev proxy config
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+      - Moving to Node 20 broke the old install steps
+      - The README was empty, so setup lived only in chat
+      - One command is enough; no env file needed yet
+      - Port 3000 matches the dev proxy config
+      - Saves a question in every onboarding call
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      - Moving to Node 20 broke the old install steps
+
+      - The README was empty, so setup lived only in chat
+
+      - One command is enough; no env file needed yet
+
+      - Port 3000 matches the dev proxy config
+
+      - Saves a question in every onboarding call
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+lines-under-80:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on, so they kept asking in chat
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+bullets-say-why-not-what:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+    - |
+      docs: Explain how to start the shop locally
+
+      - Moving to Node 20 broke the old install steps
+      - Changing nothing else keeps this a docs-only commit
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - "docs: Explain how to start the shop\n\n- Add run instructions to README\n"
+    - "docs: Explain how to start the shop\n\n- Updates README with npm start\n"
+    - "docs: Explain how to start the shop\n\n- Changed README intro\n"
+    - "docs: Explain how to start the shop\n\n- Introduce a README\n"
+    - "docs: Explain how to start the shop\n\n- Create README.md\n"
+    - "docs: Explain how to start the shop\n\n- Removes outdated setup steps\n"
+    - "docs: Explain how to start the shop\n\n- Replaced yarn with npm in docs\n"
+    - "docs: Explain how to start the shop\n\n- Bumped Node version in docs\n"
+    - "docs: Explain how to start the shop\n\n- Renamed Setup to Running locally\n"
+co-authored-by-line:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, Oct 11 2026
+single-trailer-no-email:
+  pass:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+  fail:
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+      Co-Authored-By: Claude Opus 5.5, high effort, 2026-10-11
+    - |
+      docs: Explain how to start the shop locally
+
+      - New contributors couldn't find which port the app serves on
+
+      Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>, high effort, 2026-10-11

@@ -1,0 +1,61 @@
+waits-for-checks:
+  pass:
+    - "gh auth status\ngh pr view fix/142-null-cart-total --json number,title,body,state,isDraft,url\ngh pr checks 7 --watch\ngh pr merge 7 --squash --subject fix(#142): Stop double-charging empty carts --body-file /tmp/m.md --delete-branch\n"
+  fail:
+    - "gh pr view fix/142-null-cart-total --json number,title\ngh pr merge 7 --squash --delete-branch\n"
+    - "gh pr merge 7 --squash --delete-branch\ngh pr checks 7\n"
+squashes:
+  pass:
+    - "squash\n"
+  fail:
+    - "merge\n"
+subject-is-title:
+  pass:
+    - "fix(#142): Stop double-charging empty carts\n"
+  fail:
+    - "\n"
+    - "fix(#142): Stop double-charging empty carts (#7)\n"
+    - "fix(#142): Treat a missing cart total as zero\n"
+why-bullets:
+  pass:
+    - "- Empty carts sent null totals to the payment API\n- The provider retries webhooks on timeout, charging twice\n\nCo-Authored-By: Claude Opus 5.5, high effort, 2026-10-11\n"
+  fail:
+    - "\n"
+    - "* fix(#142): Treat a missing cart total as zero\n* test(#142): Cover empty carts\n"
+max-5-bullets:
+  pass:
+    - "- Empty carts sent null totals to the payment API\n- The provider retries webhooks on timeout, charging twice\n"
+  fail:
+    - "- One\n- Two\n- Three\n- Four\n- Five\n- Six\n"
+    - "- One\n\n- Two\n\n- Three\n\n- Four\n\n- Five\n\n- Six\n"
+keeps-trailer:
+  pass:
+    - "- Empty carts sent null totals to the payment API\n\nCo-Authored-By: Claude Opus 5.5, high effort, 2026-10-11\n"
+  fail:
+    - "- Empty carts sent null totals to the payment API\n"
+    - "- Empty carts sent null totals\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n"
+single-trailer:
+  pass:
+    - "- Empty carts sent null totals to the payment API\n\nCo-Authored-By: Claude Opus 5.5, high effort, 2026-10-11\n"
+  fail:
+    - "- Empty carts sent null totals\n\nCo-Authored-By: Claude Opus 5.5, high effort, 2026-10-10\nCo-Authored-By: Claude Opus 5.5, high effort, 2026-10-11\n"
+back-on-updated-default:
+  pass:
+    - "export function total(cart) {\n  return cart.total ?? 0;\n}\n"
+  fail:
+    - "export function total(cart) {\n  return cart.total;\n}\n"
+on-default:
+  pass:
+    - "ref: refs/heads/main\n"
+  fail:
+    - "ref: refs/heads/fix/142-null-cart-total\n"
+local-branch-deleted:
+  pass:
+    - "# pack-refs with: peeled fully-peeled sorted \n8e068d4b0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/main\n8e068d4b0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/remotes/origin/main\nbb21465a0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/remotes/origin/fix/142-null-cart-total\n"
+  fail:
+    - "# pack-refs with: peeled fully-peeled sorted \nbb21465a0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/fix/142-null-cart-total\n8e068d4b0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/main\n"
+remote-branch-deleted:
+  pass:
+    - "# pack-refs with: peeled fully-peeled sorted \n8e068d4b0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/main\n"
+  fail:
+    - "# pack-refs with: peeled fully-peeled sorted \nbb21465a0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/fix/142-null-cart-total\n8e068d4b0f6a1c2d3e4f5a6b7c8d9e0f1a2b3c4d refs/heads/main\n"

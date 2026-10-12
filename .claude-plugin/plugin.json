@@ -1,0 +1,11 @@
+{
+  "name": "wbc",
+  "version": "0.0.0",
+  "description": "Claude Code skills for engineering productivity.",
+  "author": {
+    "name": "writebetacode"
+  },
+  "skills": [
+    "./productivity/"
+  ]
+}

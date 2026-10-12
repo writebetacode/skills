@@ -1,0 +1,64 @@
+no-lookups:
+  pass:
+    - { tool: Skill, input: { skill: same-page } }
+  fail:
+    - { tool: Grep, input: { pattern: "cache", path: src } }
+    - { tool: Read, input: { file_path: /repo/src/server.ts } }
+    - { tool: Glob, input: { pattern: "src/**/*.ts" } }
+    - { tool: Agent, input: { description: Find API routes, prompt: "List the API routes." } }
+    - ls src
+not-confirmed-yet:
+  pass:
+    - |-
+      You want API responses cached so repeat requests skip the database. E.g. GET /products/42 served from cache for 60s.
+
+      Which endpoints: all GETs, or a hot few? My guess: all GETs.
+  fail:
+    - |-
+      Agreed request: Cache API responses for 60s.
+      Examples: GET /products/42 served from cache.
+      Clarified: None
+asks:
+  pass:
+    - |-
+      You want API responses cached so repeat requests skip the database. E.g. GET /products/42 served from cache for 60s.
+
+      Which endpoints: all GETs, or a hot few? My guess: all GETs.
+    - "My guess: only GET requests get cached (or writes too?)"
+    - 'Did you mean "cache everything?"'
+    - My guess is the goal is “fewer database hits?”
+    - _Which endpoints should be cached?_
+    - "Should GET /search?q=x be cached too?"
+  fail:
+    - |-
+      You want repeat API reads served from cache, e.g. GET /search?q=shoes answered without hitting the database.
+
+      My guess: all GET endpoints, 60s TTL.
+    - You want API responses cached so repeat requests skip the database.
+max-two-question-marks:
+  pass:
+    - |-
+      You want repeat API reads cached, e.g. GET /search?q=shoes&page=2 answered without hitting the database.
+
+      Which endpoints: all GETs, or a hot few? And how stale may data be (my guess: 60s)?
+    - Which endpoints should be cached?
+  fail:
+    - |-
+      You want API responses cached so repeat requests skip the database.
+
+      Which endpoints? How stale may data be? Should writes invalidate the cache?
+under-130-words:
+  pass:
+    - |-
+      You want responses from the API cached so that repeated requests skip the database and return faster. For example, GET /products/42 would be served from cache for 60 seconds, while POST /orders would never be cached.
+
+      Another example that would expose a misreading: GET /cart/7 is per-user, so caching it shared across users would leak data. I'd leave per-user endpoints out unless you say otherwise.
+
+      The one question that would most change my read: should every GET endpoint be cached, or only a few hot read paths like /products? My guess is only the hot read paths, with a short TTL such as 60 seconds, invalidated on writes to the same resource, since that gives most of the speedup with the least risk of stale data.
+  fail:
+    - |-
+      You want responses from the API cached so that repeated requests skip the database and return faster. For example, GET /products/42 would be served from cache for 60 seconds, while POST /orders would never be cached because writes must always reach the database.
+
+      Another example that would expose a misreading: GET /cart/7 is per-user, so caching it in a cache shared across all users would leak one user's cart to another. I'd leave per-user endpoints out of the cache unless you say otherwise, and I'd key anything user-specific by user ID.
+
+      The one question that would most change my read: should every GET endpoint be cached, or only a few hot read paths like /products and /categories? My guess is only the hot read paths, with a short TTL such as 60 seconds, invalidated whenever a write touches the same resource, since that gives most of the speedup with the least risk of serving stale data to customers.

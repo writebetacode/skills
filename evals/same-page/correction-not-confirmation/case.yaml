@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: same-page-correction-not-confirmation
+tags: [same-page]
+execution:
+  prompt: |
+    Use the same-page skill. My request: "add caching to the API".
+    You played back: "You want API responses cached so repeat requests skip the database, e.g. GET /products/42 served from cache for 60s."
+    My reply: "Close, but only for the /orders endpoints."
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+graders:
+  - name: no-lookups
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(Read|Grep|Glob|Agent|Bash)"'
+    match: not_contains
+  - name: not-confirmed-yet
+    type: regex
+    pattern: 'Agreed request:'
+    match: not_contains
+  - name: folds-in-correction
+    type: regex
+    pattern: 'orders'
+    flags: i

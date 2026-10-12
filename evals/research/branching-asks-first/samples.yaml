@@ -1,0 +1,23 @@
+no-lookups-before-confirming:
+  pass:
+    - { tool: Skill, input: { skill: research } }
+    - { tool: Skill, input: { skill: same-page } }
+  fail:
+    - { tool: Read, input: { file_path: /repo/src/logger.ts } }
+    - { tool: Grep, input: { pattern: "console\\.log|logger", path: src } }
+    - { tool: Glob, input: { pattern: "**/*log*" } }
+    - { tool: Agent, input: { description: Map logging, prompt: "Find how this repo logs. Change nothing." } }
+    - ls src
+no-report-yet:
+  pass:
+    - |-
+      I read "look into our logging" as: find out how the app logs today and whether it's fit for purpose. For example, "we use console.log in 40 places and no levels" would answer it.
+
+      My guess is you want an audit, but it could also mean chasing missing logs from a specific bug, or picking a logging library. Which one?
+  fail:
+    - |-
+      ## Request
+      Look into our logging (as given).
+
+      ## Answer
+      The app logs with `console.log` only (src/server.ts:12).

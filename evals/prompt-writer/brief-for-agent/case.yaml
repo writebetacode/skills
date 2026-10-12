@@ -1,0 +1,24 @@
+schema_version: "1.1"
+name: prompt-writer-brief-for-agent
+tags: [prompt-writer]
+execution:
+  prompt: "I'm an agent mid-task: write a brief for a subagent that lists every TODO comment under src/ as file:line plus the comment text."
+  allowed_tools: [Skill, Read, Grep, Glob]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?prompt-writer"'
+  - name: writes-no-files
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(Write|Edit)"'
+    match: not_contains
+  - name: no-preamble
+    type: regex
+    pattern: '^\s*(Here|Sure|Below|I''ll|I will)'
+    match: not_contains
+  - name: under-80-words
+    type: regex
+    pattern: '^\s*(?:\S+\s+){80}\S'
+    match: not_contains

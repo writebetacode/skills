@@ -1,0 +1,41 @@
+schema_version: "1.1"
+name: research-clear-request-report
+tags: [research]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "How should a new form in this repo validate its input?"
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 25
+  timeout_seconds: 600
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?research"'
+  - name: skips-same-page
+    type: tool_used
+    tool: Skill
+    input_match: 'same-page'
+    min: 0
+    max: 0
+    arm: both
+  - name: no-subagents
+    type: tool_used
+    tool: Agent
+    min: 0
+    max: 0
+  - name: changes-nothing
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(Write|Edit)"'
+    match: not_contains
+  - name: report-sections-in-order
+    type: regex
+    pattern: '^\s*## Request[\s\S]*## Answer[\s\S]*## Assumptions[\s\S]*## Adjacent[\s\S]*## Not found'
+  - name: cites-file-line
+    type: regex
+    pattern: 'src/forms/\w+\.ts:\d+'
+  - name: finds-existing-pattern
+    type: regex
+    pattern: 'safeParse'

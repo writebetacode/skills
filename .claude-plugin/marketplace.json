@@ -1,0 +1,14 @@
+{
+  "name": "writebetacode",
+  "description": "writebetacode's Claude Code plugins.",
+  "owner": {
+    "name": "writebetacode"
+  },
+  "plugins": [
+    {
+      "name": "wbc",
+      "source": "./",
+      "description": "Claude Code skills for engineering productivity."
+    }
+  ]
+}

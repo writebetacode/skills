@@ -1,0 +1,40 @@
+schema_version: "1.1"
+name: prompt-writer-tighten-keeps-rules
+tags: [prompt-writer]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "Tighten skills/deploy/SKILL.md"
+  allowed_tools: [Skill, Read, Grep, Glob]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?prompt-writer"'
+  - name: keeps-test-gate
+    type: regex
+    target: { source: file, path: skills/deploy/SKILL.md }
+    pattern: 'npm test'
+  - name: keeps-stop-on-failure
+    type: regex
+    target: { source: file, path: skills/deploy/SKILL.md }
+    pattern: 'fail|pass|green|stop|abort'
+    flags: i
+  - name: keeps-deploy-command
+    type: regex
+    target: { source: file, path: skills/deploy/SKILL.md }
+    pattern: 'deploy\.sh staging'
+  - name: keeps-no-production
+    type: regex
+    target: { source: file, path: skills/deploy/SKILL.md }
+    pattern: '\bprod|staging only|only (to )?staging'
+    flags: i
+  - name: under-60-words
+    type: regex
+    target: { source: file, path: skills/deploy/SKILL.md }
+    pattern: '^\s*(?:\S+\s+){60}\S'
+    match: not_contains
+  - name: reply-is-just-the-path
+    type: regex
+    pattern: '^\s*(?:\S+\s+){40}\S'
+    match: not_contains
