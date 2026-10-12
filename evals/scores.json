@@ -1,5 +1,8 @@
 {
   "claude-opus-5-5": {
+    "prompt-writer-brief-for-agent": 1,
+    "prompt-writer-tighten-keeps-rules": 1,
+    "prompt-writer-write-skill-file": 1,
     "research-branching-asks-first": 1,
     "research-clear-request-report": 1,
     "research-fix-does-not-trigger": 1,

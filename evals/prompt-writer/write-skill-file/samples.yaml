@@ -1,0 +1,59 @@
+frontmatter:
+  pass:
+    - |
+      ---
+      name: greet
+      description: Greet the user by name in one short sentence. Use when asked to greet someone.
+      ---
+
+      Greet the user by name in one short sentence.
+  fail:
+    - |
+      # greet
+
+      Greet the user by name in one short sentence.
+    - |
+      ---
+      name: greet
+      ---
+
+      Greet the user by name in one short sentence.
+    - |
+      Greet the user by name in one short sentence.
+
+      ---
+      name: greet
+      description: Greet the user.
+no-invocation-flags:
+  pass:
+    - |
+      ---
+      name: greet
+      description: Greet the user by name in one short sentence. Use when asked to greet someone.
+      ---
+
+      Greet the user by name in one short sentence.
+  fail:
+    - |
+      ---
+      name: greet
+      description: Greet the user by name in one short sentence.
+      user-invocable: true
+      ---
+
+      Greet the user by name in one short sentence.
+    - |
+      ---
+      name: greet
+      description: Greet the user by name in one short sentence.
+      disable-model-invocation: false
+      ---
+
+      Greet the user by name in one short sentence.
+reply-is-just-the-path:
+  pass:
+    - skills/greet/SKILL.md
+    - Wrote `skills/greet/SKILL.md`.
+  fail:
+    - |-
+      I created skills/greet/SKILL.md with a frontmatter block containing the name and a description that tells Claude when to use it. The body tells Claude to greet the user by name in one short sentence. I left out user-invocable and disable-model-invocation, since both Claude and the user can invoke it by default. Let me know if you want changes.
