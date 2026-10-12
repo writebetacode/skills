@@ -1,5 +1,7 @@
 {
   "claude-opus-5-5": {
+    "branch-name-from-request": 1,
+    "branch-name-taken": 1,
     "commit-no-ticket": 1,
     "commit-nothing-staged": 1,
     "commit-ticket-from-branch": 1,

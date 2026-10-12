@@ -30,3 +30,7 @@ Writes or tightens text an agent reads (skills, agents, prompts, subagent briefs
 #### wbc:commit
 
 Commits what's staged as a conventional commit, scoped to the ticket in the branch name, with bullets that say why. Call it whenever you'd otherwise write a commit message yourself.
+
+#### wbc:branch
+
+Creates a branch off the freshly fetched default branch, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
