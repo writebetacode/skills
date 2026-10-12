@@ -8,7 +8,7 @@ Two passes; the user edits between them. Uncommitted new top section in `CHANGEL
 Pass 1 (never commit or push):
 
 1. Fetch. Commits on the default branch since the last `v*` tag (none → all), oldest first, skipping merge and `chore(release)` commits.
-2. Version: last tag bumped by the biggest of: any `!` → major (below 1.0.0: minor); `feat` → minor; `fix`/`perf` → patch. No tag → `0.1.0`. No bump → say nothing to release; stop.
+2. Version: last tag bumped by the biggest of: any `!` → major (below 1.0.0: minor); `feat` → minor; `fix`/`perf` → patch. No tag → `0.1.0`. No bump → say nothing to release; stop. Tag `v<version>` exists locally or on `origin` (`git ls-remote --tags origin v<version>`) → say so; stop.
 3. `branch` skill: `feature-release-v<version>`.
 4. Prepend to `CHANGELOG.md` (new file: under `# Changelog`), empty groups omitted:
 
@@ -29,7 +29,7 @@ Pass 1 (never commit or push):
 
 Pass 2:
 
-1. Version = top heading as edited; set plugin.json and the compare link to match.
+1. Version = top heading as edited; its tag exists → say so; stop. Set plugin.json and the compare link to match.
 2. Commit only `CHANGELOG.md` and plugin.json as `chore(release): v<version>`.
 3. `pr` skill: open (Summary: the bold title and compare link), then merge with a merge commit, never squash.
 4. Annotated tag `v<version>` on that merge commit; push it.
