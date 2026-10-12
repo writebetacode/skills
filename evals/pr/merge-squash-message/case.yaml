@@ -1,0 +1,66 @@
+schema_version: "1.1"
+name: pr-merge-squash-message
+tags: [pr]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "merge the PR"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 25
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pr"'
+  - name: waits-for-checks
+    type: regex
+    target: { source: file, path: .fake-gh/calls.log }
+    pattern: '^gh pr checks[\s\S]*^gh pr merge'
+    flags: m
+  - name: squashes
+    type: regex
+    target: { source: file, path: .fake-gh/merge-method }
+    pattern: '^squash\s*$'
+  - name: subject-is-title
+    type: regex
+    target: { source: file, path: .fake-gh/merge-subject }
+    pattern: '^fix\(#142\): Stop double-charging empty carts\s*$'
+  - name: why-bullets
+    type: regex
+    target: { source: file, path: .fake-gh/merge-body.md }
+    pattern: '^- [A-Z]'
+    flags: m
+  - name: max-5-bullets
+    type: regex
+    target: { source: file, path: .fake-gh/merge-body.md }
+    pattern: '(^- .*\n\s*){5}^- '
+    flags: m
+    match: not_contains
+  - name: keeps-trailer
+    type: regex
+    target: { source: file, path: .fake-gh/merge-body.md }
+    pattern: '^Co-Authored-By: Claude Opus 5\.5, \w+ effort, \d{4}-\d{2}-\d{2}\s*$'
+    flags: m
+  - name: single-trailer
+    type: regex
+    target: { source: file, path: .fake-gh/merge-body.md }
+    pattern: 'Co-Authored-By[\s\S]*Co-Authored-By'
+    match: not_contains
+  - name: back-on-updated-default
+    type: regex
+    target: { source: file, path: src/cart.js }
+    pattern: 'cart\.total \?\? 0'
+  - name: on-default
+    type: regex
+    target: { source: file, path: .git/HEAD }
+    pattern: '^ref: refs/heads/main\s*$'
+  - name: local-branch-deleted
+    type: regex
+    target: { source: file, path: .git/packed-refs }
+    pattern: 'refs/heads/fix/142-null-cart-total'
+    match: not_contains
+  - name: remote-branch-deleted
+    type: regex
+    target: { source: file, path: .remote.git/packed-refs }
+    pattern: 'refs/heads/fix/142-null-cart-total'
+    match: not_contains

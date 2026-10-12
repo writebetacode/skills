@@ -34,3 +34,7 @@ Commits what's staged as a conventional commit, scoped to the ticket in the bran
 #### wbc:branch
 
 Creates a branch off the freshly fetched default branch, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
+
+#### wbc:pr
+
+Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default. Call it when work is ready for review or merge.
