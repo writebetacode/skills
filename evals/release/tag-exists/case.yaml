@@ -1,0 +1,32 @@
+schema_version: "1.1"
+name: release-tag-exists
+tags: [release]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "go ahead with the release"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 20
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?release"'
+  - name: says-tag-exists
+    type: regex
+    pattern: 'v?0\.1\.0[^\n]*(exist|already|taken)|(exist|already|taken)[^\n]*v?0\.1\.0'
+    flags: i
+  - name: no-commit
+    type: regex
+    target: { source: file, path: .git/logs/HEAD }
+    pattern: '\tcheckout: moving from main to feature-release-v0\.2\.0\n$'
+  - name: no-pr
+    type: regex
+    target: { source: file, path: .fake-gh/calls.log }
+    pattern: '^gh pr (create|merge)'
+    flags: m
+    match: not_contains
+  - name: not-pushed
+    type: file_exists
+    path: .remote.git/logs/refs/heads/feature-release-v0.2.0
+    exists: false

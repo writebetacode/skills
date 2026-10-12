@@ -1,0 +1,17 @@
+says-tag-exists:
+  pass:
+    - "The changelog's top heading says 0.1.0, but v0.1.0 already exists as a tag, so I stopped. Which version did you mean?"
+    - "Stopped: tag v0.1.0 exists on origin."
+  fail:
+    - "Released v0.1.0: https://github.com/acme/shop/releases/tag/v0.1.0"
+    - "Opened the release PR for 0.2.0."
+no-commit:
+  pass:
+    - "0000 1111 dev <dev@example.com> 1 +0000\tcommit: feat: Add commit skill\n1111 1111 dev <dev@example.com> 1 +0000\tcheckout: moving from main to feature-release-v0.2.0\n"
+  fail:
+    - "1111 1111 dev <dev@example.com> 1 +0000\tcheckout: moving from main to feature-release-v0.2.0\n1111 2222 dev <dev@example.com> 1 +0000\tcommit: chore(release): v0.1.0\n"
+no-pr:
+  pass:
+    - "gh repo view --json url --jq .url\n"
+  fail:
+    - "gh pr list --state merged --limit 20 --json title\ngh pr create --title chore(release): v0.1.0 --body-file /tmp/b.md --base main --head feature-release-v0.2.0 --assignee @me\n"
