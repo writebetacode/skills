@@ -38,3 +38,7 @@ Creates a branch off the freshly fetched default branch, named `<type>/<ticket>-
 #### wbc:pr
 
 Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default. Call it when work is ready for review or merge.
+
+#### wbc:release
+
+Cuts a semver release from conventional commits in two passes: first it drafts the changelog and version bump on a release branch for you to edit, then it opens, merges, tags and publishes the release. Call it when it's time to ship a version.
