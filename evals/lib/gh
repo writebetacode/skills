@@ -1,0 +1,122 @@
+#!/bin/bash
+# Fake gh for evals; repo acme/shop. State in .fake-gh/ at the repo root:
+#   read:    merged-titles (one per line), checks (pass | fail | none), pr.json (the branch's PR), issue-<n> (title)
+#   written: calls.log (every call), pr-{title,assignee}, pr-body.md, merge-{method,subject}, merge-body.md
+# pr merge and --delete-branch act on origin (the local bare repo) like GitHub would, via plumbing:
+# the eval sandbox blocks the .git/hooks writes a clone makes.
+root=$(git rev-parse --show-toplevel 2>/dev/null) || root=$PWD
+S=$root/.fake-gh
+URL=https://github.com/acme/shop
+printf 'gh %s\n' "$*" >> "$S/calls.log"
+die() { echo "$*" >&2; exit 1; }
+
+case "$1" in --version|version) echo "gh version 2.102.0 (fake)"; exit 0 ;; esac
+sub="$1 $2"
+shift 2
+pos=()
+takes() { if [ -n "$v" ]; then printf '%s' "$v"; else printf '%s' "$2"; fi; }
+jq="" title="" subject="" body="" bodyfile="" base="" head="" assignee="" state="" method="" delete="" draft="" undo=""
+while [ $# -gt 0 ]; do
+  a=$1 v=""
+  case "$a" in --*=*) v=${a#*=}; a=${a%%=*} ;; esac
+  case "$sub:$a" in
+    "pr merge:-t") a=--subject ;; "pr merge:-s") a=--squash ;; "pr merge:-m") a=--merge ;;
+    "pr merge:-r") a=--rebase ;; "pr merge:-d") a=--delete-branch ;; "pr list:-s") a=--state ;;
+    *:-t) a=--title ;; *:-F) a=--body-file ;; *:-b) a=--body ;; *:-B) a=--base ;; *:-H) a=--head ;;
+    *:-a) a=--assignee ;; *:-d) a=--draft ;; *:-q) a=--jq ;; *:-L) a=--limit ;;
+  esac
+  case "$a" in
+    --jq) jq=$(takes "$@") ;;
+    --title) title=$(takes "$@") ;;
+    --subject) subject=$(takes "$@") ;;
+    --body) body=$(takes "$@") ;;
+    --body-file) bodyfile=$(takes "$@") ;;
+    --base) base=$(takes "$@") ;;
+    --head) head=$(takes "$@") ;;
+    --assignee) assignee=$(takes "$@") ;;
+    --state) state=$(takes "$@") ;;
+    --json|--limit|--interval) : ;;
+    --squash) method=squash ;; --merge) method=merge ;; --rebase) method=rebase ;;
+    --delete-branch) delete=1 ;; --draft) draft=1 ;; --undo) undo=1 ;;
+    --watch|--fail-fast|--required) ;;
+    -*) die "fake gh: unsupported flag $a for gh $sub" ;;
+    *) pos+=("$a") ;;
+  esac
+  if [ -z "$v" ]; then case "$a" in
+    --jq|--title|--subject|--body|--body-file|--base|--head|--assignee|--state|--json|--limit|--interval) shift ;;
+  esac; fi
+  shift
+done
+out() { if [ -n "$jq" ]; then jq -r "$jq"; else cat; fi; }
+readbody() { if [ -n "$bodyfile" ]; then if [ "$bodyfile" = - ]; then cat; else cat "$bodyfile"; fi; else printf '%s' "$body"; fi; }
+branch=$(git -C "$root" branch --show-current)
+default=$(git -C "$root" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
+
+case "$sub" in
+  "auth status") echo "github.com"; echo "  ✓ Logged in to github.com account dev (keyring)" ;;
+  "repo view")
+    jq -n --arg u "$URL" --arg d "$default" '{nameWithOwner:"acme/shop",url:$u,defaultBranchRef:{name:$d}}' | out ;;
+  "api user") echo '{"login":"dev"}' | out ;;
+  "issue view")
+    [ -f "$S/issue-${pos[0]}" ] || die "GraphQL: Could not resolve to an issue or pull request with the number of ${pos[0]}."
+    jq -n --arg n "${pos[0]}" --arg t "$(cat "$S/issue-${pos[0]}")" --arg u "$URL" \
+      '{number:($n|tonumber),title:$t,state:"OPEN",url:($u+"/issues/"+$n)}' | out ;;
+  "pr list")
+    if [ "$state" = merged ] && [ -f "$S/merged-titles" ]; then
+      jq -R . "$S/merged-titles" | jq -s 'to_entries | map({number:(.key+1),title:.value,state:"MERGED"})' | out
+    elif [ "$state" != merged ] && [ -f "$S/pr.json" ]; then jq -s . "$S/pr.json" | out
+    else echo '[]' | out; fi ;;
+  "pr view")
+    [ -f "$S/pr.json" ] || die "no pull requests found for branch \"$branch\""
+    out < "$S/pr.json" ;;
+  "pr create")
+    [ -f "$S/pr.json" ] && die "a pull request for branch \"${head:-$branch}\" into branch \"$base\" already exists"
+    h=${head:-$branch}
+    git -C "$root" ls-remote --exit-code origin "refs/heads/$h" > /dev/null || die "pull request create failed: head branch \"$h\" not found on remote"
+    readbody > "$S/pr-body.md"
+    printf '%s\n' "$title" > "$S/pr-title"
+    printf '%s\n' "$assignee" > "$S/pr-assignee"
+    jq -n --arg t "$title" --rawfile b "$S/pr-body.md" --arg h "$h" --arg base "${base:-$default}" --arg u "$URL" --arg d "${draft:-}" \
+      '{number:7,title:$t,body:$b,state:"OPEN",isDraft:($d!=""),url:($u+"/pull/7"),headRefName:$h,baseRefName:$base}' > "$S/pr.json"
+    echo "$URL/pull/7" ;;
+  "pr edit")
+    [ -f "$S/pr.json" ] || die "no pull requests found for branch \"$branch\""
+    if [ -n "$title" ]; then printf '%s\n' "$title" > "$S/pr-title"; jq --arg t "$title" '.title=$t' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"; fi
+    if [ -n "$bodyfile$body" ]; then readbody > "$S/pr-body.md"; jq --rawfile b "$S/pr-body.md" '.body=$b' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"; fi
+    echo "$URL/pull/7" ;;
+  "pr ready")
+    jq --argjson d "$([ -n "$undo" ] && echo true || echo false)" '.isDraft=$d' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json" ;;
+  "pr checks")
+    case "$(cat "$S/checks" 2>/dev/null || echo pass)" in
+      pass) printf 'build\tpass\t1m2s\t%s/actions/runs/1\n' "$URL" ;;
+      fail) printf 'build\tfail\t1m2s\t%s/actions/runs/1\n' "$URL"; exit 1 ;;
+      none) die "no checks reported on the '$branch' branch" ;;
+    esac ;;
+  "pr merge")
+    [ -f "$S/pr.json" ] || die "no pull requests found for branch \"$branch\""
+    [ "$(jq -r .state "$S/pr.json")" = OPEN ] || die "Pull request acme/shop#7 is not open"
+    [ -n "$method" ] || die "--merge, --rebase, or --squash required when not running interactively"
+    [ "$method" = rebase ] && die "fake gh: rebase merges are unsupported"
+    h=$(jq -r .headRefName "$S/pr.json"); b=$(jq -r .baseRefName "$S/pr.json"); t=$(jq -r .title "$S/pr.json")
+    readbody > "$S/merge-body.md"
+    printf '%s\n' "$method" > "$S/merge-method"
+    printf '%s\n' "$subject" > "$S/merge-subject"
+    R=$root/.remote.git
+    G() { git --git-dir="$R" -c user.name=GitHub -c user.email=noreply@github.com "$@"; }
+    bc=$(G rev-parse "refs/heads/$b") hc=$(G rev-parse "refs/heads/$h")
+    tree=$(G merge-tree --write-tree "$bc" "$hc") || die "Pull request acme/shop#7 is not mergeable: the merge commit cannot be cleanly created."
+    if [ "$method" = squash ]; then printf '%s\n' "${subject:-$t (#7)}" > "$S/msg"; parents=(-p "$bc")
+    else printf '%s\n' "${subject:-Merge pull request #7 from acme/$h}" > "$S/msg"; parents=(-p "$bc" -p "$hc"); fi
+    [ -s "$S/merge-body.md" ] && { echo; cat "$S/merge-body.md"; } >> "$S/msg"
+    new=$(G commit-tree "$tree" "${parents[@]}" -F "$S/msg")
+    G update-ref "refs/heads/$b" "$new" "$bc"
+    jq --arg o "$new" '.state="MERGED" | .mergeCommit={oid:$o}' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"
+    if [ -n "$delete" ]; then
+      G update-ref -d "refs/heads/$h"
+      if [ "$branch" = "$h" ]; then git -C "$root" checkout -q "$b"; fi
+      git -C "$root" branch -q -D "$h" 2> /dev/null
+      echo "✓ Deleted local branch $h and switched to branch $b"
+    fi
+    echo "✓ Merged pull request acme/shop#7 ($t)" ;;
+  *) die "fake gh: unsupported command: gh $sub" ;;
+esac
