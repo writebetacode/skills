@@ -1,0 +1,60 @@
+schema_version: "1.1"
+name: commit-no-ticket
+tags: [commit]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "commit"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 15
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?commit"'
+  - name: never-stages
+    type: regex
+    target: trace
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*\bgit (?:-[cC] \S+ |--[\w-]+(?:=\S+)? )*(?:add|stage|commit(?: (?:\\"(?:[^"\\]|\\[^"])*\\"|''[^'']*''|[^\s"''\\;&|]+))*? (?:-[a-z]*a[a-z]*|--all)\b)'
+    match: not_contains
+  - name: no-scope
+    type: regex
+    target: { source: file, path: .git/logs/HEAD }
+    pattern: '\tcommit: (feat|fix): [A-Z]'
+  - name: subject-under-80
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '^.{1,80}(\n|$)'
+  - name: has-why-bullet
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '^- \S'
+    flags: m
+  - name: max-5-bullets
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '(^- .*\n\s*){5}^- '
+    flags: m
+    match: not_contains
+  - name: lines-under-80
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '^.{81,}$'
+    flags: m
+    match: not_contains
+  - name: bullets-say-why-not-what
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '^- (Adds?|Added|Updat(e|es|ed)|Chang(e|es|ed)|Renam(e|es|ed)|Mov(e|es|ed)|Implement(s|ed)?|Refactor(s|ed)?|Introduc(e|es|ed)|Creat(e|es|ed)|Remov(e|es|ed)|Delet(e|es|ed)|Replac(e|es|ed)|Bump(s|ed)?|Extract(s|ed)?)\b'
+    flags: m
+    match: not_contains
+  - name: co-authored-by-line
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: '^Co-Authored-By: Claude [^,\n]+, \w+ effort, \d{4}-\d{2}-\d{2}\s*$'
+    flags: m
+  - name: single-trailer-no-email
+    type: regex
+    target: { source: file, path: .git/COMMIT_EDITMSG }
+    pattern: 'Co-Authored-By[\s\S]*Co-Authored-By|<[^>]*@'
+    match: not_contains

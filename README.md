@@ -26,3 +26,7 @@ Looks into a question across the code, docs, web and connected tools, then retur
 #### wbc:prompt-writer
 
 Writes or tightens text an agent reads (skills, agents, prompts, subagent briefs), keeping only lines that change the agent's behavior. Call it to draft a new skill or slim an existing prompt without losing any of its rules.
+
+#### wbc:commit
+
+Commits what's staged as a conventional commit, scoped to the ticket in the branch name, with bullets that say why. Call it whenever you'd otherwise write a commit message yourself.

@@ -1,5 +1,8 @@
 {
   "claude-opus-5-5": {
+    "commit-no-ticket": 1,
+    "commit-nothing-staged": 1,
+    "commit-ticket-from-branch": 1,
     "prompt-writer-brief-for-agent": 1,
     "prompt-writer-tighten-keeps-rules": 1,
     "prompt-writer-write-skill-file": 1,
