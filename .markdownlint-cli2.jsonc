@@ -1,0 +1,8 @@
+{
+  // Agent-facing Markdown: no title heading, no hard wraps, bare code fences.
+  "config": {
+    "MD013": false,
+    "MD040": false,
+    "MD041": false
+  }
+}
