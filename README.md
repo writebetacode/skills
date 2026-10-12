@@ -18,3 +18,7 @@ Invoke a skill as `/wbc:<skill>`.
 #### wbc:same-page
 
 Internal: only other skills call it. Before any work starts, it plays a request back in plain words, with examples that would expose a misreading, until you confirm it.
+
+#### wbc:research
+
+Looks into a question across the code, docs, web and connected tools, then returns a cited report and changes nothing. Call it before deciding or acting: how something works here, which pattern to follow, which versions are in use.

@@ -1,0 +1,65 @@
+makes-the-fix:
+  pass:
+    - |
+      import { z } from "zod";
+
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(12),
+      });
+
+      export function parseLogin(input: unknown) {
+        return LoginSchema.safeParse(input);
+      }
+    - |
+      import { z } from "zod";
+
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(12, "Use at least 12 characters"),
+      });
+    - |
+      import { z } from "zod";
+      import { SignupSchema } from "./signup";
+
+      export const LoginSchema = SignupSchema.pick({ email: true, password: true });
+  fail:
+    - |
+      import { z } from "zod";
+
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(1),
+      });
+
+      export function parseLogin(input: unknown) {
+        return LoginSchema.safeParse(input);
+      }
+    - |
+      import { z } from "zod";
+
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(8),
+      });
+drops-min-1:
+  pass:
+    - |
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(12),
+      });
+    - |
+      export const LoginSchema = SignupSchema.pick({ email: true, password: true });
+  fail:
+    - |
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(1),
+      });
+    - |
+      // TODO: raise to 12, like signup
+      export const LoginSchema = z.object({
+        email: z.string().email(),
+        password: z.string().min(1),
+      });

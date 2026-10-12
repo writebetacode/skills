@@ -1,5 +1,8 @@
 {
   "claude-opus-5-5": {
+    "research-branching-asks-first": 1,
+    "research-clear-request-report": 1,
+    "research-fix-does-not-trigger": 1,
     "same-page-confirmation-returns-block": 1,
     "same-page-correction-not-confirmation": 1,
     "same-page-first-reply": 1
