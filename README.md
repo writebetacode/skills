@@ -10,3 +10,11 @@ claude plugin install wbc@writebetacode
 ```
 
 Invoke a skill as `/wbc:<skill>`.
+
+## Skills
+
+### productivity
+
+#### wbc:same-page
+
+Internal: only other skills call it. Before any work starts, it plays a request back in plain words, with examples that would expose a misreading, until you confirm it.

@@ -1,0 +1,44 @@
+agreed-request:
+  pass:
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s so repeat requests skip the database.
+      Examples: GET /products/42 served from cache for 60s.
+      Clarified: Only GET on /products; 60s TTL.
+    - |-
+      **Agreed request:** Cache GET responses from the `/products` endpoints for 60s.
+      **Examples:** GET /products/42 served from cache for 60s.
+      **Clarified:** None
+  fail:
+    - |-
+      Agreed request: Add caching to the API.
+      Examples: GET /products/42 served from cache for 60s.
+      Clarified: None
+    - Great, I'll cache GET /products responses for 60s.
+examples:
+  pass:
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s so repeat requests skip the database.
+      Examples: GET /products/42 served from cache for 60s.
+      Clarified: None
+  fail:
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s so repeat requests skip the database.
+      Clarified: None
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s.
+      Example: GET /products/42 served from cache for 60s.
+      Clarified: None
+clarified:
+  pass:
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s so repeat requests skip the database.
+      Examples: GET /products/42 served from cache for 60s.
+      Clarified: Only GET on /products; 60s TTL.
+  fail:
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s so repeat requests skip the database.
+      Examples: GET /products/42 served from cache for 60s.
+    - |-
+      Agreed request: Cache GET responses from the /products endpoints for 60s.
+      Examples: GET /products/42 served from cache for 60s.
+      Constraints: Only GET; 60s TTL.
