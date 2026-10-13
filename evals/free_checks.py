@@ -72,7 +72,7 @@ def check_cli_flags():
 def check_skills():
     """Progressive disclosure only works if every pointer resolves and every sibling file is pointed at."""
     root, linked, descs = EVALS.parent, set(), 0
-    for f in sorted(root.glob("skills/*/*.md")):
+    for f in sorted([*root.glob("skills/*/*.md"), *root.glob("agents/*.md")]):
         t, rel = f.read_text(), f.relative_to(root)
         targets = [f.parent / l for l in re.findall(r"\]\(([^)\s#]+)\)", t) if not re.match(r"[a-z]+:|<", l)]
         targets += [f.parent / l for l in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\w)", t)]
@@ -112,6 +112,7 @@ def run_fixture(cid, script):
 
 
 cases = sorted(EVALS.glob("*/*/case.yaml"))
+AGENTS = {a.stem for a in (EVALS.parent / "agents").glob("*.md")}  # fired by a skill's Agent call; nothing to tag
 docs = load_yaml(p for case in cases for p in (case, case.parent / "samples.yaml"))
 for case in cases:
     c, samples = docs.get(case) or {}, docs.get(case.parent / "samples.yaml") or {}
@@ -125,7 +126,7 @@ for case in cases:
         errors.append(f"{cid}: tag {t!r} isn't a skill")
     for g in graders:  # check.py picks cases by tag: a skill the case runs but doesn't tag misses its runs
         fired = re.search(r"([\w-]+)\"'?$", str(g.get("input_match", ""))) if re.search(r"(?<!-not)-fired$", str(g.get("name"))) else None
-        if fired and fired.group(1) not in tags | {skill}:
+        if fired and fired.group(1) not in tags | {skill} | AGENTS:
             errors.append(f"{cid}/{g['name']}: fires {fired.group(1)!r} but tags don't list it")
     if skill not in tags:
         errors.append(f"{cid}: tags don't list its own skill {skill!r}")

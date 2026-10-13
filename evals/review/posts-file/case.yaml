@@ -59,4 +59,4 @@ graders:
   - name: removes-worktree
     type: regex
     target: trace
-    pattern: 'worktree remove (?![^"]*--force)'
+    pattern: 'worktree (remove (?![^"]*--force)|prune)'

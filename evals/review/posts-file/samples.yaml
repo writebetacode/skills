@@ -49,6 +49,7 @@ removes-worktree:
   pass:
     - "git worktree remove /var/folders/x/T/tmp.a1b2/review-shop-7"
     - "git worktree list && git worktree remove \"$wt\""
+    - "git worktree prune && git worktree list"
   fail:
     - "git worktree remove --force /var/folders/x/T/tmp.a1b2/review-shop-7"
     - "git worktree list"
