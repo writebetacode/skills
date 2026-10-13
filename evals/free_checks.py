@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Free checks before any paid eval run: YAML, case and grader keys, free grader types, regex graders vs samples,
-host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files and agents, skill and agent word budgets and
+host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files and agents, executable skill scripts, copies of shared rules, skill and agent word budgets and
 pointers to another skill's rules, and, with --run-fixtures, each scaffold script
 in a clean temp dir (check.py passes it only after its review gate).
 
@@ -27,6 +27,11 @@ console.log(`${c.length - bad}/${c.length} samples ok`); process.exit(bad ? 1 : 
 errors, checks = [], []
 # Word budgets: descriptions sit in every session's context; bodies load on each call. Raise only with the user's OK.
 DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
+# Rules copied on purpose: every call needs them, and a shared file would cost a read each time. A skill file holding the
+# marker must hold the exact text, so changing one copy fails until every copy changes.
+SHARED = {"host": ("URL contains `github`", "`origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of"
+                   " `gh repo view` / `glab repo view` succeeds; both or neither → ask."),
+          "default branch": ("set-head origin -a", "`git remote set-head origin -a`, then `origin/HEAD` minus `origin/`")}
 
 
 def load_yaml(paths):
@@ -75,7 +80,11 @@ def check_skills():
     for f in sorted([*root.glob("skills/*/*.md"), *root.glob("agents/*.md")]):
         t, rel = f.read_text(), f.relative_to(root)
         targets = [f.parent / l for l in re.findall(r"\]\(([^)\s#]+)\)", t) if not re.match(r"[a-z]+:|<", l)]
-        targets += [f.parent / l for l in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\w)", t)]
+        run = [f.parent / l for l in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\w)", t)]
+        targets += run
+        for s in run:
+            if s.suffix != ".md" and s.exists() and not os.access(s, os.X_OK):
+                errors.append(f"{rel}: runs {os.path.relpath(s, root)}, which isn't executable")
         for target in targets:
             if not target.exists():
                 errors.append(f"{rel}: links to missing {os.path.relpath(target, root)}")
@@ -92,9 +101,13 @@ def check_skills():
             errors.append(f"{rel}: {n} words (budget {cap})")
     if descs > DESCS_MAX:
         errors.append(f"skills: descriptions total {descs} words (budget {DESCS_MAX})")
-    for f in sorted(root.glob("skills/*/*.md")):
+    for f in sorted(p for p in root.glob("skills/*/*") if p.is_file()):
         if f.name != "SKILL.md" and f.resolve() not in linked:
             errors.append(f"{f.relative_to(root)}: no skill file links to it, so it never loads")
+    for f in sorted(root.glob("skills/*/*.md")):
+        for name, (marker, text) in SHARED.items():
+            if marker in (s := f.read_text()) and text not in s:
+                errors.append(f"{f.relative_to(root)}: its {name} rule differs from the other copies: change them all (SHARED)")
     skill_text = "".join(f.read_text() for f in root.glob("skills/*/*.md"))
     plugin = json.loads((root / ".claude-plugin/plugin.json").read_text())["name"]
     for a in sorted(root.glob("agents/*.md")):

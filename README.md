@@ -18,9 +18,9 @@ To update, run `claude plugin update wbc@writebetacode`. You only get a new copy
 Each skill calls the CLI for the host it's working with, so install only the ones you use:
 
 - [GitHub CLI](https://github.com/cli/cli#installation) (`gh`) for GitHub pull requests, issues and releases.
-- [GitLab CLI](https://gitlab.com/gitlab-org/cli/-/blob/main/docs/installation_options.md) (`glab`) 1.115 or later for GitLab merge requests, issues and releases. `review` needs 1.122 or later.
+- [GitLab CLI](https://gitlab.com/gitlab-org/cli/-/blob/main/docs/installation_options.md) (`glab`) 1.115 or later for GitLab merge requests, issues and releases. `review`, and `build` when it answers review comments, need 1.122 or later.
 - [Atlassian CLI](https://developer.atlassian.com/cloud/acli/guides/install-acli/) (`acli`) for Jira work items.
-- [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments and the GitLab skills use to look up your username.
+- [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `recap` uses to read your sessions, and the GitLab skills use to look up your username.
 
 ---
 
@@ -48,21 +48,30 @@ Use it to ship a version without assembling the changelog by hand or forgetting 
 
 ### wbc:ticket
 
-Use it to file or update a GitHub, GitLab or Jira ticket without leaving your session. Its tickets say what people see and why it matters, never how to fix it, so whoever picks one up is free to choose the fix.
+Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving your session. Its tickets say what people see and why it matters, never how to fix it, so whoever picks one up is free to choose the fix.
 
-### wbc:sdlc-plan
+### wbc:plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists. It talks the request through with you (or starts from a `debug` write-up), writes a spec you approve, and splits it into commit-sized tasks grouped into merge requests under `.ai/sdlc/<name>/`.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, or when something's broken and you need to know why. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine.
 
-### wbc:sdlc-build
+To tell it what it can use when it's chasing a bug, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 
-Use it to turn an approved plan into tested, reviewed code while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, waits for your go before committing, then opens the merge requests in order. When you close a plan, it deletes the plan's local branches whose work has fully merged and keeps any that still hold something.
+```md
+## Debug tools
+- Logs: `kubectl logs -n shop deploy/api --since=24h`
+- Errors: Sentry MCP, project `shop-api`
+- Database: read-only replica via `psql $REPLICA_URL`
+```
+
+### wbc:build
+
+Use it to turn a plan, a bug write-up or a small change into tested, reviewed pull requests while you stay in charge of every commit; anything too big for one pull request goes to `plan` first. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, and waits for your go before committing, then lands the pull requests: it rebases them after earlier ones merge, fixes failing CI from the job logs and drafts replies to review comments, and waits for your go again before it pushes or posts anything.
 
 ### wbc:review
 
 Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` (ignored by git), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
 
-To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`sdlc-plan` reads the same list):
+To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` reads the same list):
 
 ```md
 ## Related repos
@@ -77,17 +86,15 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 
 Use it when you need an answer before you decide or act, like how something works here, which pattern to follow or which versions you're on. It digs through the code, docs, web and connected tools and hands back a cited report without changing anything.
 
-### wbc:debug
+### wbc:recap
 
-Use it when something's broken and you want to know where to start looking. Once you agree on the problem, it digs through the code, git history, logs and any tools you've listed, asks you only what it can't find out itself, has a separate checker agent poke holes in its answer, then writes the likely cause and one or two fixes to `.ai/debug/<name>/findings.md` and cleans up any experiments it ran; point it at an earlier write-up to keep digging.
+Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one.
 
-To tell it what it can use, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+To send recaps to your notes, add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
 
 ```md
-## Debug tools
-- Logs: `kubectl logs -n shop deploy/api --since=24h`
-- Errors: Sentry MCP, project `shop-api`
-- Database: read-only replica via `psql $REPLICA_URL`
+## Recap
+- File: ~/vault/Daily/{date}.md, under `## Claude`
 ```
 
 ### wbc:voice

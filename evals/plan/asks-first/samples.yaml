@@ -1,0 +1,19 @@
+no-lookups-yet:
+  pass:
+    - { tool: Skill, input: { skill: plan } }
+    - { tool: Skill, input: { skill: same-page } }
+  fail:
+    - { tool: Grep, input: { pattern: "total", path: src } }
+    - git log --oneline
+    - { tool: Write, input: { file_path: .ai/plan/checkout-totals/research/cart.md, content: "# Cart\n" } }
+under-130-words:
+  pass:
+    - "You're seeing wrong totals at checkout, like an empty cart showing 'Total: null' instead of 'Total: 0'. For example, a cart with two items totals right, but an empty one doesn't. Wrong for every cart, or only some? My guess is empty carts."
+  fail:
+    - "word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word"
+asks:
+  pass:
+    - "You're seeing wrong totals at checkout, like an empty cart showing \"Total: null\". Wrong for every cart, or only some? My guess: empty carts."
+  fail:
+    - "The likely cause is the early return in src/cart.js:2."
+    - "Here's the cause: see https://example.com/cart?mode=strict for details."

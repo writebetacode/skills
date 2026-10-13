@@ -1,0 +1,39 @@
+schema_version: "1.1"
+name: pr-open-gitlab
+tags: [pr, voice]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "open a merge request for this branch"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 25
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pr"'
+  - name: pushed
+    type: file_exists
+    path: .remote.git/logs/refs/heads/fix/142-empty-cart-total
+  - name: looks-up-user
+    type: regex
+    target: { source: file, path: .fake-glab/calls.log }
+    pattern: '^glab api user\b'
+    flags: m
+  - name: creates-from-table
+    type: regex
+    target: { source: file, path: .fake-glab/calls.log }
+    pattern: '^glab mr create\b(?=.*--yes\b)(?=.*--description-file[ =]\S)(?=.*--target-branch[ =]main\b)(?=.*--source-branch[ =]fix/142-empty-cart-total\b)(?=.*--assignee[ =]dev\b)'
+    flags: m
+  - name: title-from-commit
+    type: regex
+    target: { source: file, path: .fake-glab/mr-title }
+    pattern: '^fix\(#142\): [A-Z][^\n]*\n?$'
+  - name: body-in-markers
+    type: regex
+    target: { source: file, path: .fake-glab/mr-body.md }
+    pattern: '<!-- pr-body:start -->[\s\S]*\[#142\]\(https://gitlab\.com/acme/shop/-/issues/142\)[\s\S]*## Summary[\s\S]*<!-- pr-body:end -->'
+  - name: says-merge-request
+    type: regex
+    pattern: 'merge request'
+    flags: i

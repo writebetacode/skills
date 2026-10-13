@@ -1,0 +1,46 @@
+schema_version: "1.1"
+name: plan-writes-findings
+tags: [plan, voice]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: |
+    Use the plan skill to continue .ai/plan/empty-cart-null. We agreed on the problem (an empty cart's checkout shows "Total: null" instead of "Total: 0"; carts with items are fine) and the investigation is done: its notes are in research/. The likely cause is the early return added in "perf: Skip empty carts early". Finish up and write the findings.
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 35
+  timeout_seconds: 600
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?plan"'
+  - name: checker-fired
+    type: tool_used
+    tool: Agent
+    input_match: '"subagent_type"\s*:\s*"(?:wbc:)?debug-checker"'
+  - name: proves-in-worktree
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\bgit (?:-C \S+ )?worktree add\b'
+  - name: removes-worktree
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\bgit (?:-C \S+ )?worktree remove\b'
+  - name: findings-sections
+    type: regex
+    target: { source: file, path: .ai/plan/empty-cart-null/findings.md }
+    pattern: '## Problem[\s\S]*## What we checked[\s\S]*## What it means[\s\S]*## Likely cause[\s\S]*Proof:[\s\S]*Confidence:[\s\S]*## Ruled out[\s\S]*## Ways to fix[\s\S]*## Not checked'
+  - name: no-incident-sections
+    type: regex
+    target: { source: file, path: .ai/plan/empty-cart-null/findings.md }
+    pattern: '^## (Timeline|Impact)\b'
+    flags: m
+    match: not_contains
+  - name: names-cause
+    type: regex
+    target: { source: file, path: .ai/plan/empty-cart-null/findings.md }
+    pattern: 'Skip empty carts|src/cart\.js:2\b'
+  - name: no-fix
+    type: regex
+    target: { source: file, path: src/cart.js }
+    pattern: 'return null'

@@ -1,0 +1,50 @@
+proves-in-worktree:
+  pass:
+    - git worktree add --detach /tmp/plan-empty-cart-null HEAD
+    - "cd /repo && git worktree add --detach $TMPDIR/plan-empty-cart-null HEAD && cd $TMPDIR/plan-empty-cart-null"
+  fail:
+    - "sed -i.bak 's/return null;/return 0;/' src/cart.js && node -e 'console.log(1)'"
+    - git stash
+removes-worktree:
+  pass:
+    - git worktree remove /tmp/plan-empty-cart-null
+  fail:
+    - git worktree list
+    - rm -rf /tmp/plan-empty-cart-null
+findings-sections:
+  pass:
+    - |
+      # Empty cart total shows null
+      ## Problem
+      x
+      ## What we checked
+      - x
+      ## What it means
+      x
+      ## Likely cause
+      The early return. Proof: the repro printed "Total: null", then "Total: 0" with the return removed. Confidence: high: confirmed.
+      ## Ruled out
+      None.
+      ## Ways to fix
+      1. x
+      ## Not checked
+      None.
+  fail:
+    - "## Problem\nx\n## Likely cause\nx"
+    - "## Problem\nx\n## What we checked\nx\n## What it means\nx\n## Likely cause\nThe early return. Confidence: high.\n## Ruled out\nNone.\n## Ways to fix\n1. x\n## Not checked\nNone.\n"
+no-incident-sections:
+  pass:
+    - "## Problem\nx\n## What we checked\n- x\n"
+  fail:
+    - "## Problem\nx\n## Timeline\n- 09:00: deploy\n"
+    - "## Impact\nEvery empty cart.\n"
+names-cause:
+  pass:
+    - "Likely cause: `perf: Skip empty carts early` added an early return [src/cart.js:2]."
+  fail:
+    - "Likely cause: checkout.js formats the total wrong."
+no-fix:
+  pass:
+    - "exports.total = (items) => {\n  if (items.length === 0) return null;\n};"
+  fail:
+    - "exports.total = (items) => items.reduce((sum, i) => sum + i.price * i.qty, 0);"

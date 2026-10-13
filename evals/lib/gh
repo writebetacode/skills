@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fake gh for evals; repo acme/shop. State in .fake-gh/ at the repo root:
 #   read:    merged-titles (one per line), checks (pass | fail | none), pr.json (the branch's PR), issue-<n> (title),
-#            pr.diff, graphql.json (review threads; default none)
+#            pr.diff, graphql.json (review threads; default none), runs.json (failed runs for run list), run-log (run view --log-failed)
 #   written: calls.log (every call), pr-{title,assignee}, pr-body.md, merge-{method,subject}, merge-body.md,
 #            issue-{title,assignee}, issue-body.md, pr-review-event, pr-comment.md,
 #            api-inputs.log (every --input file), api-fields.log (every @file field)
@@ -26,6 +26,7 @@ while [ $# -gt 0 ]; do
     "api:-X") a=--method ;; "api:-F") a=--field ;; "api:-f") a=--raw-field ;;
     "pr merge:-t") a=--subject ;; "pr merge:-s") a=--squash ;; "pr merge:-m") a=--merge ;;
     "pr merge:-r") a=--rebase ;; "pr merge:-d") a=--delete-branch ;; "pr list:-s") a=--state ;;
+    "run list:-b") a=--branch ;; "run list:-c") a=--commit ;; "run list:-s") a=--status ;; "run view:-j") a=--job ;;
     *:-t) a=--title ;; *:-F) a=--body-file ;; *:-b) a=--body ;; *:-B) a=--base ;; *:-H) a=--head ;;
     *:-a) a=--assignee ;; *:-d) a=--draft ;; *:-q) a=--jq ;; *:-L) a=--limit ;; *:-l) a=--label ;;
   esac
@@ -40,6 +41,7 @@ while [ $# -gt 0 ]; do
     --assignee) assignee=$(takes "$@") ;;
     --state) state=$(takes "$@") ;;
     --json|--limit|--interval|--label|--parent|--blocked-by|--blocking|--paginate|--silent) : ;;
+    --branch|--commit|--status|--job|--log-failed|--log|--exit-status) : ;;
     --method) hmethod=$(takes "$@") ;; --input) input=$(takes "$@") ;; --field|--raw-field) fields+=("$(takes "$@")") ;;
     --approve) event=APPROVE ;; --request-changes) event=REQUEST_CHANGES ;; --comment) event=COMMENT ;;
     --squash) method=squash ;; --merge) method=merge ;; --rebase) method=rebase ;;
@@ -50,7 +52,7 @@ while [ $# -gt 0 ]; do
   esac
   if [ -z "$v" ]; then case "$a" in
     --jq|--title|--subject|--body|--body-file|--base|--head|--assignee|--state|--json|--limit|--interval|\
-    --label|--parent|--blocked-by|--blocking|--method|--input|--field|--raw-field) shift ;;
+    --label|--parent|--blocked-by|--blocking|--method|--input|--field|--raw-field|--branch|--commit|--status|--job) shift ;;
   esac; fi
   shift
 done
@@ -63,7 +65,6 @@ case "$sub" in
   "auth status") echo "github.com"; echo "  ✓ Logged in to github.com account dev (keyring)" ;;
   "repo view")
     jq -n --arg u "$URL" --arg d "$default" '{nameWithOwner:"acme/shop",url:$u,defaultBranchRef:{name:$d}}' | out ;;
-  "api user") echo '{"login":"dev"}' | out ;;
   "issue view")
     [ -f "$S/issue-${pos[0]}" ] || die "GraphQL: Could not resolve to an issue or pull request with the number of ${pos[0]}."
     jq -n --arg n "${pos[0]}" --arg t "$(cat "$S/issue-${pos[0]}")" --arg u "$URL" \
@@ -87,6 +88,7 @@ case "$sub" in
       "POST "*/pulls/*/reviews) jq -n --arg u "$URL" '{id:101,state:"COMMENTED",html_url:($u+"/pull/7#pullrequestreview-101")}' | out ;;
       "POST "*/replies) jq -n --arg u "$URL" '{id:202,html_url:($u+"/pull/7#discussion_r202")}' | out ;;
       "GET "*/comments|"GET "*/reviews) echo '[]' | out ;;
+      "GET user") echo '{"login":"dev"}' | out ;;
       *) die "fake gh: unsupported api call: $m $ep" ;;
     esac ;;
   "issue create")
@@ -116,6 +118,7 @@ case "$sub" in
     [ -f "$S/pr.json" ] || die "no pull requests found for branch \"$branch\""
     if [ -n "$title" ]; then printf '%s\n' "$title" > "$S/pr-title"; jq --arg t "$title" '.title=$t' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"; fi
     if [ -n "$bodyfile$body" ]; then readbody > "$S/pr-body.md"; jq --rawfile b "$S/pr-body.md" '.body=$b' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"; fi
+    if [ -n "$base" ]; then jq --arg b "$base" '.baseRefName=$b' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json"; fi
     echo "$URL/pull/7" ;;
   "pr ready")
     jq --argjson d "$([ -n "$undo" ] && echo true || echo false)" '.isDraft=$d' "$S/pr.json" > "$S/t" && mv "$S/t" "$S/pr.json" ;;
@@ -151,5 +154,9 @@ case "$sub" in
       echo "✓ Deleted local branch $h and switched to branch $b"
     fi
     echo "✓ Merged pull request acme/shop#7 ($t)" ;;
+  "run list") if [ -f "$S/runs.json" ]; then out < "$S/runs.json"; else echo '[]' | out; fi ;;
+  "run view")
+    [ -f "$S/run-log" ] || die "could not find any workflow run with ID ${pos[0]}"
+    cat "$S/run-log" ;;
   *) die "fake gh: unsupported command: gh $sub" ;;
 esac

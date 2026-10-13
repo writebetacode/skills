@@ -1,0 +1,73 @@
+old-spec-made-true:
+  pass:
+    - "## Scope\nIn: email and password sign-in.\nOut: password resets.\n\n## Decisions\n- **Lock after five failures**: replaces unlimited retries. Why: password guessing.\n"
+  fail:
+    - "## Scope\nOut: password resets. Anyone may retry as often as they like.\n"
+    - "## Decisions\n- **No attempt limit**: retries are never refused.\n- **Lockout**: lock after 5 failures.\n"
+old-spec-kept:
+  pass:
+    - "# Sign in with email and password\n\nPeople sign in with their email and password.\n"
+  fail:
+    - "# Lock accounts after repeated failed logins\n"
+no-ticket-or-research-refs:
+  pass:
+    - |
+      # Lock accounts after repeated failed logins
+
+      ## Context
+      `POST /login` answers 401 on a wrong password; nothing counts failures.
+  fail:
+    - |
+      # Lock accounts after repeated failed logins (ABC-77)
+    - |
+      ## Context
+      See research/login-today.md for how login works today.
+gherkin-scenarios:
+  pass:
+    - |
+      ## Behaviour
+      ```gherkin
+      Scenario: Locked after five failures
+        Given an account with 4 failed logins in a row
+        When a 5th login fails
+        Then the account is locked for 15 minutes
+      ```
+  fail:
+    - |
+      ## Behaviour
+      - After 5 failed logins the account locks for 15 minutes.
+decisions-section:
+  pass:
+    - |
+      ## Decisions
+      - **Per account**: lock the account, not the IP. Why: a shared office IP would lock out everyone.
+  fail:
+    - |
+      ## Key decisions
+      - Lock per account.
+no-code:
+  pass:
+    - |
+      ```gherkin
+      Scenario: Success resets the count
+      ```
+  fail:
+    - |
+      ```js
+      if (user.failedLogins >= 5) return res.status(423).end();
+      ```
+waits-for-approval:
+  pass:
+    - "ticket: ABC-77\nspec: draft\n"
+  fail:
+    - "ticket: ABC-77\nspec: approved 2026-10-12\n"
+no-tasks-yet:
+  pass:
+    - { tool: Write, input: { file_path: .ai/plan/login-lockout/spec.md, content: "# Lock accounts\n" } }
+  fail:
+    - { tool: Write, input: { file_path: .ai/plan/login-lockout/tasks/01-api-lockout.md, content: "# 01: Lock accounts\n" } }
+asks-to-approve:
+  pass:
+    - "Spec: .ai/plan/login-lockout/spec.md. Decisions: lock per account; count on the user row. Approve, or tell me what to change?"
+  fail:
+    - Spec written to .ai/plan/login-lockout/spec.md.

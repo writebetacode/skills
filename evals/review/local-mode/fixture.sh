@@ -3,7 +3,7 @@ set -e
 git init -q -b main
 git config user.name dev
 git config user.email dev@example.com
-mkdir -p src/auth test .ai/sdlc/login-lockout
+mkdir -p src/auth test .ai/plan/login-lockout
 cat > src/auth/login.js <<'X'
 const db = require("../db");
 const { verify } = require("./password");
@@ -58,7 +58,7 @@ test("locks after five failures", async () => {
 });
 X
 printf '*\n' > .ai/.gitignore
-cat > .ai/sdlc/login-lockout/spec.md <<'X'
+cat > .ai/plan/login-lockout/spec.md <<'X'
 # Lock accounts after repeated failed logins
 
 After 5 failed logins in a row, an account locks for 15 minutes; while locked, every login is refused.

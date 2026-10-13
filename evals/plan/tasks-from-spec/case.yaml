@@ -1,0 +1,62 @@
+schema_version: "1.1"
+name: plan-tasks-from-spec
+tags: [plan]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: |
+    Use the plan skill. You walked me through .ai/plan/login-lockout/spec.md.
+    My reply: "Approved."
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 25
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?plan"'
+  - name: spec-approved
+    type: regex
+    target: { source: file, path: .ai/plan/login-lockout/status.md }
+    pattern: '^spec: approved \d{4}-\d{2}-\d{2} docs/specs/login-lockout\.md\s*$'
+    flags: m
+  - name: spec-moved-to-docs
+    type: file_exists
+    path: docs/specs/login-lockout.md
+  - name: status-lists-mrs
+    type: regex
+    target: { source: file, path: .ai/plan/login-lockout/status.md }
+    pattern: '^- 01-[\w-]+: todo\s*$'
+    flags: m
+  - name: spec-alone
+    type: regex
+    target: trace
+    pattern: '"(file_path|path|command)":\s*"[^"]*research/'
+    match: not_contains
+  - name: mr-files-in-order
+    type: regex
+    target: trace
+    pattern: '^(?=[\s\S]*tasks/01-[\w-]+\.md)(?=[\s\S]*tasks/02-[\w-]+\.md)'
+  - name: web-repo-path
+    type: regex
+    target: trace
+    pattern: 'repo: (acme/)?web (?:\.\.|/\S*)/web\b'
+  - name: web-after-api
+    type: regex
+    target: trace
+    pattern: 'repo: (acme/)?web(?:[^"\\]|\\.)*?after: 0\d'
+  - name: ships-together
+    type: regex
+    target: trace
+    pattern: 'repo: (acme/)?web(?:[^"\\]|\\.)*?with: 0\d'
+  - name: branch-has-ticket
+    type: regex
+    target: trace
+    pattern: 'branch: feat/abc-77-[a-z0-9-]+'
+  - name: every-scenario-an-ac
+    type: regex
+    target: trace
+    pattern: '^(?=[\s\S]*- \[ \] [^"\\]*Locked after five failures)(?=[\s\S]*- \[ \] [^"\\]*Right password refused while locked)(?=[\s\S]*- \[ \] [^"\\]*Success resets the count)(?=[\s\S]*- \[ \] [^"\\]*Web says when to try again)'
+  - name: web-base-default
+    type: regex
+    target: trace
+    pattern: 'repo: (acme/)?web(?:[^"\\]|\\.)*?base: trunk\b'

@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: build-big-request-plans
+tags: [build, plan, same-page]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "build sign-in for the shop: Google and Okta single sign-on, linking each to an existing account by email, plus an admin page to turn each provider on or off"
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 15
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?build"'
+  - name: plan-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?plan"'
+  - name: no-code-yet
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(?:Edit|Write)"[^\n]*?"file_path":\s*"[^"]*/(?:src|test)/'
+    match: not_contains
+  - name: no-branch
+    type: regex
+    target: { source: file, path: .git/HEAD }
+    pattern: '^ref: refs/heads/main\s*$'

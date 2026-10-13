@@ -1,0 +1,34 @@
+block-under-heading:
+  pass:
+    - "# 2026-10-12\n\n## Claude\n\n<!-- recap:start -->\n- Fixed the empty-cart total in shop (PR #142)\n- Reviewed web PR 150\n<!-- recap:end -->\n\n## Gym\n- Legs\n"
+  fail:
+    - "# 2026-10-12\n\n## Claude\n\n## Gym\n- Legs\n\n<!-- recap:start -->\n- Fixed the empty-cart total in shop (PR #142)\n<!-- recap:end -->\n"
+    - "# 2026-10-12\n\n## Claude\n- Fixed the empty-cart total in shop (PR #142)\n\n## Gym\n- Legs\n"
+keeps-rest:
+  pass:
+    - "# 2026-10-12\n\n## Claude\n\n<!-- recap:start -->\n- x\n<!-- recap:end -->\n\n## Gym\n- Legs\n"
+  fail:
+    - "## Claude\n\n<!-- recap:start -->\n- x\n<!-- recap:end -->\n"
+    - "# 2026-10-12\n\n## Claude\n- x\n"
+names-pr:
+  pass:
+    - "- Fixed the empty-cart total in shop (PR #142)\n"
+    - "- Fixed the empty-cart total: https://github.com/acme/shop/pull/142\n"
+  fail:
+    - "- Fixed the empty-cart total in shop\n"
+    - "- Reviewed PR #1420\n"
+names-commit:
+  pass:
+    - "- Added install steps to the shop README\n"
+  fail:
+    - "- Fixed the empty-cart total in shop (PR #142)\n- Reviewed web PR 150\n"
+skips-other-day:
+  pass:
+    - "- Fixed the empty-cart total in shop (PR #142)\n- Reviewed web PR 150\n"
+  fail:
+    - "- Planned the invoice export\n"
+no-em-dash:
+  pass:
+    - "- Fixed the empty-cart total in shop (PR #142)\n"
+  fail:
+    - "- Fixed the empty-cart total — PR #142\n"
