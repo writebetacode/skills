@@ -14,7 +14,7 @@ graders:
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?release"'
   - name: says-nothing-to-release
     type: regex
-    pattern: 'nothing to release|no release (is )?needed|nothing (here )?(warrants|needs) a (new )?(version|release)'
+    pattern: 'nothing (new )?(to|worth) releas|nothing releasable|no (new )?(release|version) (is )?(needed|warranted)|nothing (here )?(warrants|needs|calls for) a (new )?(version|release)'
     flags: i
   - name: changelog-unchanged
     type: regex

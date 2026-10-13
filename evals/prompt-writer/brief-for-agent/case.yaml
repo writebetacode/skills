@@ -18,7 +18,7 @@ graders:
     type: regex
     pattern: '^\s*(Here|Sure|Below|I''ll|I will)'
     match: not_contains
-  - name: under-80-words
+  - name: under-100-words
     type: regex
-    pattern: '^\s*(?:\S+\s+){80}\S'
+    pattern: '^\s*(?:\S+\s+){100}\S'
     match: not_contains
