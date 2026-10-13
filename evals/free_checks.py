@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Free checks before any paid eval run: YAML, case and grader keys, free grader types, regex graders vs samples,
-host-table flags vs each CLI's --help (CLIs not installed are skipped), and, with --run-fixtures, each scaffold script
+host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files, word budgets and
+pointers to another skill's rules, and, with --run-fixtures, each scaffold script
 in a clean temp dir (check.py passes it only after its review gate).
 
 samples.yaml, next to case.yaml: <grader name>: {pass: [text, ...], fail: [text, ...]}; a trace sample is a Bash command or {tool, input}.
@@ -24,6 +25,8 @@ for (const [id, p, f, m, t, want] of c) {
 }
 console.log(`${c.length - bad}/${c.length} samples ok`); process.exit(bad ? 1 : 0);"""
 errors, checks = [], []
+# Word budgets: descriptions sit in every session's context; bodies load on each call. Raise only with the user's OK.
+DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 450, 750, 300
 
 
 def load_yaml(paths):
@@ -66,6 +69,34 @@ def check_cli_flags():
         print(f"· {tool} not installed: its host tables go unchecked", flush=True)
 
 
+def check_skills():
+    """Progressive disclosure only works if every pointer resolves and every sibling file is pointed at."""
+    root, linked, descs = EVALS.parent, set(), 0
+    for f in sorted(root.glob("skills/*/*.md")):
+        t, rel = f.read_text(), f.relative_to(root)
+        targets = [f.parent / l for l in re.findall(r"\]\(([^)\s#]+)\)", t) if not re.match(r"[a-z]+:|<", l)]
+        targets += [f.parent / l for l in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\w)", t)]
+        for target in targets:
+            if not target.exists():
+                errors.append(f"{rel}: links to missing {os.path.relpath(target, root)}")
+            linked.add(target.resolve())
+        if m := re.search(r"(?:as|per) the `[\w-]+` skill \w+", t):
+            errors.append(f"{rel}: '{m.group(0)}' points at a skill that may not be loaded: inline the rule or link its file")
+        fm = re.match(r"---\n(.*?)\n---\n", t, re.S)
+        if fm:
+            n = len((re.search(r"^description: (.*)$", fm.group(1), re.M) or [""])[0].split()) - 1
+            descs += n
+            if n > DESC_MAX:
+                errors.append(f"{rel}: description is {n} words (budget {DESC_MAX})")
+        if (n := len(t[fm.end():].split()) if fm else len(t.split())) > (cap := BODY_MAX if fm else SIBLING_MAX):
+            errors.append(f"{rel}: {n} words (budget {cap})")
+    if descs > DESCS_MAX:
+        errors.append(f"skills: descriptions total {descs} words (budget {DESCS_MAX})")
+    for f in sorted(root.glob("skills/*/*.md")):
+        if f.name != "SKILL.md" and f.resolve() not in linked:
+            errors.append(f"{f.relative_to(root)}: no skill file links to it, so it never loads")
+
+
 def run_fixture(cid, script):
     with tempfile.TemporaryDirectory() as d:
         home, work = Path(d, "home"), Path(d, "work")
@@ -89,6 +120,15 @@ for case in cases:
         if unknown := set((c.get(section) or {}) if section else c) - allowed:
             errors.append(f"{cid}: unknown {section or 'top-level'} keys {sorted(unknown)}")
     graders = c.get("graders") or []
+    tags, skill = set(c.get("tags") or []), case.parent.parent.name
+    for t in sorted(tags - {d.name for d in (EVALS.parent / "skills").iterdir()}):
+        errors.append(f"{cid}: tag {t!r} isn't a skill")
+    for g in graders:  # check.py picks cases by tag: a skill the case runs but doesn't tag misses its runs
+        fired = re.search(r"([\w-]+)\"'?$", str(g.get("input_match", ""))) if re.search(r"(?<!-not)-fired$", str(g.get("name"))) else None
+        if fired and fired.group(1) not in tags | {skill}:
+            errors.append(f"{cid}/{g['name']}: fires {fired.group(1)!r} but tags don't list it")
+    if skill not in tags:
+        errors.append(f"{cid}: tags don't list its own skill {skill!r}")
     if unknown := set(samples) - {g.get("name") for g in graders}:
         errors.append(f"{cid}: samples for unknown graders {sorted(unknown)}")
     for g in graders:
@@ -113,6 +153,7 @@ for case in cases:
     if script and "--run-fixtures" in sys.argv:
         run_fixture(cid, case.parent / script)
 check_cli_flags()
+check_skills()
 for e in errors:
     print(f"✗ {e}", flush=True)
 code = subprocess.run(["node", "-e", JS], input=json.dumps(checks), text=True).returncode
