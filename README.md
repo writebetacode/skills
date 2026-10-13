@@ -51,9 +51,13 @@ Creates, edits, comments on, links, assigns, closes or reopens GitHub and GitLab
 
 Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked.
 
-To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`sdlc-plan` reads the same list):
 
 ```md
 ## Related repos
 - acme/web (../web): imports `@acme/cart`; calls `/api/cart/*`
 ```
+
+#### wbc:sdlc-plan
+
+Plans a feature, bug fix, research request or epic into `.ai/sdlc/<name>/`. It agrees the request with you, researches quietly, writes a self-contained spec for you to approve, then splits the spec into commit-sized tasks grouped into merge requests in merge order. Call it before building anything bigger than a quick fix, or to turn a ticket into a plan.
