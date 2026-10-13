@@ -30,6 +30,8 @@
     "sdlc-plan-writes-spec": 1,
     "ticket-asks-tracker": 1,
     "ticket-native-links": 1,
-    "ticket-what-not-how": 1
+    "ticket-what-not-how": 1,
+    "voice-explain-terse": 1,
+    "voice-reply-draft": 1
   }
 }

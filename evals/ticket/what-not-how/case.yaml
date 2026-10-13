@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: ticket-what-not-how
-tags: [ticket]
+tags: [ticket, voice]
 context:
   scaffold_script: fixture.sh
 execution:
@@ -12,6 +12,10 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?ticket"'
+  - name: voice-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
   - name: creates-assigned-without-asking
     type: regex
     target: { source: file, path: .fake-gh/calls.log }
@@ -43,4 +47,9 @@ graders:
     target: { source: file, path: .fake-gh/issue-title }
     pattern: 'cartTotal|reduce|initial value'
     flags: i
+    match: not_contains
+  - name: body-no-em-dash
+    type: regex
+    target: { source: file, path: .fake-gh/issue-body.md }
+    pattern: '—|\s–\s'
     match: not_contains

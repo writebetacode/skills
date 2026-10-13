@@ -1,0 +1,36 @@
+schema_version: "1.1"
+name: voice-reply-draft
+tags: [voice]
+execution:
+  prompt: |
+    draft a reply to this PR comment from a teammate: "This duplicates formatPrice in utils/money.js. Could we reuse that instead?"
+    they're right, I'll switch to it
+  allowed_tools: [Skill, Read, Grep, Glob]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
+  - name: posts-nothing
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\b(gh|glab) '
+    match: not_contains
+  - name: no-preamble
+    type: regex
+    pattern: '^\W*(Here''s|Here is|Sure\b|Below|Certainly|Draft\b)'
+    flags: i
+    match: not_contains
+  - name: no-sycophancy
+    type: regex
+    pattern: '\b(absolutely|totally|completely|so) right\b|\bgreat (catch|point|call|question)\b|\bexcellent\b'
+    flags: i
+    match: not_contains
+  - name: no-em-dash
+    type: regex
+    pattern: '—|\s–\s'
+    match: not_contains
+  - name: under-40-words
+    type: regex
+    pattern: '^\s*(?:\S+\s+){40}\S'
+    match: not_contains

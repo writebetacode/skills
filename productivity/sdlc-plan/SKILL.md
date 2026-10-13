@@ -21,7 +21,7 @@ Talk to the user only in `same-page` rounds: the request, then each open choice 
 1. Ticket key or URL → `ticket` skill: view. Input only.
 2. `same-page` on the request. Several features that each ship alone → propose an epic in that round.
 3. Research quietly: `research` skill per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched); save each report as `research/<topic>.md`.
-4. Write `spec.md`.
+4. Invoke the `voice` skill; write `spec.md`.
 5. Walk it: path, then its decisions and open questions in ≤8 lines; ask to approve or change. Changes → `same-page` on them, edit, walk again; open questions → settle before approval. Explicit approval only → `status.md` `spec: approved <date>`.
 6. Tasks from `spec.md` alone: never research, tickets or this conversation.
 7. Reply: folder path; MRs in order with repo, branch, task count; next step: `sdlc-build`. Nothing to build → say `sdlc-build` closes it.
@@ -30,11 +30,11 @@ Tickets: file or link only when asked (`ticket` skill); record in `status.md`, n
 
 ## Revise
 
-An existing folder, or `sdlc-build` handing back a change → `same-page` on the change; edit `spec.md`, adding the decision; walk the changed parts. On approval rewrite only uncommitted tasks; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
+An existing folder, or `sdlc-build` handing back a change → `same-page` on the change; invoke the `voice` skill; edit `spec.md`, adding the decision; walk the changed parts. On approval rewrite only uncommitted tasks; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
 
 ## spec.md
 
-Written for someone who saw none of the conversation, tickets or research: restate everything they need in plain, terse prose. No code, ticket keys or research references. Omit sections with nothing to say. Research request → the question, the answer and why; Behaviour and Design only for a deliverable it asks for.
+Written for someone who saw none of the conversation, tickets or research: restate everything they need. No code, ticket keys or research references. Omit sections with nothing to say. Research request → the question, the answer and why; Behaviour and Design only for a deliverable it asks for.
 
 ````
 # <Title>

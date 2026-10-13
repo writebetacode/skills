@@ -33,7 +33,7 @@ The file's `reviewed at` is the head → say it's current; stop, unless posting.
 4. Bar: would this ship something broken. `(blocking)`: broken behavior, security, breakage elsewhere. `(non-blocking)`: its summary says why it matters to this change; "could also" → drop. Never preferences, linter rules or untouched code.
 5. Existing threads, only after drafting findings. Same point as an open thread: ours adds context → `reply to:` it; else `linked:` (never posts). Resolved thread whose problem is still in the code and wasn't explained away → new comment, its summary linking the thread. Explained away → `linked:`.
 6. Checker: one fresh `Agent`, given only the drafted findings (temp file), the worktree path and the diff, briefed to be stricter than the reviewer: re-derive each finding from the code; withdraw it unless the cited code is there at the head, the claim holds, it traces to this change, it matters, it isn't a duplicate, preference or linter rule, and any example is right. May downgrade `(blocking)`; never adds. Its result is final; withdrawn findings are discarded, never written.
-7. Write the file: survivors numbered blocking first; a re-review continues after the file's highest number and never renumbers.
+7. Invoke the `voice` skill, then write the file: survivors numbered blocking first; a re-review continues after the file's highest number and never renumbers.
 
 Re-review also: a finding the head fixes → `## Resolved`, `(resolved in <short sha>)` on its heading. A reply after our comment (matched by `<!-- review:<N> -->`) → research it in the worktree; draft an answer under the finding.
 
@@ -88,6 +88,6 @@ Reply draft: <≤2 sentences>
 - Labels: praise, nitpick, suggestion, issue, todo, question, thought, chore, note.
 - The user withdraws by moving a finding under `## Withdrawn`, or says `withdraw <N>`. Nothing under Resolved or Withdrawn posts.
 
-Tone, in the file and everything posted: inquisitive, about the code not the person, plain English.
+Tone, in the file and everything posted: inquisitive, about the code not the person.
 
 - ✗ `This breaks checkout for empty carts.` ✓ `Could an empty cart reach checkout here? If so, would it show "Total: null"?`

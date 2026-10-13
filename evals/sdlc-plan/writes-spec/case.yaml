@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: sdlc-plan-writes-spec
-tags: [sdlc-plan]
+tags: [sdlc-plan, voice]
 context:
   scaffold_script: fixture.sh
 execution:
@@ -17,6 +17,10 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?sdlc-plan"'
+  - name: voice-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
   - name: spec-written
     type: file_exists
     path: .ai/sdlc/login-lockout/spec.md

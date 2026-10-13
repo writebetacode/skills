@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: pr-open-matches-repo-style
-tags: [pr]
+tags: [pr, voice]
 context:
   scaffold_script: fixture.sh
 execution:

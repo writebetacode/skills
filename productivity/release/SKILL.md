@@ -23,7 +23,7 @@ Pass 1 (never commit or push):
    ### Other
    ```
 
-   Group: `!` → Breaking; else `feat` → Features; `fix`/`perf` → Fixes; rest → Other. No last tag → link `v<version>`'s commits instead of a compare.
+   Group: `!` → Breaking; else `feat` → Features; `fix`/`perf` → Fixes; rest → Other. No last tag → link `v<version>`'s commits instead of a compare. Theme: `voice` skill.
 5. Set `version` in `.claude-plugin/plugin.json`, if present.
 6. Stop: ask the user to review and edit the diff, then say go.
 

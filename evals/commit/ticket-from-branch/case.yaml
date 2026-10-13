@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: commit-ticket-from-branch
-tags: [commit]
+tags: [commit, voice]
 context:
   scaffold_script: fixture.sh
 execution:
@@ -12,6 +12,10 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?commit"'
+  - name: voice-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
   - name: never-stages
     type: regex
     target: trace

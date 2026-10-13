@@ -1,6 +1,6 @@
 schema_version: "1.1"
 name: pr-open-fallback-format
-tags: [pr]
+tags: [pr, voice]
 context:
   scaffold_script: fixture.sh
 execution:
@@ -12,6 +12,10 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?pr"'
+  - name: voice-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
   - name: fallback-title
     type: regex
     target: { source: file, path: .fake-gh/pr-title }
