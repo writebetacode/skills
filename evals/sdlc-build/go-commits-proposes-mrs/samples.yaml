@@ -38,5 +38,6 @@ asks-to-open:
   pass:
     - "Committed. One merge request is needed: 01 in shop, fix/142-empty-cart-total → main, 1 task. Open it?"
     - "Shall I open the PR?"
+    - "Committed. One pull request is needed: fix/142-empty-cart-total into main. Say go and I'll open it."
   fail:
     - "Committed fix(#142): Total empty carts as zero. Opened https://github.com/acme/shop/pull/8."

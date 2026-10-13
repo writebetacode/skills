@@ -53,5 +53,5 @@ graders:
     match: not_contains
   - name: asks-to-open
     type: regex
-    pattern: '(?:merge request|pull request|\bMRs?\b|\bPRs?\b)[^?]*\?'
+    pattern: '(?:merge request|pull request|\bMRs?\b|\bPRs?\b)(?:[^?]*\?|[\s\S]*\b(?:say go|say the word|let me know|tell me|want me to|when you''re ready)\b)'
     flags: i
