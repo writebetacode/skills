@@ -1,5 +1,6 @@
 {
   "claude-opus-5-5": {
+    "branch-default-base-given": 1,
     "branch-name-from-request": 1,
     "branch-name-taken": 1,
     "commit-no-ticket": 1,
