@@ -19,7 +19,7 @@ graders:
   - name: no-commit
     type: regex
     target: { source: file, path: .git/logs/HEAD }
-    pattern: '\tcheckout: moving from main to feature-release-v0\.2\.0\n$'
+    pattern: '\tcheckout: moving from main to chore/release-v0\.2\.0\n$'
   - name: no-pr
     type: regex
     target: { source: file, path: .fake-gh/calls.log }
@@ -28,5 +28,5 @@ graders:
     match: not_contains
   - name: not-pushed
     type: file_exists
-    path: .remote.git/logs/refs/heads/feature-release-v0.2.0
+    path: .remote.git/logs/refs/heads/chore/release-v0.2.0
     exists: false

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Free checks before any paid eval run: YAML, case and grader keys, free grader types, regex graders vs samples,
-and, with --run-fixtures, each scaffold script in a clean temp dir (check.py passes it only after its review gate).
+host-table flags vs each CLI's --help (CLIs not installed are skipped), and, with --run-fixtures, each scaffold script
+in a clean temp dir (check.py passes it only after its review gate).
 
 samples.yaml, next to case.yaml: <grader name>: {pass: [text, ...], fail: [text, ...]}; a trace sample is a Bash command or {tool, input}.
 """
-import json, os, subprocess, sys, tempfile
+import itertools, json, os, re, shutil, subprocess, sys, tempfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 EVALS = Path(__file__).resolve().parent
@@ -24,14 +26,44 @@ console.log(`${c.length - bad}/${c.length} samples ok`); process.exit(bad ? 1 : 
 errors, checks = [], []
 
 
-def yaml(p):
-    if not p.exists():
-        return {}
-    r = subprocess.run(["npx", "-y", "js-yaml@4.1.0", str(p)], capture_output=True, text=True)
+def load_yaml(paths):
+    """{path: parsed} for each existing file, all in one node process: one npx call per file took ~28 s."""
+    r = subprocess.run(["npx", "-y", "-p", "js-yaml@4.1.0", "-c", "command -v js-yaml"], capture_output=True, text=True)
     if r.returncode:
-        errors.append(f"{p.relative_to(EVALS)}: {(r.stderr.strip().splitlines() or ['unparseable'])[0]}")
-        return {}
-    return json.loads(r.stdout)
+        sys.exit(f"✗ can't fetch js-yaml@4.1.0: {(r.stderr or r.stdout).strip()[-200:]}")
+    pkg = Path(os.path.realpath(r.stdout.strip())).parents[1]  # node_modules/.bin/js-yaml → node_modules/js-yaml
+    js = """const y = require(process.argv[1]), fs = require("fs"), out = {};
+for (const p of process.argv.slice(2)) try { out[p] = [y.load(fs.readFileSync(p, "utf8"))]; } catch (e) { out[p] = e.message.split("\\n")[0]; }
+console.log(JSON.stringify(out));"""
+    files = [str(p) for p in paths if p.exists()]
+    out = json.loads(subprocess.run(["node", "-e", js, str(pkg), *files], capture_output=True, text=True, check=True).stdout)
+    errors.extend(f"{Path(p).relative_to(EVALS)}: {v}" for p, v in out.items() if isinstance(v, str))
+    return {Path(p): v[0] for p, v in out.items() if isinstance(v, list)}
+
+
+def check_cli_flags():
+    """Skills run remote commands only from their host tables, so a flag the CLI dropped or renamed fails for real."""
+    cmds = [(f, c.split("\\|")[0]) for f in sorted(EVALS.parent.glob("skills/*/*.md")) if f.name != "SKILL.md"
+            for c in re.findall(r"`((?:gh|glab|acli) [^`]+)`", f.read_text())]
+
+    def sub(cmd):  # the subcommand: words up to the first flag or placeholder; `api` takes a path, not subcommands
+        words = list(itertools.takewhile(lambda t: re.fullmatch(r"[a-z][\w-]*", t), cmd.split()))
+        return tuple(words[:2] if words[1:2] == ["api"] else words)
+
+    def help_text(s):
+        r = subprocess.run([*s, "--help"], capture_output=True, text=True, timeout=30)
+        return r.stdout + r.stderr
+
+    subs = sorted({sub(c) for _, c in cmds if shutil.which(c.split()[0])})
+    with ThreadPoolExecutor(8) as ex:
+        helps = dict(zip(subs, ex.map(help_text, subs)))
+    for f, c in cmds:
+        if (s := sub(c)) in helps:
+            for flag in sorted(set(re.findall(r"(?<![\w-])--[a-z][\w-]*", c))):
+                if not re.search(rf"(?<![\w-]){re.escape(flag)}(?![\w-])", helps[s]):
+                    errors.append(f"{f.relative_to(EVALS.parent)}: `{' '.join(s)} --help` lists no {flag}")
+    for tool in sorted({c.split()[0] for _, c in cmds} - {s[0] for s in subs}):
+        print(f"· {tool} not installed: its host tables go unchecked", flush=True)
 
 
 def run_fixture(cid, script):
@@ -48,8 +80,11 @@ def run_fixture(cid, script):
             errors.append(f"{cid}: {script.name} runs over 120 s")
 
 
-for case in sorted(EVALS.glob("*/*/case.yaml")):
-    c, samples, cid = yaml(case), yaml(case.parent / "samples.yaml"), f"{case.parent.parent.name}/{case.parent.name}"
+cases = sorted(EVALS.glob("*/*/case.yaml"))
+docs = load_yaml(p for case in cases for p in (case, case.parent / "samples.yaml"))
+for case in cases:
+    c, samples = docs.get(case) or {}, docs.get(case.parent / "samples.yaml") or {}
+    cid = f"{case.parent.parent.name}/{case.parent.name}"
     for section, allowed in KEYS.items():
         if unknown := set((c.get(section) or {}) if section else c) - allowed:
             errors.append(f"{cid}: unknown {section or 'top-level'} keys {sorted(unknown)}")
@@ -77,6 +112,7 @@ for case in sorted(EVALS.glob("*/*/case.yaml")):
     script = (c.get("context") or {}).get("scaffold_script")
     if script and "--run-fixtures" in sys.argv:
         run_fixture(cid, case.parent / script)
+check_cli_flags()
 for e in errors:
     print(f"✗ {e}", flush=True)
 code = subprocess.run(["node", "-e", JS], input=json.dumps(checks), text=True).returncode

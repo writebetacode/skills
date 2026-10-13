@@ -23,7 +23,7 @@ graders:
   - name: on-release-branch
     type: regex
     target: { source: file, path: .git/HEAD }
-    pattern: '^ref: refs/heads/feature-release-v0\.2\.0\s*$'
+    pattern: '^ref: refs/heads/chore/release-v0\.2\.0\s*$'
   - name: version-heading
     type: regex
     target: { source: file, path: CHANGELOG.md }
@@ -60,8 +60,8 @@ graders:
   - name: no-commit-yet
     type: regex
     target: { source: file, path: .git/logs/HEAD }
-    pattern: '\tcheckout: moving from [^\n]* to feature-release-v0\.2\.0\n$'
+    pattern: '\tcheckout: moving from [^\n]* to chore/release-v0\.2\.0\n$'
   - name: not-pushed
     type: file_exists
-    path: .remote.git/logs/refs/heads/feature-release-v0.2.0
+    path: .remote.git/logs/refs/heads/chore/release-v0.2.0
     exists: false
