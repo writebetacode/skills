@@ -13,7 +13,7 @@ Pass 1 (never commit or push):
 
    ### Breaking
 
-   - <subject> ([<short hash>](<commit link>))
+   - <commit subject, verbatim> ([<short hash>](<commit link>))
 
    ### Features
 

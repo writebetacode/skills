@@ -12,5 +12,7 @@ says-unpushed:
   pass:
     - "Your branch has a commit that isn't pushed (feat(#142): Cap cart size). Merging would delete it, so push it first or drop it?"
     - "fix/142-null-cart-total is 1 commit ahead of origin, so I stopped before merging."
+    - "I stopped before merging because your local branch has a commit that was never pushed."
+    - "I stopped before merging because your local branch has a commit that GitHub doesn't."
   fail:
     - "Merged PR #7 and switched back to main."

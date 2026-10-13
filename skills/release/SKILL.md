@@ -9,4 +9,4 @@ Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else which
 
 Once the version is known, before anything else: tag `v<version>` exists locally or on `origin` (`git ls-remote --tags origin v<version>`) → say so; stop.
 
-Version files: each manifest holding the project's version (`package.json`, `pyproject.toml`, `Cargo.toml`, `.claude-plugin/plugin.json`…) and the lockfile entries mirroring it (`package-lock.json`, `Cargo.lock`). JS: `npm version <version> --no-git-tag-version`. None → changelog only.
+Version files: each manifest, hidden folders included, holding the project's version (`package.json`, `pyproject.toml`, `Cargo.toml`, `.claude-plugin/plugin.json`…) and the lockfile entries mirroring it (`package-lock.json`, `Cargo.lock`). JS: `npm version <version> --no-git-tag-version`. None → changelog only.
