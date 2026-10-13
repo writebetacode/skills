@@ -52,7 +52,7 @@ Use it to file or update a GitHub, GitLab or Jira ticket without leaving your se
 
 ### wbc:sdlc-plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists. It talks the request through with you, writes a spec you approve, and splits it into commit-sized tasks grouped into merge requests under `.ai/sdlc/<name>/`.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists. It talks the request through with you (or starts from a `debug` write-up), writes a spec you approve, and splits it into commit-sized tasks grouped into merge requests under `.ai/sdlc/<name>/`.
 
 ### wbc:sdlc-build
 
@@ -77,6 +77,19 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 
 Use it when you need an answer before you decide or act, like how something works here, which pattern to follow or which versions you're on. It digs through the code, docs, web and connected tools and hands back a cited report without changing anything.
 
+### wbc:debug
+
+Use it when something's broken and you want to know where to start looking. Once you agree on the problem, it digs through the code, git history, logs and any tools you've listed, asks you only what it can't find out itself, has a separate checker agent poke holes in its answer, then writes the likely cause and one or two fixes to `.ai/debug/<name>/findings.md` and cleans up any experiments it ran; point it at an earlier write-up to keep digging.
+
+To tell it what it can use, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+
+```md
+## Debug tools
+- Logs: `kubectl logs -n shop deploy/api --since=24h`
+- Errors: Sentry MCP, project `shop-api`
+- Database: read-only replica via `psql $REPLICA_URL`
+```
+
 ### wbc:voice
 
 Use it when text is for people, so it reads like a teammate wrote it rather than an AI. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and gives the other skills' commits, PRs, tickets, reviews, changelogs and specs the same voice.
@@ -85,10 +98,6 @@ Use it when text is for people, so it reads like a teammate wrote it rather than
 
 Use it to write or slim down a skill, agent, prompt or subagent brief so it costs fewer tokens and behaves the same. It keeps only the lines that change what the agent does, and never drops one of your rules when tightening.
 
----
-
-## Internal skills
-
 ### wbc:same-page
 
-Internal: only other skills call it. It heads off misunderstandings before work starts by playing your request back in plain words, with examples that would catch a misreading, until you confirm it.
+Use it so you and Claude agree on what you mean before work starts, with one question at a time instead of a list. It plays your request back in plain words, with examples that would catch a misreading, and asks the one question that matters most until you confirm; Claude and the other skills use it whenever they need something from you.

@@ -1,0 +1,10 @@
+one-question:
+  pass:
+    - "You want the API to reject clients that send too many requests, e.g. a 429 after 100 calls a minute from one key. Per API key or per IP? My guess: per API key."
+  fail:
+    - "A few questions: 1. Which endpoints? 2. Per user or per IP? 3. What limits?"
+asks:
+  pass:
+    - "Per API key or per IP? My guess: per API key."
+  fail:
+    - "I'll add a token bucket per API key."

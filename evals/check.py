@@ -8,7 +8,7 @@ Usage: check.py <model> [skill[,skill…]|changed|since-release|all] [eval args]
        check.py <model> [target] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
        check.py --free            free checks only (see free_checks.py); every paid run runs them first and stops on a ✗
        check.py --accept          store the last run's scores as the baseline
-Add --reviewed (last) once the user has reviewed the diff from main.
+Add --reviewed (last) once the user has reviewed the diff from main. --runs above 3 needs --user-asked: only when the user asked.
 """
 import json, os, re, shutil, subprocess, sys, tempfile
 from collections import Counter
@@ -16,7 +16,7 @@ from pathlib import Path
 
 EVALS = Path(__file__).resolve().parent
 SCORES, LAST, FLAKES = EVALS / "scores.json", EVALS / ".last.json", EVALS / "flakes.json"
-CONFIRM_RUNS = 3
+CONFIRM_RUNS = MAX_RUNS = 3
 
 
 def last_reply(trace):
@@ -105,13 +105,17 @@ d = git("diff", "--name-only", "main", "--", ".", ":!evals/scores.json")
 changed = d.stdout + git("ls-files", "-o", "--exclude-standard").stdout if d.returncode == 0 else "(no main to diff against)\n"
 if changed and "--reviewed" not in extra:
     sys.exit(f"Differs from main; scaffold scripts and hooks run unsandboxed as you. Ask the user to review, then add --reviewed:\n{changed}")
+runs = [int(a.split("=", 1)[1] if "=" in a else extra[i + 1]) for i, a in enumerate(extra) if a.split("=")[0] == "--runs"]
+if any(n > MAX_RUNS for n in runs) and "--user-asked" not in extra:
+    sys.exit(f"--runs {max(runs)}: more than {MAX_RUNS} runs a case only when the user asks; then add --user-asked.")
 if subprocess.run([sys.executable, str(EVALS / "free_checks.py"), "--run-fixtures"]).returncode:
     sys.exit("Free checks failed: fix them before any paid run.")
 if free:
     sys.exit()
 ablate = "--with-without" in extra
-extra = [a for a in extra if a not in ("--reviewed", "--with-without")]
-LAST.unlink(missing_ok=True)
+extra = [a for a in extra if a not in ("--reviewed", "--with-without", "--user-asked")]
+if not ablate:  # a with-without run stores nothing, so it keeps the last run's scores for --accept
+    LAST.unlink(missing_ok=True)
 env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 env["PATH"] = ".eval-bin:" + env.get("PATH", "")  # fixtures put fake CLIs here (evals/lib/setup.sh)
 traces, kept = [], set()

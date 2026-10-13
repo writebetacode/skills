@@ -1,0 +1,22 @@
+schema_version: "1.1"
+name: debug-asks-first
+tags: [debug, same-page]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "checkout totals look wrong, can you figure out why?"
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 15
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?debug"'
+  - name: no-lookups
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(Read|Grep|Glob|Agent|Bash)"'
+    match: not_contains
+  - name: asks
+    type: regex
+    pattern: '\?(?![A-Za-z0-9=&%#/])'

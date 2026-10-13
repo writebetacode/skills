@@ -18,7 +18,7 @@ Talk to the user only in `same-page` rounds (the request, then each open choice 
 
 ## Plan
 
-1. Ticket key or URL → `ticket` skill: view. Input only.
+1. Inputs only, nothing else before `same-page`: ticket key or URL → `ticket` skill: view; `.ai/debug/<name>/` given → its `findings.md` (its `research/` counts as step 3's: reuse, don't redo).
 2. `same-page` on the request. Several features that each ship alone → propose an epic in that round.
 3. Research quietly: `research` skill per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched); save each report as `research/<topic>.md`.
 4. Invoke the `voice` skill (once per session); write `spec.md`.

@@ -26,7 +26,7 @@ for (const [id, p, f, m, t, want] of c) {
 console.log(`${c.length - bad}/${c.length} samples ok`); process.exit(bad ? 1 : 0);"""
 errors, checks = [], []
 # Word budgets: descriptions sit in every session's context; bodies load on each call. Raise only with the user's OK.
-DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 450, 750, 300
+DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
 
 
 def load_yaml(paths):
