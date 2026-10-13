@@ -72,16 +72,19 @@ git = lambda *a: subprocess.run(["git", *a], cwd=EVALS.parent, capture_output=Tr
 
 
 def changed_skills(base):
-    """Skills whose skill or eval files differ from base, plus those whose fixtures source a changed evals/lib file;
+    """Skills whose skill or eval files differ from base, plus those whose fixtures source a changed evals/lib file
+    or whose files name a changed agent;
     None (= all) when other shared eval tooling changed. The runner and free checks don't change what a case does."""
-    diff = git("diff", "--name-only", base, "--", "skills", "evals", ":!evals/scores.json", ":!evals/flakes.json",
+    diff = git("diff", "--name-only", base, "--", "skills", "agents", "evals", ":!evals/scores.json", ":!evals/flakes.json",
                ":!evals/check.py", ":!evals/free_checks.py")
     if diff.returncode:
         sys.exit(f"{target}: no {base} to diff against")
     names = set()
-    for f in (diff.stdout + git("ls-files", "-o", "--exclude-standard", "skills", "evals").stdout).split():
+    for f in (diff.stdout + git("ls-files", "-o", "--exclude-standard", "skills", "agents", "evals").stdout).split():
         parts = f.split("/")
-        if parts[:2] == ["evals", "lib"]:
+        if parts[0] == "agents":
+            names |= {s.parent.name for s in EVALS.parent.glob("skills/*/*.md") if Path(f).stem in s.read_text()}
+        elif parts[:2] == ["evals", "lib"]:
             names |= {s.parent.name if s.parent.parent == EVALS else s.parent.parent.name
                       for s in EVALS.glob("*/**/*.sh") if "lib/" in s.read_text()} - {"lib"}
         elif parts[0] == "skills" or (len(parts) > 2 and (EVALS / parts[1]).is_dir()):

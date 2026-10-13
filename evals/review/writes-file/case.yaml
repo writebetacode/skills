@@ -16,9 +16,10 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?voice"'
-  - name: checker-ran
+  - name: checker-fired
     type: tool_used
     tool: Agent
+    input_match: '"subagent_type"\s*:\s*"(?:wbc:)?review-checker"'
   - name: separate-checkout
     type: regex
     target: trace

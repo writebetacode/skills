@@ -3,6 +3,7 @@
     "branch-name-taken": 1,
     "release-nothing-to-release": 1,
     "release-prepares-changelog": 2,
+    "review-posts-file": 1,
     "ticket-asks-tracker": 1
   }
 }
