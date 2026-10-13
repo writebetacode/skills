@@ -3,7 +3,7 @@ name: commit
 description: Commit staged changes as a ticket-scoped conventional commit. Use whenever the user asks to commit.
 ---
 
-Commit only what's staged; never stage. Nothing staged → say so and stop.
+Commit only what's staged; never stage. Nothing staged → say so and stop. Else invoke the `voice` skill, then write:
 
 ```
 <type>(<ticket>): <summary>

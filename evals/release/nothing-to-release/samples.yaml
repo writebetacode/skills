@@ -2,6 +2,9 @@ says-nothing-to-release:
   pass:
     - 'Nothing to release: since v0.1.0 there are only docs, chore and test commits.'
     - "There's nothing to release yet. The three commits since v0.1.0 are docs, chore and test."
+    - "There's nothing new to release: since v0.1.0 it's only docs, chore and test commits."
+    - 'Nothing worth releasing since v0.1.0, just docs and chores.'
+    - 'No new version is needed: the commits since v0.1.0 are docs, chore and test.'
   fail:
     - 'Prepared 0.1.1 on feature-release-v0.1.1. Review the diff, then say go.'
     - 'Released v0.1.1.'

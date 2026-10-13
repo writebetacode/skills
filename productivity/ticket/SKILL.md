@@ -12,7 +12,7 @@ Tracker, first match:
 
 Origin's host: `origin` URL contains `github`/`gitlab`; else whichever of `gh repo view`/`glab repo view` succeeds. Read [github.md](github.md), [gitlab.md](gitlab.md) or [jira.md](jira.md); run remote commands only from its table.
 
-Content, in titles, bodies, edits and comments: what was seen or is wanted, and why it matters to users. Never how: no causes, code, files or fixes, even when the request names them.
+Content, in titles, bodies, edits and comments, after invoking the `voice` skill: what was seen or is wanted, and why it matters to users. Never how: no causes, code, files or fixes, even when the request names them.
 
 - ✗ `Add a null check in cartTotal()` ✓ `An empty cart's checkout shows 0.00`
 

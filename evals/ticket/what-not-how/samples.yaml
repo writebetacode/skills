@@ -69,3 +69,8 @@ title-says-no-how:
     - "fix: Checkout total is null for an empty cart\n"
   fail:
     - "fix: Pass an initial value to reduce in cartTotal\n"
+body-no-em-dash:
+  pass:
+    - "## Description\nCheckout shows a null total when the cart is empty, so shoppers can't tell what they'll pay.\n"
+  fail:
+    - "## Description\nCheckout shows a null total when the cart is empty — shoppers can't tell what they'll pay.\n"

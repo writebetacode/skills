@@ -1,0 +1,36 @@
+no-lookups:
+  pass:
+    - { tool: Skill, input: { skill: voice } }
+  fail:
+    - { tool: Read, input: { file_path: test/cart.test.js } }
+    - cat src/cart.js
+no-shorthand:
+  pass:
+    - "I finished the first task. An empty cart now totals zero, and a test checks it. The reviewer found two problems on the first pass and both are fixed. Have a look, then say go and I'll commit."
+  fail:
+    - "Empty cart totals zero → test at line 12 ✓."
+    - "Review round r1 found 2 issues, now 0."
+no-em-dash:
+  pass:
+    - "The reviewer found two problems, and both are fixed. Say go to commit."
+    - "Tests cover lines 1-3."
+  fail:
+    - "The reviewer found two problems — both are fixed."
+    - "The reviewer found two problems – both are fixed."
+no-stock-phrases:
+  pass:
+    - "The first task is done: an empty cart now totals zero. Say go and I'll commit."
+  fail:
+    - "Certainly! Here's what that means."
+    - "In summary, the task is done."
+    - "Let me know if you have questions."
+says-next-step:
+  pass:
+    - "Have a look at the changes, then say go and I'll commit them."
+  fail:
+    - "Have a look at the changes before they're committed."
+under-120-words:
+  pass:
+    - "I finished the first task. An empty cart now totals zero, and a test checks it. The reviewer found two problems on the first pass and both are fixed. Have a look, then say go and I'll commit."
+  fail:
+    - "I finished the first task in the plan, which is called cart total. The goal of that task was to make sure that when a shopper has nothing in their cart, the total shows as zero instead of something broken. There is now a test in the test folder, on line twelve of the cart test file, that checks exactly that, and it passes. I changed two files to get there: the cart code itself and its test file. After that, a separate reviewer looked over the change. On its first pass it found two problems, and I fixed both of them, so there is nothing left from the review. Nobody disagreed with any of the findings either. Now it's your turn: look over the changes, and when you're happy with them, say go and I will commit the work for you."
