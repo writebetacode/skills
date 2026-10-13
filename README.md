@@ -49,7 +49,7 @@ Creates, edits, comments on, links, assigns, closes or reopens GitHub and GitLab
 
 #### wbc:review
 
-Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked.
+Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked. Other skills can also ask it for a local review of uncommitted changes against a spec, which returns the findings and writes or posts nothing.
 
 To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`sdlc-plan` reads the same list):
 
