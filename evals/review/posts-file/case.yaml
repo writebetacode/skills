@@ -25,15 +25,20 @@ graders:
   - name: posts-active-findings
     type: regex
     target: { source: file, path: .fake-gh/api-inputs.log }
-    pattern: 'review:1 -->[\s\S]*review:2 -->|review:2 -->[\s\S]*review:1 -->'
+    pattern: 'review:2 -->[\s\S]*review:3 -->|review:3 -->[\s\S]*review:2 -->'
   - name: conventional-body
     type: regex
     target: { source: file, path: .fake-gh/api-inputs.log }
     pattern: 'issue \(blocking\): Could a name like'
+  - name: skips-posted
+    type: regex
+    target: { source: file, path: .fake-gh/api-inputs.log }
+    pattern: 'review:1\b|cap how many rows'
+    match: not_contains
   - name: skips-withdrawn
     type: regex
     target: { source: file, path: .fake-gh/api-inputs.log }
-    pattern: 'review:3\b|searchUsers'
+    pattern: 'review:4\b|searchUsers'
     match: not_contains
   - name: comment-event
     type: regex
@@ -50,3 +55,8 @@ graders:
     target: { source: file, path: .ai/reviews/7.md }
     pattern: '^posted: \d{4}-\d{2}-\d{2}\b'
     flags: m
+    match: "count:3"
+  - name: removes-worktree
+    type: regex
+    target: trace
+    pattern: 'worktree remove (?![^"]*--force)'

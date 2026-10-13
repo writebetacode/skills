@@ -3,7 +3,7 @@ name: review
 description: Review a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, re-review it after new pushes or replies, and post it when told; or review uncommitted local changes against a spec and return the findings. Use when asked to review or re-review a PR or MR, to post or submit a review, to answer replies to review comments, or for a local review against a spec.
 ---
 
-Host: `origin` URL contains `github`/`gitlab`; else whichever of `gh repo view`/`glab repo view` succeeds. Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
+Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
 
 - File: `<repo root>/.ai/reviews/<number>.md`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore` (ignores all of `.ai/`, itself included). Never stage it.
 - Code: `fetch-ref`, then `git worktree add --detach ${TMPDIR:-/tmp}/review-<repo>-<number> <head sha>` (exists → `git -C <it> checkout --detach <head sha>`). Read code only there. Never `--force`.
@@ -39,7 +39,7 @@ Re-review also: a finding the head fixes → `## Resolved`, `(resolved in <short
 
 ## Post
 
-Only when told ("post it"). Head ≠ `reviewed at` → re-review; stop for the user. Then `batch` at once: every `## <N>.` finding without `linked:`, on its line or as a reply where `reply to:`, plus every reply draft. Bodies and JSON go in files under `${TMPDIR:-/tmp}`; check each holds what it should before sending. Approve or request changes only when named. Nothing else: no summary, overview or counts. Under each sent finding: `posted: <YYYY-MM-DD> <url the host returned, if any>`; drop sent drafts.
+Only when told ("post it"). Head ≠ `reviewed at` → re-review; stop for the user. Then `batch` at once: every `## <N>.` finding without `linked:` or `posted:`, on its line or as a reply where `reply to:`, plus every reply draft. Bodies and JSON go in files under `${TMPDIR:-/tmp}`; check each holds what it should before sending. Approve or request changes only when named. Nothing else: no summary, overview or counts. Under each sent finding: `posted: <YYYY-MM-DD> <url the host returned, if any>`; drop sent drafts. Then `git worktree remove` each worktree this review made, related repos' too (`git worktree list`); a re-review makes them again.
 
 Comment body:
 

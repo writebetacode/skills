@@ -14,7 +14,7 @@ tasks/NN-<mr>.md     one per MR; NN = merge order
 
 Epic (several features that each ship alone): its own `spec.md` and `status.md`, plus `NN-<feature>/` sub-folders in build order, each laid out as above.
 
-Talk to the user only in `same-page` rounds: the request, then each open choice the spec needs. Never ask them to approve research.
+Talk to the user only in `same-page` rounds (the request, then each open choice the spec needs), the spec walk and the final reply. Never ask them to approve research.
 
 ## Plan
 

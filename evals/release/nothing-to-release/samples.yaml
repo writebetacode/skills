@@ -6,7 +6,7 @@ says-nothing-to-release:
     - 'Nothing worth releasing since v0.1.0, just docs and chores.'
     - 'No new version is needed: the commits since v0.1.0 are docs, chore and test.'
   fail:
-    - 'Prepared 0.1.1 on feature-release-v0.1.1. Review the diff, then say go.'
+    - 'Prepared 0.1.1 on chore/release-v0.1.1. Review the diff, then say go.'
     - 'Released v0.1.1.'
 changelog-unchanged:
   pass:
@@ -51,4 +51,4 @@ no-branch:
   pass:
     - "ref: refs/heads/main\n"
   fail:
-    - "ref: refs/heads/feature-release-v0.1.1\n"
+    - "ref: refs/heads/chore/release-v0.1.1\n"

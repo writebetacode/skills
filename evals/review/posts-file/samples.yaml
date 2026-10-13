@@ -5,20 +5,26 @@ one-batched-review:
     - "gh pr view 7 --json headRefOid\ngh pr comment 7 --body-file /tmp/1.md\ngh pr comment 7 --body-file /tmp/2.md\n"
 posts-active-findings:
   pass:
-    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:2 -->\\nquestion (non-blocking): y\"}]}\n"
+    - "{\"comments\": [{\"body\": \"<!-- review:2 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:3 -->\\nquestion (non-blocking): y\"}]}\n"
   fail:
-    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}]}\n"
+    - "{\"comments\": [{\"body\": \"<!-- review:2 -->\\nissue (blocking): x\"}]}\n"
     - "{\"comments\": [{\"body\": \"issue (blocking): x\"}, {\"body\": \"question (non-blocking): y\"}]}\n"
 conventional-body:
   pass:
-    - "\"body\": \"<!-- review:1 -->\\nissue (blocking): Could a name like `' OR '1'='1` change which rows this query returns?\\n\\n...\""
+    - "\"body\": \"<!-- review:2 -->\\nissue (blocking): Could a name like `' OR '1'='1` change which rows this query returns?\\n\\n...\""
   fail:
-    - "\"body\": \"<!-- review:1 -->\\n**issue (blocking): src/users.js:10**\\n\\n**The ask:** Could a name like `' OR '1'='1` change which rows?\""
+    - "\"body\": \"<!-- review:2 -->\\n**issue (blocking): src/users.js:10**\\n\\n**The ask:** Could a name like `' OR '1'='1` change which rows?\""
+skips-posted:
+  pass:
+    - "{\"comments\": [{\"body\": \"<!-- review:2 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:3 -->\\nquestion (non-blocking): y\"}]}\n"
+  fail:
+    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nsuggestion (non-blocking): x\"}, {\"body\": \"<!-- review:2 -->\\nissue (blocking): y\"}]}\n"
+    - "{\"comments\": [{\"body\": \"suggestion (non-blocking): Should `findUsersByName` cap how many rows it returns?\"}]}\n"
 skips-withdrawn:
   pass:
-    - "{\"comments\": [{\"body\": \"<!-- review:1 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:2 -->\\nquestion (non-blocking): y\"}]}\n"
+    - "{\"comments\": [{\"body\": \"<!-- review:2 -->\\nissue (blocking): x\"}, {\"body\": \"<!-- review:3 -->\\nquestion (non-blocking): y\"}]}\n"
   fail:
-    - "{\"comments\": [{\"body\": \"<!-- review:3 -->\\nnitpick (non-blocking): Would `searchUsers` read better?\"}]}\n"
+    - "{\"comments\": [{\"body\": \"<!-- review:4 -->\\nnitpick (non-blocking): Would `searchUsers` read better?\"}]}\n"
 comment-event:
   pass:
     - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"comments\": []\n}\n"
@@ -27,15 +33,23 @@ comment-event:
     - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"comments\": []\n}\n"
 no-summary:
   pass:
-    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"comments\": [\n    {\n      \"path\": \"src/users.js\",\n      \"line\": 10,\n      \"body\": \"<!-- review:1 -->\"\n    }\n  ]\n}\n"
+    - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"comments\": [\n    {\n      \"path\": \"src/users.js\",\n      \"line\": 10,\n      \"body\": \"<!-- review:2 -->\"\n    }\n  ]\n}\n"
     - "{\"commit_id\":\"4f1c2d3\",\"event\":\"COMMENT\",\"comments\":[{\"path\":\"src/users.js\",\"line\":10,\"body\":\"x\"}]}\n"
   fail:
     - "{\n  \"commit_id\": \"4f1c2d3\",\n  \"event\": \"COMMENT\",\n  \"body\": \"Left 2 comments.\",\n  \"comments\": []\n}\n"
     - "{\"commit_id\":\"4f1c2d3\",\"event\":\"COMMENT\",\"body\":\"Left 2 comments.\",\"comments\":[]}\n"
 records-posted:
   pass:
-    - "## 1. issue (blocking): src/users.js:10\nposted: 2026-10-12 https://github.com/acme/shop/pull/7#pullrequestreview-101\n"
-    - "## 2. question (non-blocking): src/users.js:9\nposted: 2026-10-12\n"
+    - "## 1. suggestion (non-blocking): src/users.js:10\nposted: 2026-10-12 https://github.com/acme/shop/pull/7#discussion_r101\n\n## 2. issue (blocking): src/users.js:10\nposted: 2026-10-13 https://github.com/acme/shop/pull/7#pullrequestreview-101\n\n## 3. question (non-blocking): src/users.js:9\nposted: 2026-10-13\n"
   fail:
-    - "## 1. issue (blocking): src/users.js:10\n\nThe ask: x\n"
-    - "## 1. issue (blocking): src/users.js:10\nposted: https://github.com/acme/shop/pull/7#pullrequestreview-101\n"
+    - "## 1. suggestion (non-blocking): src/users.js:10\nposted: 2026-10-12 https://github.com/acme/shop/pull/7#discussion_r101\n\n## 2. issue (blocking): src/users.js:10\n\nThe ask: x\n"
+    - "## 1. suggestion (non-blocking): src/users.js:10\nposted: 2026-10-12 https://github.com/acme/shop/pull/7#discussion_r101\nposted: 2026-10-13\n\n## 2. issue (blocking): src/users.js:10\nposted: 2026-10-13\n\n## 3. question (non-blocking): src/users.js:9\nposted: 2026-10-13\n"
+    - "## 1. suggestion (non-blocking): src/users.js:10\nposted: 2026-10-12\n\n## 2. issue (blocking): src/users.js:10\nposted: https://github.com/acme/shop/pull/7#pullrequestreview-101\n\n## 3. question (non-blocking): src/users.js:9\nposted: 2026-10-13\n"
+removes-worktree:
+  pass:
+    - "git worktree remove /var/folders/x/T/tmp.a1b2/review-shop-7"
+    - "git worktree list && git worktree remove \"$wt\""
+  fail:
+    - "git worktree remove --force /var/folders/x/T/tmp.a1b2/review-shop-7"
+    - "git worktree list"
+    - "rm -rf /var/folders/x/T/tmp.a1b2/review-shop-7"
