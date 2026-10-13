@@ -6,7 +6,7 @@ GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitl
 | view | `glab mr view <branch> --output json` (`iid`, `title`, `description`, `state`, `draft`, `web_url`) |
 | issue | `glab issue view <n> --output json` (`title`, `web_url`) |
 | user | `glab api user \| jq -r .username` |
-| create | `glab mr create --yes --title <title> --description-file <file> --target-branch <default> --source-branch <branch> --assignee <user>`, plus `--draft` if asked |
+| create | `glab mr create --yes --title <title> --description-file <file> --target-branch <base> --source-branch <branch> --assignee <user>`, plus `--draft` if asked |
 | edit-body | `glab mr update <iid> --description-file <file>` |
 | edit-title | `glab mr update <iid> --title <title>`, plus `--draft` if it's a draft (else the title loses GitLab's draft prefix) |
 | draft | `glab mr update <iid> --draft` |

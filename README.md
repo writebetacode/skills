@@ -37,7 +37,7 @@ Creates a branch off the freshly fetched default branch, or off a branch you nam
 
 #### wbc:pr
 
-Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default. Call it when work is ready for review or merge.
+Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default; it can target a branch to stack on and list MRs that must merge in order. Call it when work is ready for review or merge.
 
 #### wbc:release
 
