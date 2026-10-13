@@ -8,4 +8,4 @@ No `tasks/` → Close.
 
 ## Close
 
-Ask "Done? I'll archive `<folder>`." Yes → move it to `.ai/sdlc/completed/<YYYY-MM-DD>-<name>/` (an epic moves whole; target exists → stop). Never merge.
+Fetch; on the default branch, each MR's local `branch:`: `git merge-tree --write-tree origin/<default> <branch>` prints `git rev-parse origin/<default>^{tree}` → `git branch -D` (squash merges defeat `-d`); else, or any error, keep it, say why. Then ask "Done? I'll archive `<folder>`." Yes → move it to `.ai/sdlc/completed/<YYYY-MM-DD>-<name>/` (an epic moves whole; target exists → stop). Never merge.
