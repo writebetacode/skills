@@ -33,7 +33,7 @@ Commits what's staged as a conventional commit, scoped to the ticket in the bran
 
 #### wbc:branch
 
-Creates a branch off the freshly fetched default branch, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
+Creates a branch off the freshly fetched default branch, or off a branch you name to stack on, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
 
 #### wbc:pr
 
