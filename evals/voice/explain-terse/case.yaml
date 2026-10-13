@@ -3,7 +3,7 @@ name: voice-explain-terse
 tags: [voice]
 execution:
   prompt: |
-    The sdlc-build skill just replied:
+    The build skill just replied:
 
     Task 01-cart-total. ACs: Empty cart totals zero → test/cart.test.js:12 ✓. Files: src/cart.js, test/cart.test.js. Review: r1 2→0; disputed: none. Look it over; say go to commit.
 

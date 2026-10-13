@@ -1,0 +1,12 @@
+no-code-yet:
+  pass:
+    - { tool: Skill, input: { skill: plan } }
+    - { tool: Read, input: { file_path: /repo/src/cart.js } }
+  fail:
+    - { tool: Write, input: { file_path: /repo/src/auth/sso.js, content: "exports.google = () => {};\n" } }
+    - { tool: Edit, input: { file_path: /repo/test/cart.test.js, old_string: "});\n", new_string: "});\n\ntest(\"sso\", () => {});\n" } }
+no-branch:
+  pass:
+    - "ref: refs/heads/main\n"
+  fail:
+    - "ref: refs/heads/feat/sso-sign-in\n"

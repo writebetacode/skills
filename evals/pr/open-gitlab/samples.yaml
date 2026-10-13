@@ -1,0 +1,30 @@
+looks-up-user:
+  pass:
+    - "glab api user\nglab mr create --yes --title x --description-file /tmp/b.md --target-branch main --source-branch fix/142-empty-cart-total --assignee dev\n"
+  fail:
+    - "glab mr create --yes --title x --description-file /tmp/b.md --target-branch main --source-branch fix/142-empty-cart-total --assignee @me\n"
+creates-from-table:
+  pass:
+    - "glab mr create --yes --title fix(#142): Total empty carts as zero --description-file /tmp/b.md --target-branch main --source-branch fix/142-empty-cart-total --assignee dev\n"
+    - "glab mr create --assignee=dev --source-branch=fix/142-empty-cart-total --target-branch=main --description-file=/tmp/b.md --title x --yes\n"
+  fail:
+    - "glab mr create --title x --description-file /tmp/b.md --target-branch main --source-branch fix/142-empty-cart-total --assignee dev\n"
+    - "glab mr create --yes --title x --description \"$(cat /tmp/b.md)\" --target-branch main --source-branch fix/142-empty-cart-total --assignee dev\n"
+    - "glab mr create --yes --title x --description-file /tmp/b.md --target-branch master --source-branch fix/142-empty-cart-total --assignee dev\n"
+title-from-commit:
+  pass:
+    - "fix(#142): Total empty carts as zero\n"
+  fail:
+    - "Total empty carts as zero\n"
+    - "fix(#142): total empty carts as zero\n"
+body-in-markers:
+  pass:
+    - "<!-- pr-body:start -->\n## Tickets\n- [#142](https://gitlab.com/acme/shop/-/issues/142) Checkout shows a null total for an empty cart\n## Summary\nEmpty carts now total 0.\n## Changes\n- `src/cart.js`: drop the null early return\n<!-- pr-body:end -->\n"
+  fail:
+    - "## Tickets\n- #142\n## Summary\nEmpty carts now total 0.\n"
+    - "<!-- pr-body:start -->\n## Tickets\n- [#142](https://github.com/acme/shop/issues/142) x\n## Summary\nx\n<!-- pr-body:end -->\n"
+says-merge-request:
+  pass:
+    - "Opened merge request !3: https://gitlab.com/acme/shop/-/merge_requests/3"
+  fail:
+    - "Opened pull request #3: https://gitlab.com/acme/shop/-/merge_requests/3"

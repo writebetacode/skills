@@ -1,0 +1,61 @@
+schema_version: "1.1"
+name: build-go-commits-proposes-mrs
+tags: [build, commit, voice]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: |
+    Use the build skill on .ai/plan/empty-cart-total. You built task 1, the review found nothing, and you stopped for my review.
+    My reply: "go"
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 25
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?build"'
+  - name: commit-skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?commit"'
+  - name: committed
+    type: regex
+    target: { source: file, path: .git/logs/HEAD }
+    pattern: '\tcommit: fix\(#142\): [A-Z]'
+  - name: stages-by-path
+    type: regex
+    target: trace
+    pattern: '^(?=[\s\S]*git add [^"]*src/cart\.js)(?=[\s\S]*git add [^"]*test/cart\.test\.js)'
+  - name: stages-spec
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\bgit add [^"]*docs/specs/empty-cart-total\.md'
+  - name: never-stages-all
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*\bgit add (?:[^"]* )?(?:-A|--all|-u|\.)(?=[\s"\;&|])'
+    match: not_contains
+  - name: ac-ticked
+    type: regex
+    target: { source: file, path: .ai/plan/empty-cart-total/tasks/01-cart-total.md }
+    pattern: '^- \[x\] Empty cart totals zero\s*$'
+    flags: mi
+  - name: status-committed
+    type: regex
+    target: { source: file, path: .ai/plan/empty-cart-total/status.md }
+    pattern: '^- 01-cart-total: committed\s*$'
+    flags: m
+  - name: not-pushed
+    type: file_exists
+    path: .remote.git/logs/refs/heads/fix/142-empty-cart-total
+    exists: false
+  - name: no-pr-yet
+    type: regex
+    target: { source: file, path: .fake-gh/calls.log }
+    pattern: '^gh pr create'
+    flags: m
+    match: not_contains
+  - name: asks-to-open
+    type: regex
+    pattern: '(?:merge request|pull request|\bMRs?\b|\bPRs?\b)(?:[^?]*\?|[\s\S]*\b(?:say go|say the word|let me know|tell me|want me to|when you''re ready)\b)'
+    flags: i

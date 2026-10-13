@@ -4,7 +4,7 @@ tags: [review]
 context:
   scaffold_script: fixture.sh
 execution:
-  prompt: "Use the review skill in local mode: review my uncommitted changes against .ai/sdlc/login-lockout/spec.md, ACs: Locked after five failures; Right password refused while locked. Return the findings."
+  prompt: "Use the review skill in local mode: review my uncommitted changes against .ai/plan/login-lockout/spec.md, ACs: Locked after five failures; Right password refused while locked. Return the findings."
   allowed_tools: [Skill, Read, Grep, Glob, Agent]
   max_turns: 30
 graders:
