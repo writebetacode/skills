@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Run skill evals and compare case scores with the accepted baseline (evals/scores.json, per model).
 
-Usage: check.py <model> [skill[,skill…]|changed|all] [eval args]   e.g. --case <name> --runs 1, -j 4; ▲ ▼ = per case;
-         a ▼ is re-run before it counts; exit 1 on any ▼. changed: skills and cases touched since main (eval tooling → all)
+Usage: check.py <model> [skill[,skill…]|changed|since-release|all] [eval args]   e.g. --case <name> --runs 1, -j 4;
+         ▲ ▼ = per case; a ▼ is re-run before it counts; exit 1 on any ▼. changed: skills and cases touched since main;
+         since-release: since the last v* tag (none → all). evals/lib touched → the skills whose fixtures source it;
+         other eval tooling (not check.py, free_checks.py) → all
        check.py <model> [target] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
        check.py --free            free checks only (see free_checks.py); every paid run runs them first and stops on a ✗
        check.py --accept          store the last run's scores as the baseline
@@ -69,24 +71,31 @@ model, target, extra = (None, "all", sys.argv[2:]) if free else (sys.argv[1], (s
 git = lambda *a: subprocess.run(["git", *a], cwd=EVALS.parent, capture_output=True, text=True)
 
 
-def changed_skills():
-    """Skills whose skill or eval files differ from main; None (= all) when shared eval tooling changed."""
-    diff = git("diff", "--name-only", "main", "--", "skills", "evals", ":!evals/scores.json", ":!evals/flakes.json")
+def changed_skills(base):
+    """Skills whose skill or eval files differ from base, plus those whose fixtures source a changed evals/lib file;
+    None (= all) when other shared eval tooling changed. The runner and free checks don't change what a case does."""
+    diff = git("diff", "--name-only", base, "--", "skills", "evals", ":!evals/scores.json", ":!evals/flakes.json",
+               ":!evals/check.py", ":!evals/free_checks.py")
     if diff.returncode:
-        sys.exit("changed: no main to diff against")
+        sys.exit(f"{target}: no {base} to diff against")
     names = set()
     for f in (diff.stdout + git("ls-files", "-o", "--exclude-standard", "skills", "evals").stdout).split():
         parts = f.split("/")
-        if parts[0] == "skills" or (len(parts) > 2 and (EVALS / parts[1]).is_dir() and parts[1] != "lib"):
+        if parts[:2] == ["evals", "lib"]:
+            names |= {s.parent.name if s.parent.parent == EVALS else s.parent.parent.name
+                      for s in EVALS.glob("*/**/*.sh") if "lib/" in s.read_text()} - {"lib"}
+        elif parts[0] == "skills" or (len(parts) > 2 and (EVALS / parts[1]).is_dir()):
             names.add(parts[1])
         elif parts[0] == "evals":
             return None
     if not names:
-        sys.exit("changed: no skill or eval differs from main")
+        sys.exit(f"{target}: no skill or eval differs from {base}")
     return sorted(names)
 
 
-tags = None if free or target == "all" else changed_skills() if target == "changed" else target.split(",")
+tag = git("describe", "--tags", "--abbrev=0", "--match", "v*", "main").stdout.strip() if target == "since-release" else None
+tags = (None if free or target == "all" or target == "since-release" and not tag
+        else changed_skills(tag or "main") if target in ("changed", "since-release") else target.split(","))
 if tags:
     print(f"skills: {', '.join(tags)} (plus every case tagged with one)")
 d = git("diff", "--name-only", "main", "--", ".", ":!evals/scores.json")
