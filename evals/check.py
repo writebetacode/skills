@@ -10,13 +10,14 @@ Usage: check.py <model> [skill[,skill…]|changed|since-release|all] [eval args]
        check.py --accept          store the last run's scores as the baseline
 Add --reviewed (last) once the user has reviewed the diff from main. --runs above 3 needs --user-asked: only when the user asked.
 """
-import json, os, re, shutil, subprocess, sys, tempfile
+import atexit, json, os, re, shutil, signal, subprocess, sys, tempfile
 from collections import Counter
 from pathlib import Path
 
 EVALS = Path(__file__).resolve().parent
 SCORES, LAST, FLAKES = EVALS / "scores.json", EVALS / ".last.json", EVALS / "flakes.json"
 CONFIRM_RUNS = MAX_RUNS = 3
+TMP = Path("/tmp").resolve()  # where `claude plugin eval` puts its e-* scaffold dirs, whatever TMPDIR says
 
 
 def last_reply(trace):
@@ -118,7 +119,8 @@ if not ablate:  # a with-without run stores nothing, so it keeps the last run's 
     LAST.unlink(missing_ok=True)
 env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 env["PATH"] = ".eval-bin:" + env.get("PATH", "")  # fixtures put fake CLIs here (evals/lib/setup.sh)
-traces, kept = [], set()
+kept, before = set(), set(TMP.glob("e-*"))
+signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))  # so a stopped run still cleans up (atexit)
 
 
 def evaluate(*args):
@@ -137,7 +139,6 @@ def evaluate(*args):
             print(line)
     res = json.loads(result.read_text())
     shutil.rmtree(tmp)
-    traces.extend(r.get("tracePath") for c in res["cases"] for arm in c["arms"].values() for r in arm)
     print(f"{'partial: ' + res['partialReason'] + ' · ' if res.get('partial') else ''}~${res['costUsd']:.2f} · {res['durationSeconds']}s")
     return res
 
@@ -158,10 +159,14 @@ def explain(runs):
 
 
 def clean_traces():
-    for t in map(Path, filter(None, set(traces) - kept)):
-        if t.parent.name == "out" and t.parent.parent.name.startswith("e-"):
-            subprocess.run(["chmod", "-R", "u+rwx", str(t.parent.parent)], capture_output=True)
-            shutil.rmtree(t.parent.parent, ignore_errors=True)
+    """Each e-* dir made since this run started, except those of traces explain() printed. Two check.py runs at once
+    aren't supported (they share .last.json), so every new one is this run's."""
+    for d in set(TMP.glob("e-*")) - before - {Path(t).parent.parent for t in kept}:
+        subprocess.run(["chmod", "-R", "u+rwx", str(d)], capture_output=True)
+        shutil.rmtree(d, ignore_errors=True)
+
+
+atexit.register(clean_traces)
 
 
 res, old, new, drops = evaluate(*extra), load(SCORES).get(model, {}), {}, 0
@@ -197,5 +202,4 @@ for c in res["cases"]:
     explain(runs)
 if not ablate:
     LAST.write_text(json.dumps({"model": model, "scores": new}))
-clean_traces()
 sys.exit(1 if drops else 0)
