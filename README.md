@@ -56,7 +56,7 @@ Use it before anything bigger than a quick fix, so you and Claude agree on what 
 
 ### wbc:sdlc-build
 
-Use it to turn an approved plan into tested, reviewed code while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change, waits for your go before committing, then opens the merge requests in order. When you close a plan, it deletes the plan's local branches whose work has fully merged and keeps any that still hold something.
+Use it to turn an approved plan into tested, reviewed code while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, waits for your go before committing, then opens the merge requests in order. When you close a plan, it deletes the plan's local branches whose work has fully merged and keeps any that still hold something.
 
 ### wbc:review
 

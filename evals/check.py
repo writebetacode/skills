@@ -2,8 +2,8 @@
 """Run skill evals and compare case scores with the accepted baseline (evals/scores.json, per model).
 
 Usage: check.py <model> [skill[,skill…]|changed|since-release|all] [eval args]   e.g. --case <name> --runs 1, -j 4;
-         ▲ ▼ = per case; a ▼ is re-run before it counts; exit 1 on any ▼. changed: skills and cases touched since main;
-         since-release: since the last v* tag (none → all). evals/lib touched → the skills whose fixtures source it;
+         ▲ ▼ = per case; a ▼ is re-run before it counts; exit 1 on any ▼. changed: skills, agents and cases touched since main;
+         since-release: since the last v* tag (none → all). evals/lib or an agent touched → the skills whose fixtures source it or that name it;
          other eval tooling (not check.py, free_checks.py) → all
        check.py <model> [target] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
        check.py --free            free checks only (see free_checks.py); every paid run runs them first and stops on a ✗
