@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.1 — 2026-10-13
+
+**Fresher branch bases and cheaper release evals**
+[v0.1.0...v0.1.1](https://github.com/writebetacode/skills/compare/v0.1.0...v0.1.1)
+
+### Fixes
+
+- fix: Write lint-clean changelogs and lint shell-written Markdown ([a1c8650](https://github.com/writebetacode/skills/commit/a1c865062bc6a16ae249565b818e5ef78bc389fb))
+- fix: Base work on the remote default branch and check release tags remotely ([a3ffdd4](https://github.com/writebetacode/skills/commit/a3ffdd4f8479e42f1cdfd43a7bab8233d3c9846a))
+
+### Other
+
+- chore: Skip the macOS git shim for fetch and push in eval fixtures ([ec22c59](https://github.com/writebetacode/skills/commit/ec22c59fbeb0bcf9f2d94d5c71df4ab01adf7d74))
+- docs: Make skill groups stand out from skills in the README ([3e4ceb7](https://github.com/writebetacode/skills/commit/3e4ceb753dcef390752a5e29fddc8205a7a10590))
+- chore: Run release evals only for skills changed since the last release ([81a5e0c](https://github.com/writebetacode/skills/commit/81a5e0cc8bea4cc11dc6efc9001337d92590e338))
+
 ## 0.1.0 — 2026-10-13
 
 **First cut of the wbc skills plugin**
