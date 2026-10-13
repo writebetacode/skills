@@ -1,7 +1,8 @@
 {
-  // Agent-facing Markdown: no title heading, no hard wraps, bare code fences.
+  // Agent-facing Markdown: no title heading, no hard wraps, bare code fences. Changelogs repeat group headings per release.
   "config": {
     "MD013": false,
+    "MD024": { "siblings_only": true },
     "MD040": false,
     "MD041": false
   }
