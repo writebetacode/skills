@@ -61,3 +61,7 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 #### wbc:sdlc-plan
 
 Plans a feature, bug fix, research request or epic into `.ai/sdlc/<name>/`. It agrees the request with you, researches quietly, writes a self-contained spec for you to approve, then splits the spec into commit-sized tasks grouped into merge requests in merge order. Call it before building anything bigger than a quick fix, or to turn a ticket into a plan.
+
+#### wbc:sdlc-build
+
+Builds a plan from `sdlc-plan` one task at a time: tests first, then the code, then a fresh agent reviews the change against the spec, and it stops for you to look before each commit. After the last commit it opens the merge requests in merge order, stacked where the plan says, and archives the plan to `.ai/sdlc/completed/` once you say it's done. A change to what the spec says goes back to `sdlc-plan`. Call it to build, continue or finish planned work.

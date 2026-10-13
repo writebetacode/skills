@@ -23,6 +23,8 @@
     "same-page-confirmation-returns-block": 1,
     "same-page-correction-not-confirmation": 1,
     "same-page-first-reply": 1,
+    "sdlc-build-go-commits-proposes-mrs": 1,
+    "sdlc-build-stops-for-review": 1,
     "sdlc-plan-asks-first": 1,
     "sdlc-plan-tasks-from-spec": 1,
     "sdlc-plan-writes-spec": 1,
