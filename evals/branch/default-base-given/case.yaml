@@ -1,0 +1,19 @@
+schema_version: "1.1"
+name: branch-default-base-given
+tags: [branch]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "Start a branch off trunk for ABC-123: lock out login after 5 failed attempts"
+  allowed_tools: [Skill, Read, Grep, Glob]
+  max_turns: 15
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?branch"'
+  - name: off-up-to-date-default
+    type: regex
+    target: { source: file, path: .git/logs/HEAD }
+    pattern: '^[0-9a-f]{40} 7369280e781a67e7f6dbd16b24f893460c223208 [^\n]*\tcheckout: moving from [^\n]* to feat/abc-123-'
+    flags: m
