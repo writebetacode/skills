@@ -1,0 +1,11 @@
+off-up-to-date-default:
+  pass:
+    - "c21aca45af4db000ffe02fa8721f78b0e7b9e580 7369280e781a67e7f6dbd16b24f893460c223208 dev <dev@example.com> 1791817223 -0500\tcheckout: moving from feat/abc-99-search to feat/abc-123-login-lockout\n"
+    - "c21aca45af4db000ffe02fa8721f78b0e7b9e580 9f2b7c1d4e8a3b6c5d0e1f2a3b4c5d6e7f8a9b0c dev <dev@example.com> 1791817223 -0500\tcheckout: moving from feat/abc-99-search to trunk\n\
+      9f2b7c1d4e8a3b6c5d0e1f2a3b4c5d6e7f8a9b0c 7369280e781a67e7f6dbd16b24f893460c223208 dev <dev@example.com> 1791817224 -0500\tpull: Fast-forward\n\
+      7369280e781a67e7f6dbd16b24f893460c223208 7369280e781a67e7f6dbd16b24f893460c223208 dev <dev@example.com> 1791817225 -0500\tcheckout: moving from trunk to feat/abc-123-login-lockout\n"
+  fail:
+    # Off the stale local trunk.
+    - "c21aca45af4db000ffe02fa8721f78b0e7b9e580 9f2b7c1d4e8a3b6c5d0e1f2a3b4c5d6e7f8a9b0c dev <dev@example.com> 1791817223 -0500\tcheckout: moving from feat/abc-99-search to feat/abc-123-login-lockout\n"
+    # Off the current feature branch.
+    - "c21aca45af4db000ffe02fa8721f78b0e7b9e580 c21aca45af4db000ffe02fa8721f78b0e7b9e580 dev <dev@example.com> 1791817223 -0500\tcheckout: moving from feat/abc-99-search to feat/abc-123-login-lockout\n"
