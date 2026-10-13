@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.0 — 2026-10-13
+
+**Safer branch cleanup and more reliable releases**
+[v0.1.1...v0.2.0](https://github.com/writebetacode/skills/compare/v0.1.1...v0.2.0)
+
+### Features
+
+- feat: Delete only fully merged branches and tag only merged releases ([55c30e4](https://github.com/writebetacode/skills/commit/55c30e46d27e2bb1054436d86c8411fa311c43a0))
+
+### Fixes
+
+- fix: Bump hidden manifests and keep commit subjects whole in releases ([3e148d0](https://github.com/writebetacode/skills/commit/3e148d062934a799e50a4d98101e0791b949b251))
+- fix: Accept clear asks without a question mark in eval graders ([9c246c9](https://github.com/writebetacode/skills/commit/9c246c930c33bd45dd22652ed74b22c5d34be562))
+
+### Other
+
+- chore: Accept "nothing that needs a release" and store new eval scores ([0422b19](https://github.com/writebetacode/skills/commit/0422b19998d40aa05516f3520652bb659c753980))
+
 ## 0.1.1 — 2026-10-13
 
 **Fresher branch bases and cheaper release evals**
