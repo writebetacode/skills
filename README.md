@@ -36,7 +36,7 @@ Use it so your history explains why things changed, without you writing the mess
 
 ### wbc:pr
 
-Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style, fills your template, squashes on merge by default, and handles drafts and stacked PRs that have to merge in order.
+Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style, fills your template, squashes on merge by default, and handles drafts and stacked PRs that have to merge in order. It won't merge while your branch has commits you haven't pushed, and it deletes a local branch only once all its work has merged.
 
 ### wbc:release
 
@@ -56,7 +56,7 @@ Use it before anything bigger than a quick fix, so you and Claude agree on what 
 
 ### wbc:sdlc-build
 
-Use it to turn an approved plan into tested, reviewed code while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change, waits for your go before committing, then opens the merge requests in order.
+Use it to turn an approved plan into tested, reviewed code while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change, waits for your go before committing, then opens the merge requests in order. When you close a plan, it deletes the plan's local branches whose work has fully merged and keeps any that still hold something.
 
 ### wbc:review
 
