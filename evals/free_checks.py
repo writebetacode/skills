@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Free checks before any paid eval run: YAML, case and grader keys, free grader types, regex graders vs samples,
-host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files, word budgets and
+host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files and agents, skill and agent word budgets and
 pointers to another skill's rules, and, with --run-fixtures, each scaffold script
 in a clean temp dir (check.py passes it only after its review gate).
 
@@ -95,6 +95,11 @@ def check_skills():
     for f in sorted(root.glob("skills/*/*.md")):
         if f.name != "SKILL.md" and f.resolve() not in linked:
             errors.append(f"{f.relative_to(root)}: no skill file links to it, so it never loads")
+    skill_text = "".join(f.read_text() for f in root.glob("skills/*/*.md"))
+    plugin = json.loads((root / ".claude-plugin/plugin.json").read_text())["name"]
+    for a in sorted(root.glob("agents/*.md")):
+        if f"{plugin}:{a.stem}" not in skill_text:
+            errors.append(f"{a.relative_to(root)}: no skill names {plugin}:{a.stem}, so it never runs")
 
 
 def run_fixture(cid, script):
