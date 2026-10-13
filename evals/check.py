@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Run skill evals and compare case scores with the accepted baseline (evals/scores.json, per model).
 
-Usage: check.py <model> [skill|all] [eval args]   e.g. --case <name> --runs 1; ▲ ▼ = per case; a ▼ is re-run before it counts; exit 1 on any ▼
-       check.py <model> [skill|all] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
+Usage: check.py <model> [skill[,skill…]|changed|all] [eval args]   e.g. --case <name> --runs 1, -j 4; ▲ ▼ = per case;
+         a ▼ is re-run before it counts; exit 1 on any ▼. changed: skills and cases touched since main (eval tooling → all)
+       check.py <model> [target] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
        check.py --free            free checks only (see free_checks.py); every paid run runs them first and stops on a ✗
        check.py --accept          store the last run's scores as the baseline
 Add --reviewed (last) once the user has reviewed the diff from main.
@@ -12,8 +13,8 @@ from collections import Counter
 from pathlib import Path
 
 EVALS = Path(__file__).resolve().parent
-SCORES, LAST = EVALS / "scores.json", EVALS / ".last.json"
-CONFIRM_RUNS = 6
+SCORES, LAST, FLAKES = EVALS / "scores.json", EVALS / ".last.json", EVALS / "flakes.json"
+CONFIRM_RUNS = 3
 
 
 def last_reply(trace):
@@ -64,9 +65,30 @@ if sys.argv[1:] == ["--accept"]:
     sys.exit()
 
 free = sys.argv[1:2] == ["--free"]
-model, tag, extra = (None, "all", sys.argv[2:]) if free else (sys.argv[1], (sys.argv[2:3] or ["all"])[0], sys.argv[3:])
-tag = None if tag == "all" else tag
+model, target, extra = (None, "all", sys.argv[2:]) if free else (sys.argv[1], (sys.argv[2:3] or ["all"])[0], sys.argv[3:])
 git = lambda *a: subprocess.run(["git", *a], cwd=EVALS.parent, capture_output=True, text=True)
+
+
+def changed_skills():
+    """Skills whose skill or eval files differ from main; None (= all) when shared eval tooling changed."""
+    diff = git("diff", "--name-only", "main", "--", "skills", "evals", ":!evals/scores.json", ":!evals/flakes.json")
+    if diff.returncode:
+        sys.exit("changed: no main to diff against")
+    names = set()
+    for f in (diff.stdout + git("ls-files", "-o", "--exclude-standard", "skills", "evals").stdout).split():
+        parts = f.split("/")
+        if parts[0] == "skills" or (len(parts) > 2 and (EVALS / parts[1]).is_dir() and parts[1] != "lib"):
+            names.add(parts[1])
+        elif parts[0] == "evals":
+            return None
+    if not names:
+        sys.exit("changed: no skill or eval differs from main")
+    return sorted(names)
+
+
+tags = None if free or target == "all" else changed_skills() if target == "changed" else target.split(",")
+if tags:
+    print(f"skills: {', '.join(tags)} (plus every case tagged with one)")
 d = git("diff", "--name-only", "main", "--", ".", ":!evals/scores.json")
 changed = d.stdout + git("ls-files", "-o", "--exclude-standard").stdout if d.returncode == 0 else "(no main to diff against)\n"
 if changed and "--reviewed" not in extra:
@@ -80,13 +102,13 @@ extra = [a for a in extra if a not in ("--reviewed", "--with-without")]
 LAST.unlink(missing_ok=True)
 env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 env["PATH"] = ".eval-bin:" + env.get("PATH", "")  # fixtures put fake CLIs here (evals/lib/setup.sh)
-traces = []
+traces, kept = [], set()
 
 
 def evaluate(*args):
     tmp = tempfile.mkdtemp()
-    cmd = ["claude", "plugin", "eval", str(EVALS.parent), *(["--tag", tag] if tag else []),
-           "--model", model, "--ablation", "with-without" if ablate else "none", "--threshold", "0", "-j", "4",
+    cmd = ["claude", "plugin", "eval", str(EVALS.parent), *(["--tag", *tags] if tags else []),
+           "--model", model, "--ablation", "with-without" if ablate else "none", "--threshold", "0", "-j", "8",
            "--trust-plugin", "--no-publish", "--scaffold", "--keep-temp", *args,
            "--output-dir", tmp, "--report", f"{tmp}/r.html", "--json", f"{tmp}/r.json",
            "--allow-tools", "Write", "Edit", "Bash"]
@@ -104,8 +126,23 @@ def evaluate(*args):
     return res
 
 
+def explain(runs):
+    """Each failed grader with its rate and reason, plus the first failing run's reply and kept trace: enough to tell a
+    skill bug from a grader that's too strict."""
+    failed = [g for r in runs for g in r["graders"] if not g["passed"]]
+    for name, n in Counter(g["name"] for g in failed).items():
+        why = next(g["explanation"] for g in failed if g["name"] == name)
+        print(f"      ✗ {name} {n}/{len(runs)}: {why[:300]}")
+    bad = next((r for r in runs if not r["passed"] or r["score"] < 1), None)
+    if bad:
+        print(f"      reply: {last_reply(bad.get('tracePath'))[:400]}")
+        if bad.get("tracePath"):
+            kept.add(bad["tracePath"])
+            print(f"      trace: {bad['tracePath']}")
+
+
 def clean_traces():
-    for t in map(Path, filter(None, traces)):
+    for t in map(Path, filter(None, set(traces) - kept)):
         if t.parent.name == "out" and t.parent.parent.name.startswith("e-"):
             subprocess.run(["chmod", "-R", "u+rwx", str(t.parent.parent)], capture_output=True)
             shutil.rmtree(t.parent.parent, ignore_errors=True)
@@ -127,7 +164,13 @@ for c in res["cases"]:
         keep = [a for i, a in enumerate(extra) if a not in ("--case", "--runs") and extra[i - 1:i] not in (["--case"], ["--runs"])]
         more = [r for x in evaluate(*keep, "--case", c["name"], "--runs", str(CONFIRM_RUNS))["cases"] for r in x["arms"]["with"]]
         if round(sum(r["score"] for r in more) / len(more), 2) >= o:
-            print(f"~   {s:.2f} (was {o:.2f})  {c['name']} (flaky: {CONFIRM_RUNS} re-runs held the baseline; not stored)")
+            flakes = load(FLAKES)
+            mine = flakes.setdefault(model, {})
+            mine[c["name"]] = n = mine.get(c["name"], 0) + 1
+            FLAKES.write_text(json.dumps(flakes, indent=2, sort_keys=True) + "\n")
+            print(f"~   {s:.2f} (was {o:.2f})  {c['name']} (flaky: {CONFIRM_RUNS} re-runs held the baseline; not stored;"
+                  f" flaked {n}× so far; fix the grader or the skill so it can't flake)")
+            explain(runs + more)
             continue
         runs = runs + more
         s = round(sum(r["score"] for r in runs) / len(runs), 2)
@@ -135,13 +178,7 @@ for c in res["cases"]:
     drops += o is not None and s < o
     mark = "new" if o is None else "▲" if s > o else "▼" if s < o else "="
     print(f"{mark:3} {s:.2f}{'' if o is None else f' (was {o:.2f})'}  {c['name']}")
-    failed = [g for r in runs for g in r["graders"] if not g["passed"]]
-    for name, n in Counter(g["name"] for g in failed).items():
-        why = next(g["explanation"] for g in failed if g["name"] == name)
-        print(f"      ✗ {name} {n}/{len(runs)}: {why[:120]}")
-    bad = next((r for r in runs if not r["passed"] or r["score"] < 1), None)
-    if bad:
-        print(f"      reply: {last_reply(bad.get('tracePath'))[:400]}")
+    explain(runs)
 if not ablate:
     LAST.write_text(json.dumps({"model": model, "scores": new}))
 clean_traces()

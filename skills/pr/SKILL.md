@@ -8,7 +8,7 @@ Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else which
 **Open** (the branch already has one → update it):
 
 1. Push: `git push -u origin <branch>` unless the remote has the same SHA. Never force; rejected → report; stop.
-2. Invoke the `voice` skill.
+2. Invoke the `voice` skill (once per session).
 3. Title: match the style of the last 20 merged titles (`merged`): ticket or not and where, casing, prefix. No clear style → commit-subject form: most significant type among the branch's commits, ticket from the branch, `!` if any commit has one: ✓ `fix(#142): Stop double-charging empty carts`.
 4. Body: fill the repo's PR/MR template if it has one, else:
 
@@ -28,11 +28,6 @@ Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else which
 
 **Draft/ready**: only when asked; already so → say so.
 
-**Merge**:
-
-1. `checks`; any failure → report; stop.
-2. Squash unless the caller asks for a merge commit. Squash message: subject = the PR title; body = the ≤5 most important why-bullets from the squashed commits, then the newest squashed `Co-Authored-By` line, copied exactly (none → no trailer).
-3. `merge`, deleting the remote branch; refused → report why; stop.
-4. Switch to the default branch, pull, delete the local branch if it's still there.
+**Merge**: read [merge.md](merge.md).
 
 No AI attribution in titles or descriptions.

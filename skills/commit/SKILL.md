@@ -3,14 +3,14 @@ name: commit
 description: Commit staged changes as a ticket-scoped conventional commit. Use whenever the user asks to commit.
 ---
 
-Commit only what's staged; never stage. Nothing staged → say so and stop. Else invoke the `voice` skill, then write:
+Commit only what's staged; never stage. Nothing staged → say so and stop. Else invoke the `voice` skill (once per session), then write:
 
 ```
 <type>(<ticket>): <summary>
 
 - <why>
 
-Co-Authored-By: <your model>, ${CLAUDE_EFFORT} effort, <YYYY-MM-DD>
+Co-Authored-By: <model, e.g. Claude Opus 5.5>, ${CLAUDE_EFFORT} effort, <today, YYYY-MM-DD>
 ```
 
 - Subject ≤80 chars with prefix; summary starts with a capital.
@@ -20,4 +20,4 @@ Co-Authored-By: <your model>, ${CLAUDE_EFFORT} effort, <YYYY-MM-DD>
 - ≤5 bullets, ≤80 chars each, why only:
   - ✗ `- Add retry to fetchOrders`
   - ✓ `- Survive the payment API's 502s mid-deploy`
-- Co-Authored-By is the only trailer; model like `Claude Opus 5.5`; today's date.
+- No other trailer.
