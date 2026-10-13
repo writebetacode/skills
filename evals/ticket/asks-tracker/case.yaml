@@ -19,4 +19,4 @@ graders:
     match: not_contains
   - name: asks-offering-origin-host
     type: regex
-    pattern: 'GitHub[^\n?]*\?'
+    pattern: 'GitHub[^?.]{0,200}\?|\b([Ww]hich|[Ww]hat) tracker\b[^\n]{0,200}GitHub|GitHub[^.\n]{0,120}\bor (GitLab|Jira)\b'

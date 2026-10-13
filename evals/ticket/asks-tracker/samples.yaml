@@ -8,6 +8,9 @@ asks-offering-origin-host:
   pass:
     - "Which tracker should I file this in: GitHub (acme/shop)?"
     - "File it on GitHub (acme/shop), or in GitLab or Jira?"
+    - "Where should this go? Options:\n- GitHub (acme/shop), the repo's own issues\n- GitLab or Jira, if you track work there?"
+    - "Which tracker do you use? I'd suggest GitHub (acme/shop), since that's where origin points."
+    - "I can file it on GitHub (acme/shop) or Jira. Pick one and I'll write it up."
   fail:
     - "Filed: https://github.com/acme/shop/issues/9"
     - "Which tracker should I use: GitLab or Jira?"
