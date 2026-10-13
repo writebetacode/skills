@@ -2,7 +2,7 @@
 """Run skill evals and compare case scores with the accepted baseline (evals/scores.json, per model).
 
 Usage: check.py <model> [skill|all] [eval args]   e.g. --case <name> --runs 1; ▲ ▼ = per case; a ▼ is re-run before it counts; exit 1 on any ▼
-       check.py <model> [skill|all] --with-without   also run each case without the plugin; print Δ; store nothing
+       check.py <model> [skill|all] --with-without   also run each case without the plugin; print Δ and the graders that differ; store nothing
        check.py --free            free checks only (see free_checks.py); every paid run runs them first and stops on a ✗
        check.py --accept          store the last run's scores as the baseline
 Add --reviewed (last) once the user has reviewed the diff from main.
@@ -33,6 +33,24 @@ def last_reply(trace):
 
 def load(p):
     return json.loads(p.read_text()) if p.exists() else {}
+
+
+def delta(case):
+    """Mean with-minus-without pass rate per grader, leaving out graders that require a skill to fire (`*-fired`, not
+    `*-not-fired`): without the plugin they always fail, so they'd make every case look like it pins something."""
+    rates = []
+    for arm in ("with", "without"):
+        passes = {}
+        for r in case["arms"].get(arm) or []:
+            for g in r["graders"]:
+                if not re.search(r"(?<!-not)-fired$", g["name"]):
+                    passes.setdefault(g["name"], []).append(g["passed"])
+        rates.append({n: sum(v) / len(v) for n, v in passes.items()})
+    w, wo = rates
+    if not w or not wo:
+        return None, ""
+    differ = ", ".join(f"{n} {w[n]:.2f}/{wo.get(n, 0):.2f}" for n in w if w[n] != wo.get(n, 0))
+    return sum(w[n] - wo.get(n, 0) for n in w) / len(w), differ
 
 
 if sys.argv[1:] == ["--accept"]:
@@ -102,8 +120,8 @@ for c in res["cases"]:
         print(f"err {s:.2f}  {c['name']} (run errors; not comparable, not stored)\n      ! {sorted(errs)[0][:160]}")
         continue
     if ablate:
-        dl = c["aggregates"].get("delta")
-        print(f"Δ {'n/a' if dl is None else f'{dl:+.2f}'}  with {s:.2f}  {c['name']}")
+        dl, differ = delta(c)
+        print(f"Δ {'n/a' if dl is None else f'{dl:+.2f}'}  with {s:.2f}  {c['name']}{f'  ({differ})' if differ else ''}")
         continue
     if o is not None and s < o:
         keep = [a for i, a in enumerate(extra) if a not in ("--case", "--runs") and extra[i - 1:i] not in (["--case"], ["--runs"])]
