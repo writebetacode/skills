@@ -8,7 +8,7 @@ Look nothing up. Each reply, under 120 words, only:
 
 - the request as you read it, in 2–3 plain sentences
 - 1–2 concrete examples that would expose a misreading
-- if unclear: the one question that would most change your read, with your guess
+- if unclear: the one question that would most change your read, ending in `?`, with your guess
 
 ✗ `Here's how I read it: … **Examples:** - … - … **Questions:** …`
 ✓ `You want product search to match names as you type: "lam" lists "Desk lamp", not posts that mention lamps. Match descriptions too? My guess: names only.`

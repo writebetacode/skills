@@ -1,6 +1,6 @@
 ---
 name: sdlc-plan
-description: Plan a feature, bug fix, research request, epic or ticket into `.ai/sdlc/<name>/`: a self-contained spec agreed with the user, then commit-sized tasks grouped into merge requests. Use when asked to plan, spec or scope work before building it, to turn a ticket into a plan, or when sdlc-build hands back a change to an approved spec.
+description: Plan a feature, bug fix, research request, epic or ticket into `.ai/sdlc/<name>/` as a spec and tasks. Use when asked to plan, spec or scope work before building it, to turn a ticket into a plan, or when sdlc-build hands back a change to an approved spec.
 ---
 
 Folder: `<git rev-parse --show-toplevel>/.ai/sdlc/<name>/`, `<name>` 2–4 kebab-case words, not already under `.ai/sdlc/`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore`.
@@ -21,7 +21,7 @@ Talk to the user only in `same-page` rounds (the request, then each open choice 
 1. Ticket key or URL → `ticket` skill: view. Input only.
 2. `same-page` on the request. Several features that each ship alone → propose an epic in that round.
 3. Research quietly: `research` skill per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched); save each report as `research/<topic>.md`.
-4. Invoke the `voice` skill; write `spec.md`.
+4. Invoke the `voice` skill (once per session); write `spec.md`.
 5. Walk it: path, then its decisions and open questions in ≤8 lines; ask to approve or change. Changes → `same-page` on them, edit, walk again; open questions → settle before approval. Explicit approval only → `status.md` `spec: approved <date>`.
 6. Tasks from `spec.md` alone: never research, tickets or this conversation.
 7. Reply: folder path; MRs in order with repo, branch, task count; next step: `sdlc-build`. Nothing to build → say `sdlc-build` closes it.
@@ -30,7 +30,7 @@ Tickets: file or link only when asked (`ticket` skill); record in `status.md`, n
 
 ## Revise
 
-An existing folder, or `sdlc-build` handing back a change → `same-page` on the change; invoke the `voice` skill; edit `spec.md`, adding the decision; walk the changed parts. On approval rewrite only uncommitted tasks; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
+An existing folder, or `sdlc-build` handing back a change → `same-page` on the change; invoke the `voice` skill (once per session); edit `spec.md`, adding the decision; walk the changed parts. On approval rewrite only uncommitted tasks; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
 
 ## spec.md
 
@@ -86,8 +86,8 @@ with: <NN, … | none>
 - [ ] <spec scenario name | observable check when no scenario fits>
 ```
 
-- `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch, found as the `branch` skill finds it.
-- Branch named per the `branch` skill, lowercase, ticket from `status.md`: ✓ `feat/abc-77-login-lockout`.
+- `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch name: `git remote set-head origin -a`, then `origin/HEAD` minus `origin/`: ✓ `base: trunk` ✗ `base: origin/trunk`.
+- `branch:` ticket from `status.md`: ✓ `feat/abc-77-login-lockout`.
 - Each spec scenario is an AC of exactly one task. Each task carries its own tests: never a tests-only or code-only task.
 - Another repo's path: `## Related repos` in loaded `CLAUDE.md`, else a sibling folder of that name; else ask.
 

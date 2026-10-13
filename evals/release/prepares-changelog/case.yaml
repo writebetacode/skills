@@ -57,6 +57,14 @@ graders:
     type: regex
     target: { source: file, path: .claude-plugin/plugin.json }
     pattern: '"version":\s*"0\.2\.0"'
+  - name: package-version
+    type: regex
+    target: { source: file, path: package.json }
+    pattern: '"version":\s*"0\.2\.0"'
+  - name: lockfile-version
+    type: regex
+    target: { source: file, path: package-lock.json }
+    pattern: '^(?![\s\S]*"0\.1\.0")[\s\S]*"version":\s*"0\.2\.0"'
   - name: no-commit-yet
     type: regex
     target: { source: file, path: .git/logs/HEAD }
