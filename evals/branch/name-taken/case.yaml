@@ -22,4 +22,5 @@ graders:
     exists: false
   - name: asks
     type: regex
-    pattern: '\?(?![A-Za-z0-9=&%#/])'
+    pattern: '\?(?![A-Za-z0-9=&%#/])|\b(pick|choose) (one|between|which)\b|\bwhich (one|would you)\b'
+    flags: i

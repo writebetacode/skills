@@ -7,12 +7,18 @@ Pass 1 (never commit or push):
 
    ```
    ## <version> — <today, YYYY-MM-DD>
+
    **<the release's overall theme, ≤8 words>**
    [<last tag>...v<version>](<compare link>)
+
    ### Breaking
+
    - <subject> ([<short hash>](<commit link>))
+
    ### Features
+
    ### Fixes
+
    ### Other
    ```
 

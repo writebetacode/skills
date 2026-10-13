@@ -32,7 +32,7 @@ graders:
   - name: bold-title-under-heading
     type: regex
     target: { source: file, path: CHANGELOG.md }
-    pattern: '^## 0\.2\.0[^\n]*\n\*\*[^*\n]+\*\*[ \t]*\n'
+    pattern: '^## 0\.2\.0[^\n]*\n\n?\*\*[^*\n]+\*\*[ \t]*\n'
     flags: m
   - name: compare-link
     type: regex

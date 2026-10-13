@@ -73,6 +73,7 @@ version-heading:
       - feat: Add research skill ([3f2a1b0](https://github.com/acme/shop/commit/3f2a1b0c4d5e6f708192a3b4c5d6e7f8091a2b3c))
 bold-title-under-heading:
   pass:
+    - "## 0.2.0 — 2026-10-12\n\n**Gaps section and citable reports**\n[v0.1.0...v0.2.0](https://github.com/acme/shop/compare/v0.1.0...v0.2.0)\n"
     - |
       # Changelog
 
