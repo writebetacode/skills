@@ -1,7 +1,6 @@
 ---
 name: same-page
-description: Agree on what a request means before work. Use only when another skill calls for it.
-user-invocable: false
+description: Agree on what a request means, one question at a time. Use before work when a request has more than one reading, whenever you'd ask the user more than one thing, or when a skill calls for it.
 ---
 
 Look nothing up. Each reply, under 120 words, only:
@@ -13,7 +12,7 @@ Look nothing up. Each reply, under 120 words, only:
 ✗ `Here's how I read it: … **Examples:** - … - … **Questions:** …`
 ✓ `You want product search to match names as you type: "lam" lists "Desk lamp", not posts that mention lamps. Match descriptions too? My guess: names only.`
 
-Repeat, folding in each answer, until the requester explicitly confirms the latest playback (a correction isn't confirmation). Then return to the calling skill:
+Repeat, folding in each answer, until the requester explicitly confirms the latest playback (a correction isn't confirmation). Then return this to the calling skill, if any, and carry on with the agreed request:
 
 ```
 Agreed request: <actionable without this conversation>
