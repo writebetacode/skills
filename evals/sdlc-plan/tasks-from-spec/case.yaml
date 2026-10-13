@@ -53,3 +53,7 @@ graders:
     type: regex
     target: trace
     pattern: '^(?=[\s\S]*- \[ \] [^"\\]*Locked after five failures)(?=[\s\S]*- \[ \] [^"\\]*Right password refused while locked)(?=[\s\S]*- \[ \] [^"\\]*Success resets the count)(?=[\s\S]*- \[ \] [^"\\]*Web says when to try again)'
+  - name: web-base-default
+    type: regex
+    target: trace
+    pattern: 'repo: (acme/)?web(?:[^"\\]|\\.)*?base: trunk\b'

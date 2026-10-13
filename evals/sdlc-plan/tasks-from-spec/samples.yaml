@@ -52,3 +52,10 @@ every-scenario-an-ac:
     - { tool: Write, input: { file_path: tasks/01-api.md, content: "## 1. Lock after failures\n- [ ] Locked after five failures\n- [ ] Right password refused while locked\n- [ ] Success resets the count\n\n# 02\n## 1. Say when to retry\n- [ ] Scenario: Web says when to try again\n" } }
   fail:
     - { tool: Write, input: { file_path: tasks/01-api.md, content: "## 1. Lock after failures\n- [ ] Locked after five failures\n- [ ] Success resets the count\n- [ ] Web says when to try again\n" } }
+web-base-default:
+  pass:
+    - { tool: Write, input: { file_path: tasks/02-web.md, content: "repo: acme/web ../web\nbranch: feat/abc-77-locked-message\nbase: trunk\nafter: 01\n" } }
+  fail:
+    - { tool: Write, input: { file_path: tasks/02-web.md, content: "repo: acme/web ../web\nbranch: feat/abc-77-locked-message\nbase: feat/abc-77-login-lockout\nafter: 01\n" } }
+    - { tool: Write, input: { file_path: tasks/02-web.md, content: "repo: acme/web ../web\nbranch: feat/abc-77-locked-message\nafter: 01\n" } }
+    - { tool: Write, input: { file_path: tasks/02-web.md, content: "repo: acme/web ../web\nbranch: feat/abc-77-locked-message\nbase: main\nafter: 01\n" } }

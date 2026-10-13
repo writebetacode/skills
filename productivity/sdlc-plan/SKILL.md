@@ -77,6 +77,7 @@ Terse, for an agent. MR = one branch that works and ships alone; MRs merge stric
 # <NN>: <MR title>
 repo: <name> <local path>
 branch: <type>/<ticket>-<short-name>
+base: <branch>
 after: <NN | none>
 with: <NN, … | none>
 
@@ -85,6 +86,7 @@ with: <NN, … | none>
 - [ ] <spec scenario name | observable check when no scenario fits>
 ```
 
+- `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch, found as the `branch` skill finds it.
 - Branch named per the `branch` skill, lowercase, ticket from `status.md`: ✓ `feat/abc-77-login-lockout`.
 - Each spec scenario is an AC of exactly one task. Each task carries its own tests: never a tests-only or code-only task.
 - Another repo's path: `## Related repos` in loaded `CLAUDE.md`, else a sibling folder of that name; else ask.

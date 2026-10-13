@@ -50,3 +50,15 @@ The API keeps a failed-login count and a locked-until time on each user's row, c
 - **Lock per account**: one count per user. Why: a shared office IP would lock out everyone. Not per IP: same reason.
 - **Count on the user's row**: two fields on the users table. Why: the stack has no cache. Not Redis: a new service for two fields.
 X
+# The web repo, checked out next door; its default branch is trunk.
+mkdir ../web && cd ../web
+git init -q --bare -b trunk .remote.git
+git init -q -b trunk
+git config user.name dev
+git config user.email dev@example.com
+echo ".remote.git/" >> .git/info/exclude
+printf '<form action="/login" method="post"></form>\n' > login.html
+git add -A && git commit -qm "feat: Add login form"
+git remote add origin "$PWD/.remote.git"
+git push -q -u origin trunk
+git remote set-head origin -a > /dev/null
