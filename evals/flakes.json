@@ -1,6 +1,7 @@
 {
   "claude-opus-5-5": {
     "branch-name-taken": 1,
+    "release-prepares-changelog": 1,
     "ticket-asks-tracker": 1
   }
 }

@@ -13,9 +13,13 @@ repo_with_remote() {
   git config user.email dev@example.com
   printf '.remote.git/\n.eval-bin/\n.fake-gh/\n' >> .git/info/exclude
   git remote add origin "$PWD/.remote.git"
-  # macOS /usr/bin/git is an xcrun shim whose cache write the eval sandbox blocks; its errors in every git
-  # call's output read as real failures (ticket-asks-tracker flaked on it). Run the real binary instead.
-  if real=$(xcrun --find git 2>/dev/null); then mkdir -p .eval-bin && ln -sf "$real" .eval-bin/git; fi
+  # macOS /usr/bin/git* are xcrun shims whose cache write the eval sandbox blocks; their errors in git's
+  # output read as real failures (ticket-asks-tracker, release-prepares-changelog flaked on them). Run the
+  # real binaries instead; fetch and push from the local remote start the pack programs by name.
+  if real=$(xcrun --find git 2>/dev/null); then
+    mkdir -p .eval-bin
+    for b in git git-upload-pack git-receive-pack; do ln -sf "$(dirname "$real")/$b" .eval-bin/$b; done
+  fi
 }
 
 # Push the current (default) branch and record it as origin/HEAD.
