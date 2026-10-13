@@ -1,0 +1,30 @@
+schema_version: "1.1"
+name: review-local-mode
+tags: [review]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "Use the review skill in local mode: review my uncommitted changes against .ai/sdlc/login-lockout/spec.md, ACs: Locked after five failures; Right password refused while locked. Return the findings."
+  allowed_tools: [Skill, Read, Grep, Glob, Agent]
+  max_turns: 30
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?review"'
+  - name: checker-ran
+    type: tool_used
+    tool: Agent
+  - name: stays-local
+    type: regex
+    target: trace
+    pattern: '"command":\s*"[^"]*(\bgh |\bglab |worktree add)|"file_path":\s*"[^"]*\.ai/reviews'
+    match: not_contains
+  - name: blocks-on-lock-bypass
+    type: regex
+    pattern: '^#+ ?\d+\. \w+ \(blocking\): src/auth/login\.js:\d+'
+    flags: m
+  - name: flags-missing-test
+    type: regex
+    pattern: '(right|correct) password[\s\S]*\btests?\b|\btests?\b[\s\S]*(right|correct) password'
+    flags: i

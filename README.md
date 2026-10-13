@@ -33,11 +33,11 @@ Commits what's staged as a conventional commit, scoped to the ticket in the bran
 
 #### wbc:branch
 
-Creates a branch off the freshly fetched default branch, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
+Creates a branch off the freshly fetched default branch, or off a branch you name to stack on, named `<type>/<ticket>-<short-name>` unless you give a name, and never stashes or discards your changes. Call it to start any piece of work.
 
 #### wbc:pr
 
-Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default. Call it when work is ready for review or merge.
+Opens, updates, drafts, readies or merges the GitHub pull request or GitLab merge request for the current branch, titling it in the repo's own style and squashing by default; it can target a branch to stack on and list MRs that must merge in order. Call it when work is ready for review or merge.
 
 #### wbc:release
 
@@ -49,11 +49,19 @@ Creates, edits, comments on, links, assigns, closes or reopens GitHub and GitLab
 
 #### wbc:review
 
-Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked.
+Reviews a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, where everything under `.ai/` is ignored by git, with every finding re-checked by a second agent before you read it. Run it again to pick up new pushes and replies, withdraw what you don't want, then tell it to post; findings are inquisitive [Conventional Comments](https://conventionalcomments.org/), and it approves only when asked. Other skills can also ask it for a local review of uncommitted changes against a spec, which returns the findings and writes or posts nothing.
 
-To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`sdlc-plan` reads the same list):
 
 ```md
 ## Related repos
 - acme/web (../web): imports `@acme/cart`; calls `/api/cart/*`
 ```
+
+#### wbc:sdlc-plan
+
+Plans a feature, bug fix, research request or epic into `.ai/sdlc/<name>/`. It agrees the request with you, researches quietly, writes a self-contained spec for you to approve, then splits the spec into commit-sized tasks grouped into merge requests in merge order. Call it before building anything bigger than a quick fix, or to turn a ticket into a plan.
+
+#### wbc:sdlc-build
+
+Builds a plan from `sdlc-plan` one task at a time: tests first, then the code, then a fresh agent reviews the change against the spec, and it stops for you to look before each commit. After the last commit it opens the merge requests in merge order, stacked where the plan says, and archives the plan to `.ai/sdlc/completed/` once you say it's done. A change to what the spec says goes back to `sdlc-plan`. Call it to build, continue or finish planned work.

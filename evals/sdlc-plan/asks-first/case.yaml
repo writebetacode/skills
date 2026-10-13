@@ -1,0 +1,35 @@
+schema_version: "1.1"
+name: sdlc-plan-asks-first
+tags: [sdlc-plan, same-page]
+context:
+  scaffold_script: fixture.sh
+execution:
+  prompt: "Plan a feature: lock accounts after 5 failed logins."
+  allowed_tools: [Skill, Read, Grep, Glob]
+graders:
+  - name: skill-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?sdlc-plan"'
+  - name: same-page-fired
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?same-page"'
+  - name: no-research-yet
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?research"'
+    min: 0
+    max: 0
+  - name: no-lookups-yet
+    type: regex
+    target: trace
+    pattern: '"name":\s*"(Read|Grep|Glob|Agent|Bash|Write|Edit)"'
+    match: not_contains
+  - name: under-130-words
+    type: regex
+    pattern: '^\s*(?:\S+\s+){130}\S'
+    match: not_contains
+  - name: asks
+    type: regex
+    pattern: '\?(?![A-Za-z0-9=&%#/])'

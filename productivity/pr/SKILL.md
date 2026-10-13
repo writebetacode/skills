@@ -3,7 +3,7 @@ name: pr
 description: Open or update, mark draft or ready, or merge the GitHub pull request or GitLab merge request for the current branch. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
 ---
 
-Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Default branch: `origin/HEAD`; never assume `main`.
+Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else the default branch: `origin/HEAD`; never assume `main`.
 
 **Open** (the branch already has one → update it):
 
@@ -16,11 +16,13 @@ Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else which
    - <ABC-123 | [#142](<url>) <issue title> | N/A>
    ## Summary
    <≤2 sentences: what changed and why>
+   ## Merge order
+   1. <MR URL> <title> <(this) on this one>
    ## Changes
    - `<file>`: <one line>
    ```
 
-   Either way between `<!-- pr-body:start -->` and `<!-- pr-body:end -->`. ≤10 Changes bullets; more → one per group. Link an issue only after `issue` finds it. Write the body to a temp file outside the repo.
+   Merge order only when the caller gives one (MRs that ship together, across repos too). Either way between `<!-- pr-body:start -->` and `<!-- pr-body:end -->`. ≤10 Changes bullets; more → one per group. Link an issue only after `issue` finds it. Write the body to a temp file outside the repo.
 4. New → `create`, assigned to the user; show the URL. Existing → replace only between the markers (none → insert at the top), keep the rest byte-for-byte, `edit-body`; `edit-title` if the title no longer fits.
 
 **Draft/ready**: only when asked; already so → say so.

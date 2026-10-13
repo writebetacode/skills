@@ -1,0 +1,18 @@
+no-lookups-yet:
+  pass:
+    - { tool: Skill, input: { skill: sdlc-plan } }
+    - { tool: Skill, input: { skill: same-page } }
+  fail:
+    - { tool: Read, input: { file_path: /repo/src/auth/login.js } }
+    - git ls-files
+    - { tool: Write, input: { file_path: .ai/sdlc/login-lockout/spec.md, content: "# Lock accounts\n" } }
+under-130-words:
+  pass:
+    - You want an account to lock after 5 failed logins in a row, so a 6th try is refused even with the right password. For example, 4 bad tries then the right one gets in and resets the count. Should the lock lift on its own? My guess is after 15 minutes.
+  fail:
+    - "word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word"
+asks:
+  pass:
+    - You want an account to lock after 5 failed logins in a row, so a 6th try is refused even with the right password. Should the lock lift on its own? My guess is after 15 minutes.
+  fail:
+    - "Here's the plan: lock after 5 failures for 15 minutes, see https://example.com/lockout?mode=strict for details."
