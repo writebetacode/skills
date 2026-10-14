@@ -19,7 +19,7 @@ graders:
   - name: never-stages
     type: regex
     target: trace
-    pattern: '"command":\s*"(?:[^"\\]|\\.)*\bgit (?:-[cC] \S+ |--[\w-]+(?:=\S+)? )*(?:add|stage|commit(?: (?:\\"(?:[^"\\]|\\[^"])*\\"|''[^'']*''|[^\s"''\\;&|]+))*? (?:-[a-z]*a[a-z]*|--all)\b)'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*(?:\\n|\b)git (?:-[cC] \S+ |--[\w-]+(?:=\S+)? )*(?:add|stage|commit(?: (?:\\"(?:[^"\\]|\\[^"])*\\"|''[^'']*''|[^\s"''\\;&|]+))*? (?:-[a-z]*a[a-z]*|--all)\b)'
     match: not_contains
   - name: no-bare-m
     type: regex

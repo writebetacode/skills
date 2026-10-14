@@ -2,10 +2,10 @@
 # Prints each Claude Code session active on a local day: start time, folder, branch, title, PRs, the user's prompts
 # and Claude's last reply that day; then that day's commits by you in each repo those sessions ran in. Skips subagent
 # transcripts and sessions run in temp dirs (evals, scratch).
-# Usage: sessions.sh [YYYY-MM-DD]   (default: today). WBC_SESSIONS_DIR: where sessions live; set, temp dirs count too (evals).
+# Usage: sessions.sh [YYYY-MM-DD]   (default: today). EVAL_SESSIONS_DIR (evals): where sessions live; set, temp dirs count too.
 set -euo pipefail
 day=${1:-$(date +%F)}
-dir=${WBC_SESSIONS_DIR:-${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects}
+dir=${EVAL_SESSIONS_DIR:-${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects}
 [ -d "$dir" ] || { echo "no sessions folder: $dir" >&2; exit 1; }
 
 prog='
@@ -37,7 +37,7 @@ def command: if test("<command-name>") then
 | "\($start)\t\($m.cwd // "")\t\(join("\u001f"))"
 '
 # One line per session (start, folder, block with \x1f for its newlines) so sessions sort by start time.
-keeptemp=$([ -n "${WBC_SESSIONS_DIR:-}" ] && echo 1 || echo 0)
+keeptemp=$([ -n "${EVAL_SESSIONS_DIR:-}" ] && echo 1 || echo 0)
 lines=$(find "$dir" -name '*.jsonl' -newermt "$day" -print0 | while IFS= read -r -d '' f; do
   jq -nrR --arg d "$day" --arg keeptemp "$keeptemp" "$prog" "$f" || echo "(couldn't read $f)" >&2
 done | sort)
@@ -45,10 +45,12 @@ done | sort)
 printf '%s\n' "$lines" | cut -f3- | tr '\037' '\n'
 
 echo "# Commits on $day"
+# `if`, not `&&`: under set -e a folder outside git would end the loop early, and a repo with no commits that day would
+# fail the script.
 printf '%s\n' "$lines" | cut -f2 | while IFS= read -r cwd; do
-  [ -d "$cwd" ] && git -C "$cwd" rev-parse --show-toplevel 2>/dev/null
+  if [ -d "$cwd" ]; then git -C "$cwd" rev-parse --show-toplevel 2>/dev/null || true; fi
 done | sort -u | while IFS= read -r repo; do
   email=$(git -C "$repo" config user.email) || continue
-  log=$(git -C "$repo" log --all --since="$day 00:00:00" --until="$day 23:59:59" --author="$email" --format='%h %s' | sort -u -k2)
-  [ -n "$log" ] && printf '## %s\n%s\n\n' "$repo" "$log"
+  log=$(git -C "$repo" log --all --since="$day 00:00:00" --until="$day 23:59:59" --author="$email" --format='%h %s' | sort -u -k2) || continue
+  if [ -n "$log" ]; then printf '## %s\n%s\n\n' "$repo" "$log"; fi
 done

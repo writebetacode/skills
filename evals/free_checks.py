@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Free checks before any paid eval run: YAML, case and grader keys, free grader types, regex graders vs samples,
+"""Free checks before any paid eval run: YAML, case and grader keys, case env keys, free grader types, regex graders vs
+samples, trace graders on commands that a quoted argument or a later line would slip past,
 host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links, orphan files and agents, executable skill scripts, copies of shared rules, skill and agent word budgets and
 pointers to another skill's rules, and, with --run-fixtures, each scaffold script
 in a clean temp dir (check.py passes it only after its review gate).
@@ -138,6 +139,9 @@ for case in cases:
     for section, allowed in KEYS.items():
         if unknown := set((c.get(section) or {}) if section else c) - allowed:
             errors.append(f"{cid}: unknown {section or 'top-level'} keys {sorted(unknown)}")
+    for k in sorted((c.get("execution") or {}).get("env") or {}):
+        if not re.fullmatch(r"EVAL_\w+", k):
+            errors.append(f"{cid}: env key {k!r}: the eval runner takes only EVAL_* keys from case.yaml")
     graders = c.get("graders") or []
     tags, skill = set(c.get("tags") or []), case.parent.parent.name
     for t in sorted(tags - {d.name for d in (EVALS.parent / "skills").iterdir()}):
@@ -159,6 +163,11 @@ for case in cases:
             errors.append(f"{gid}: unknown keys {sorted(unknown)}")
         if g["type"] != "regex":
             continue
+        if g.get("target") == "trace":  # the trace is JSON: a quoted arg reads \", a later line \n<cmd>
+            if '"command":\\s*"[^"]*' in g["pattern"]:
+                errors.append(f'{gid}: [^"]* stops at a quoted argument; use (?:[^"\\\\]|\\\\.)*?')
+            if re.search(r"(?<!\|)\\b\(?(?:\?:)?(?:git|gh|glab|acli)\b", g["pattern"]):
+                errors.append(f"{gid}: \\b<cmd> misses a command on a later line (\\n<cmd>); use (?:\\\\n|\\b)<cmd>")
         s = samples.get(g["name"]) or {}
         if not (s.get("pass") and s.get("fail")):
             errors.append(f"{gid}: needs a pass and a fail sample")

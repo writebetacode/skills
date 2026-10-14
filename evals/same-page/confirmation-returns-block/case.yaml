@@ -5,7 +5,7 @@ execution:
   prompt: |
     Use the same-page skill. My request: "add caching to the API".
     You played back: "You want GET responses from the /products endpoints cached so repeat requests skip the database, e.g. GET /products/42 served from cache for 60s."
-    My reply: "Yes, that's exactly what I want."
+    My reply: "Yes, that's exactly what I want. I'll build it myself later."
   allowed_tools: [Skill, Read, Grep, Glob, Agent]
 graders:
   - name: agreed-request

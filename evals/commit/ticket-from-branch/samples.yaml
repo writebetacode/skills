@@ -22,6 +22,7 @@ never-stages:
       - Stop -a from staging
       EOF
   fail:
+    - "cd /repo\ngit add -A"
     - 'git commit -m "feat(PROJ-142): x" -a'
     - git -c core.autocrlf=false add src/login.js
     - git -c user.name=x -C . add .

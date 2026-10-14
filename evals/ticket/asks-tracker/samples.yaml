@@ -2,6 +2,7 @@ creates-nothing:
   pass:
     - "gh repo view --json nameWithOwner --jq .nameWithOwner"
   fail:
+    - 'cd "/repo" && gh issue create --title "fix: x" --body-file /tmp/b.md'
     - "gh issue create --title 'fix: Accented searches find nothing' --body-file /tmp/b.md --assignee @me"
     - "acli jira workitem create --project SHOP --type Bug --summary x --description-file /tmp/b.md"
 asks-offering-origin-host:

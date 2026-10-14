@@ -14,7 +14,7 @@ graders:
   - name: posts-nothing
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\b(gh|glab) '
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)(gh|glab) '
     match: not_contains
   - name: no-preamble
     type: regex

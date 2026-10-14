@@ -12,8 +12,10 @@ stages-by-path:
     - git add -A
 stages-spec:
   pass:
+    - 'cd "/repo" && git add "src/cart.js" docs/specs/empty-cart-total.md'
     - git add src/cart.js test/cart.test.js docs/specs/empty-cart-total.md
     - "git add docs/specs/empty-cart-total.md && git status"
+    - "cd /repo\ngit add src/cart.js test/cart.test.js docs/specs/empty-cart-total.md"
   fail:
     - git add src/cart.js test/cart.test.js
     - git add .ai/plan/empty-cart-total/spec.md
@@ -22,10 +24,13 @@ never-stages-all:
     - git add src/cart.js test/cart.test.js
     - git add .ai/plan/x
   fail:
+    - 'cd "/repo" && git add -A'
+    - "git add .\ngit status"
     - git add -A
     - git add .
     - git add src/cart.js .
     - "cd /repo && git add -u && git status"
+    - "cd /repo\ngit add -A"
 ac-ticked:
   pass:
     - "## 1. Return 0 for an empty cart\n- [x] Empty cart totals zero\n"

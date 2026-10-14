@@ -4,6 +4,7 @@ stays-local:
     - git status --porcelain
     - { tool: Read, input: { file_path: /repo/src/auth/login.js } }
   fail:
+    - 'cd "/repo" && gh pr view 7'
     - gh pr view --json number
     - git worktree add --detach /tmp/review-shop-local HEAD
     - { tool: Write, input: { file_path: /repo/.ai/reviews/local.md, content: "# Review\n" } }

@@ -20,18 +20,18 @@ Talk to the user only in `same-page` rounds (the request, then each open choice 
 ## Plan
 
 1. Inputs only, nothing else before `same-page`: ticket key or URL → `ticket` skill: view; `.ai/plan/<name>/findings.md` given → read it (its `research/` counts as step 3's: reuse, don't redo).
-2. `same-page` on the request. Something broken to track down (bug, error, failing test, incident, alert) → read [investigate.md](investigate.md); come back only to plan its fix. Several features that each ship alone → propose an epic in that round.
+2. `same-page` on the request, bugs too. Agreed, and it's something broken to track down (bug, error, failing test, incident, alert) → read [investigate.md](investigate.md); come back only to plan its fix. Several features that each ship alone → propose an epic in that round.
 3. Research quietly: `research` skill per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched, specs in `docs/specs/` it touches); save each report as `research/<topic>.md`.
-4. Invoke the `voice` skill (once per session); write `spec.md`. Each `docs/specs/` spec this change makes untrue → edit it to match, adding a Decision: what changed, why.
+4. Invoke the `voice` skill (once per session); write `spec.md`. Each `docs/specs/` spec this change makes untrue → edit it to match, replacing each Decision it overturns with the new one and why it changed; git keeps the old wording.
 5. Walk it: path, then its decisions and open questions in ≤8 lines; ask to approve or change. Changes → `same-page` on them, edit, walk again; open questions → settle before approval. Explicit approval only → something to build: move the spec to `docs/specs/<name>.md` (epic feature: `docs/specs/<epic>/<feature>.md`, no `NN-`); `status.md` `spec: approved <date> <spec path>`, then each edited spec's path.
-6. Tasks: read [tasks.md](tasks.md).
+6. Tasks, from the spec alone: read [tasks.md](tasks.md).
 7. Reply: folder and spec paths; MRs in order with repo, branch, task count; next step: `build`. Nothing to build → say `build` closes it.
 
 Tickets: file or link only when asked (`ticket` skill); record in `status.md`, never the spec.
 
 ## Revise
 
-An existing folder, or `build` handing back a change → `same-page` on the change; invoke the `voice` skill (once per session); edit the spec (and specs it makes untrue), adding the decision; walk the changed parts. On approval rewrite only uncommitted tasks, per tasks.md; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
+An existing folder, or `build` handing back a change → `same-page` on the change; invoke the `voice` skill (once per session); edit the spec, adding the decision, and specs it makes untrue as in Plan step 4; walk the changed parts. On approval rewrite only uncommitted tasks, per tasks.md; committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.
 
 ## The spec
 

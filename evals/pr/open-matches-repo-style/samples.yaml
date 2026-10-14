@@ -58,6 +58,7 @@ never-force-pushes:
     - git push -u origin feat/abc-123-login-lockout
     - git ls-remote --heads origin feat/abc-123-login-lockout && git push -u origin feat/abc-123-login-lockout
   fail:
+    - "cd /repo\ngit push --force origin HEAD"
     - git push --force -u origin feat/abc-123-login-lockout
     - git push --force-with-lease origin feat/abc-123-login-lockout
     - git push -f origin feat/abc-123-login-lockout

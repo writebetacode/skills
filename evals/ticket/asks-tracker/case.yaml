@@ -15,7 +15,7 @@ graders:
   - name: creates-nothing
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\b(gh issue create|glab issue create|acli jira workitem create)\b'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)(gh issue create|glab issue create|acli jira workitem create)\b'
     match: not_contains
   - name: asks-offering-origin-host
     type: regex
