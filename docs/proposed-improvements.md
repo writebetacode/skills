@@ -16,7 +16,7 @@ Each idea has one status:
 | `wbc:daily` skill | Done | Replaces `recap`: plans your morning from what's waiting on you, then recaps what you did. |
 | Ticket triage | Done | Becomes part of `daily`'s morning instead of a skill of its own. |
 | Upgrade path in `plan` | Done | `plan` proposes the dependency upgrades a feature needs, and you withdraw the ones you don't want. Replaces a separate dependency-upgrade skill. |
-| `wbc:spec-checker` agent | Planned | Checks a draft spec against the spec rules, the repo's rules and earlier specs before `plan` walks you through it. |
+| `wbc:spec-checker` agent | Done | Checks a draft spec against the spec rules, the repo's rules and earlier specs before `plan` walks you through it. |
 | Deploy and watch releases | Rejected | Watching the deploy after a release, checking health and offering a rollback. The maintainer doesn't want it. |
 | Check changes in the running app | Skipped for now | `build` running the app with Claude Code's `run` skill to prove user-facing criteria, not just tests. |
 | Release backports and hotfixes | Proposed | Letting `release` cut versions from maintenance branches, not only the default branch. |
