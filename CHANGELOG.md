@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.4.0 — 2026-10-14
+
+**Setup and daily skills, and sturdier plans**
+[v0.3.0...v0.4.0](https://github.com/writebetacode/skills/compare/v0.3.0...v0.4.0)
+
+### Breaking
+
+- feat!: Fold research into plan, drop paid evals, call release and recap by name ([a8dd0f7](https://github.com/writebetacode/skills/commit/a8dd0f71d0b46063f88ea1230ec51906ec757f17))
+- feat!: Replace recap with daily to plan your morning and recap your day (#32) ([dae3048](https://github.com/writebetacode/skills/commit/dae30489146e84d13c9731c9f33a0db4c42ee9c9))
+
+### Features
+
+- feat: Add setup to check CLIs, link related repos and list debug tools (#31) ([afa060d](https://github.com/writebetacode/skills/commit/afa060ddf9f486ac128bc4ea6db49f341e92f3da))
+- feat: Propose an upgrade path in plan before tasks are written (#33) ([2e9a5cc](https://github.com/writebetacode/skills/commit/2e9a5cc95b3b71eb5c808032ea9c6e760eaa784e))
+- feat: Check each spec with a fresh agent before plan walks you through it (#34) ([77c4a05](https://github.com/writebetacode/skills/commit/77c4a0528345a3e39098cce8f4d9f274e4903998))
+
+### Fixes
+
+- fix: Link daily's Jira tickets only to the site you're logged in to (#35) ([3b5999d](https://github.com/writebetacode/skills/commit/3b5999d9d1c7bcd18cc50b868e77c70b93c7f62f))
+- fix: Cover edge cases where skills lost work, stalled or misread state (#36) ([fd43e79](https://github.com/writebetacode/skills/commit/fd43e79edc409e3932fed7fb77958e2618b6cf12))
+
 ## 0.3.0 — 2026-10-14
 
 **Debugging joins plan, and build lands its PRs**
