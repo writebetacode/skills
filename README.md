@@ -22,6 +22,16 @@ Each skill calls the CLI for the host it's working with, so install only the one
 - [Atlassian CLI](https://developer.atlassian.com/cloud/acli/guides/install-acli/) (`acli`) for Jira work items.
 - [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `recap` uses to read your sessions, and the GitLab skills use to look up your username.
 
+`/wbc:setup` checks which of these you have and whether you're logged in.
+
+---
+
+## Setup skills
+
+### wbc:setup
+
+Use it when you install the plugin, and again when you start on another repo, so `plan` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git) once you confirm. Claude never starts it on its own: type `/wbc:setup`.
+
 ---
 
 ## Git skills
@@ -54,7 +64,7 @@ Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving y
 
 Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, when something's broken and you need to know why, or when you need an answer before you decide, like how something works here, which pattern to follow or which versions you're on. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine. A plain question gets a cited report from the code, docs, web and connected tools, with nothing changed and no plan folder.
 
-To tell it what it can use when it's chasing a bug, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+To tell it what it can use when it's chasing a bug, run `/wbc:setup`, or list your tools yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 
 ```md
 ## Debug tools
@@ -71,7 +81,7 @@ Use it to turn a plan, a bug write-up or a small change into tested, reviewed pu
 
 Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` (ignored by git), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
 
-To have it check repos that depend on this one, list them in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` reads the same list):
+To have it check repos that depend on this one, run `/wbc:setup`, or list them yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` reads the same list):
 
 ```md
 ## Related repos
