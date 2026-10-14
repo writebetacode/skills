@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.0 — 2026-10-14
+
+**Debugging joins plan, and build lands its PRs**
+[v0.2.0...v0.3.0](https://github.com/writebetacode/skills/compare/v0.2.0...v0.3.0)
+
+### Breaking
+
+- feat!: Merge debug into plan, let build land PRs and add recap ([57642e2](https://github.com/writebetacode/skills/commit/57642e259834318a01d51e3069b4403e6df13b78))
+
+### Features
+
+- feat: Recheck review findings with a read-only checker agent ([68ca826](https://github.com/writebetacode/skills/commit/68ca826a29728a76c0ebf162037832854c714273))
+- feat: Add debug skill and let anyone call same-page ([43e6378](https://github.com/writebetacode/skills/commit/43e6378be2abab5fab88851e0c183360f235a8d6))
+
+### Fixes
+
+- fix: Send every nested review finding to the checker and document agents ([5284ee8](https://github.com/writebetacode/skills/commit/5284ee86824921c3e33ef989910421975301b982))
+- fix: Prune merged branch refs and clean up stopped eval runs ([e010b33](https://github.com/writebetacode/skills/commit/e010b3315a524acd7e14150e7e0a538e9489485a))
+- fix: Keep recap commits whole and make the eval suite catch what it missed (#28) ([57622cf](https://github.com/writebetacode/skills/commit/57622cf35d0b65222ade5222c88264f960a45caa))
+
 ## 0.2.0 — 2026-10-13
 
 **Safer branch cleanup and more reliable releases**
