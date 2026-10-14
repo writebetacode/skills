@@ -1,6 +1,6 @@
 ---
 name: ticket
-description: Create, view, list, edit, comment on, assign, link, close or reopen tickets: GitHub or GitLab issues and Jira work items. Use when asked to file, open, log or write up a bug, feature or task as a ticket, issue or work item; to find tickets; or to change, comment on, link or close one.
+description: GitHub or GitLab issues and Jira work items. Use when asked to file, open, log or write up a bug, feature or task as a ticket, issue or work item; to find tickets; or to view, edit, comment on, assign, link, close or reopen one.
 ---
 
 Tracker, first match:

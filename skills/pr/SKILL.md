@@ -1,6 +1,6 @@
 ---
 name: pr
-description: Open or update, mark draft or ready, or merge the GitHub pull request or GitLab merge request for the current branch. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
+description: The current branch's GitHub pull request or GitLab merge request. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
 ---
 
 Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else `${CLAUDE_SKILL_DIR}/../branch/default-branch.sh`; never assume `main`.

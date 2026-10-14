@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, re-review it, and post it when told; or review uncommitted local changes, against a spec if given. Use when asked to review or re-review a PR or MR, to post a review, to answer replies to review comments, or to review local changes.
+description: Review a GitHub PR or GitLab MR into a file you edit before it posts. Use when asked to review or re-review a PR or MR, post a review, answer replies to review comments, or review local changes.
 ---
 
 Uncommitted local changes, no PR → read [local.md](local.md).

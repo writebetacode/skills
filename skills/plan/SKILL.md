@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Plan work, answer questions with cited reports, or prove why something's broken. Use when asked to plan, spec or scope work; to look into how something works here, which pattern to follow or versions in use; to debug a bug, error, failing test, incident or alert; or to write up findings or a postmortem.
+description: Plan work, answer questions or prove why something's broken. Use when asked to plan, spec or scope work; to look into how something works here, which pattern to follow or versions in use; to debug a bug, error, failing test, incident or alert; or to write up findings or a postmortem.
 ---
 
 Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md).
