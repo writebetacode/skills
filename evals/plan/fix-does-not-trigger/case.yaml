@@ -14,13 +14,3 @@ graders:
     min: 0
     max: 0
     arm: both
-  - name: makes-the-fix
-    type: regex
-    target: { source: file, path: src/forms/login.ts }
-    pattern: '\b12\b|signup'
-    flags: i
-  - name: drops-min-1
-    type: regex
-    target: { source: file, path: src/forms/login.ts }
-    pattern: 'min\(1\)'
-    match: not_contains
