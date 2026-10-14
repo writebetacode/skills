@@ -2,10 +2,11 @@
 - Asking the user anything: `same-page`, one question per reply.
 - LLM-directed text (skills, agents, prompts, this file): as terse as possible; each fact in one place, except a rule every call needs: mechanical → one skill script they all run; else an identical copy per skill. Human docs: `voice` skill.
 - After writing any `.md`: `npx markdownlint-cli2@0.23.3 --fix <file>`, then fix remaining errors.
-- Changing a skill: `python3 scripts/check.py`; fix each ✗. Over a word budget → cut; raise the budget only once the user OKs it.
+- Changing a skill or `docs/proposed-improvements.md`: `python3 scripts/check.py`; fix each ✗. Over a word budget → cut; raise the budget only once the user OKs it.
 - Before each commit: re-read every changed file whole; grep the repo for each name, term and behavior you changed (skills, agents, scripts, README, this file, docstrings) and update every stale mention.
 - Adding, removing, renaming or changing what a skill does: update its README section (`### wbc:<skill>` under the `## <group> skills` it fits, each group preceded by `---`; `voice`, 1–2 sentences: why you'd use it, then what it does; internal-only → say so). Skills live in `skills/<name>/`.
 - Agents: `agents/<name>.md`, flat (a subfolder joins the name: `wbc:<folder>:<name>`); called only by skills. Changing one = changing each skill that names it.
 - New kind of file or convention: add its rule here, and make `scripts/check.py` check it where it can (links, budgets).
+- Ideas for skills, agents or features: `docs/proposed-improvements.md` (human doc). Read it before proposing one; never propose a `Rejected` idea again. Add each new idea with the user's verdict as its status, a skill or agent's Idea cell starting `` `wbc:<name>` `` (the check matches only that); the PR that ships one marks it `Done`.
 - A skill writing files into the repo it works on: under `<git rev-parse --show-toplevel>/.ai/<area>/`; ensure `.ai/.gitignore` holds `*` (ignores all of `.ai/` in that clone only). Only files meant to be committed go elsewhere (`plan`'s approved specs: `docs/specs/`). Never `.claude/` or `.git/`: Claude Code protects them, so every write prompts or is denied.
 - Skill scripts: `skills/<name>/<script>`, executable, run as `${CLAUDE_SKILL_DIR}/<script>` (another skill's: `${CLAUDE_SKILL_DIR}/../<name>/<script>`; sibling `.md` files get no substitution: `<this skill's base directory>/../<name>/<script>`); shell that runs on macOS (BSD) and GNU tools alike.

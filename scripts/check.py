@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
-orphan files and agents, executable skill scripts, skill and agent word budgets, and pointers to another skill's rules."""
+orphan files and agents, executable skill scripts, skill and agent word budgets, pointers to another skill's rules, and
+proposed-improvement statuses."""
 import itertools, json, os, re, shutil, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -73,8 +74,28 @@ def check_skills():
             errors.append(f"{a.relative_to(root)}: no skill names {plugin}:{a.stem}, so it never runs")
 
 
+def check_proposals():
+    """A rejected idea must never come back built, and Done must be true, or the record stops meaning anything."""
+    f, statuses = ROOT / "docs/proposed-improvements.md", ("Proposed", "Planned", "Done", "Skipped for now", "Rejected")
+    plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["name"]
+    for line in f.read_text().splitlines() if f.exists() else []:
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if not line.startswith("|") or len(cells) < 2 or cells[1] == "Status" or re.fullmatch(r":?-+:?", cells[1]):
+            continue
+        idea, status = cells[:2]
+        if status not in statuses:
+            errors.append(f"docs/proposed-improvements.md: {idea}: status '{status}' isn't one of {', '.join(statuses)}")
+        elif m := re.match(rf"`{plugin}:([\w-]+)`", idea):  # a skill or agent idea; a feature idea names none first
+            built = (ROOT / "skills" / m[1] / "SKILL.md").exists() or (ROOT / "agents" / f"{m[1]}.md").exists()
+            if status == "Done" and not built:
+                errors.append(f"docs/proposed-improvements.md: {idea} is Done, but there's no skill or agent {m[0]}")
+            if status == "Rejected" and built:
+                errors.append(f"docs/proposed-improvements.md: {idea} is Rejected, but {m[0]} exists")
+
+
 check_cli_flags()
 check_skills()
+check_proposals()
 for e in errors:
     print(f"✗ {e}", flush=True)
 print(f"{len(errors)} problem(s)" if errors else "✓ all skill checks pass")
