@@ -1,6 +1,7 @@
 ---
 name: recap
-description: Recap a day's work across your Claude Code sessions as bullets, in the terminal or your notes. Use when asked what you did today or on a given day, or for a recap.
+description: Recap a day's work across your Claude Code sessions as bullets, in the terminal or your notes. Name a day for one other than today.
+disable-model-invocation: true
 ---
 
 Day: today, or the one named; local time.

@@ -1,6 +1,6 @@
 # writebetacode/skills
 
-Claude Code skills for engineering productivity: small, single-purpose and lean, each pinned by quick evals so it does its one job the same way every time.
+Claude Code skills for engineering productivity: small, single-purpose and lean, each doing one job well.
 
 ## Install
 
@@ -40,7 +40,7 @@ Use it to open, update or merge a pull request (or GitLab merge request) without
 
 ### wbc:release
 
-Use it to ship a version without assembling the changelog by hand or forgetting a version file. It drafts the changelog and bumps the version wherever your project keeps it (`package.json` and its lockfile, `pyproject.toml`, `Cargo.toml`, a plugin manifest) for you to edit, then opens, merges, tags and publishes the release.
+Use it to ship a version without assembling the changelog by hand or forgetting a version file. It drafts the changelog and bumps the version wherever your project keeps it (`package.json` and its lockfile, `pyproject.toml`, `Cargo.toml`, a plugin manifest) for you to edit, then opens, merges, tags and publishes the release. Claude never starts it on its own: type `/wbc:release` to draft, edit the changelog, then `/wbc:release go` to ship.
 
 ---
 
@@ -52,7 +52,7 @@ Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving y
 
 ### wbc:plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, or when something's broken and you need to know why. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, when something's broken and you need to know why, or when you need an answer before you decide, like how something works here, which pattern to follow or which versions you're on. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine. A plain question gets a cited report from the code, docs, web and connected tools, with nothing changed and no plan folder.
 
 To tell it what it can use when it's chasing a bug, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 
@@ -80,15 +80,11 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 
 ---
 
-## Research and writing skills
-
-### wbc:research
-
-Use it when you need an answer before you decide or act, like how something works here, which pattern to follow or which versions you're on. It digs through the code, docs, web and connected tools and hands back a cited report without changing anything.
+## Writing skills
 
 ### wbc:recap
 
-Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one.
+Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one. Claude never starts it on its own: type `/wbc:recap`, or name a day, like `/wbc:recap yesterday`.
 
 To send recaps to your notes, add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
 

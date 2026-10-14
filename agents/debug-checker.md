@@ -13,6 +13,7 @@ Try to break the claim:
 - Does the evidence show this cause, or only fit it? Name any other cause it fits as well.
 - Does the cause explain every symptom, including when and where it happens?
 - Was any other cause ruled out on weak grounds?
+- The failing path (`research/path.md`): read each step marked `assumed`; could another cause hide there? No walk → a Gap.
 - Proof: did the repro fail, then pass with only this cause patched out? Could the patch have changed something else? No proof → at most medium.
 
 Reply:

@@ -1,0 +1,1 @@
+Revise: `same-page` on the change; invoke the `voice` skill (once per session); edit the spec per [spec-file.md](spec-file.md), adding the decision, and specs it makes untrue as in Plan step 4; walk the changed parts. On approval rewrite only uncommitted tasks, per [tasks.md](tasks.md); committed ones stay byte-for-byte; one the change contradicts → a new task reversing it.

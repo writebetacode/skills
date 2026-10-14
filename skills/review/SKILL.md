@@ -1,11 +1,11 @@
 ---
 name: review
-description: Review a GitHub pull request or GitLab merge request into `.ai/reviews/<number>.md`, re-review it, and post it when told; or review uncommitted local changes, against a spec if given. Use when asked to review or re-review a PR or MR, to post a review, to answer replies to review comments, or to review local changes.
+description: Review a GitHub PR or GitLab MR into a file you edit before it posts. Use when asked to review or re-review a PR or MR, post a review, answer replies to review comments, or review local changes.
 ---
 
 Uncommitted local changes, no PR → read [local.md](local.md).
 
-Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
+Host: `${CLAUDE_SKILL_DIR}/../pr/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
 
 - File: `<repo root>/.ai/reviews/<number>.md`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore` (ignores all of `.ai/`, itself included). Never stage it.
 - Code: `fetch-ref`, then `git worktree add --detach ${TMPDIR:-/tmp}/review-<repo>-<number> <head sha>` (exists → `git -C <it> checkout --detach <head sha>`). Read code only there. Never `--force`.

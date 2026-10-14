@@ -1,9 +1,9 @@
 ---
 name: pr
-description: Open or update, mark draft or ready, or merge the GitHub pull request or GitLab merge request for the current branch. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
+description: The current branch's GitHub pull request or GitLab merge request. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
 ---
 
-Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else the default branch: `git remote set-head origin -a`, then `origin/HEAD` minus `origin/`; never assume `main`.
+Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else `${CLAUDE_SKILL_DIR}/../branch/default-branch.sh`; never assume `main`.
 
 **Open** (the branch already has one → update it):
 

@@ -1,6 +1,6 @@
 ---
 name: voice
-description: Word text people read in a plain, friendly, human voice with no AI tells. Use when asked to draft or reword a reply or message, write a note or doc, make text sound less robotic, or explain terse output in plain words, or when another skill calls for it.
+description: Plain, friendly wording for text people read, with no AI tells. Use when asked to draft or reword a reply or message, write a note or doc, make text sound less robotic, explain terse output in plain words, or when another skill calls for it.
 ---
 
 Readers are people. Write like a friendly colleague talking to a teammate:
