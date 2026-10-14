@@ -14,7 +14,7 @@ DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
 
 def check_cli_flags():
     """Skills run remote commands only from their host tables, so a flag the CLI dropped or renamed fails for real."""
-    cmds = [(f, c.split("\\|")[0]) for f in sorted(ROOT.glob("skills/*/*.md")) if f.name != "SKILL.md"
+    cmds = [(f, c.split("\\|")[0]) for f in sorted(ROOT.glob("skills/*/*.md"))
             for c in re.findall(r"`((?:gh|glab|acli) [^`]+)`", f.read_text())]
 
     def sub(cmd):  # the subcommand: words up to the first flag or placeholder; `api` takes a path, not subcommands

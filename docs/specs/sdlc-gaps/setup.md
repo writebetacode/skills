@@ -37,9 +37,9 @@ Scenario: Link repos found in a folder
   And infra gets no Related repos entry, because nothing ties it to the others
 
 Scenario: Name repos one by one
-  Given you name ../web and ../api instead of a folder
+  Given you're in web and name ../api instead of a folder
   When you confirm the links
-  Then only those repos are scanned and linked
+  Then only web and api are scanned and linked
 
 Scenario: Nothing is written before you confirm
   Given setup has worked out links and debug tools
@@ -86,11 +86,11 @@ Scenario Outline: Proposed improvements stay honest
 
 **The skill** lives in `skills/setup/`, runs only when you type it, and walks you through these steps, asking one thing at a time:
 
-1. Which hosts and trackers you use: the hosts behind each repo's `origin`, and whether you use Jira. For each, it checks the CLI is installed and logged in (`gh`, `glab` for that host, `acli` for Jira), plus `jq`. It reports a short checklist and the command to fix each gap.
-2. Which repos: specific paths, or a folder whose git repos (up to two levels down) it scans. The repo you're in is always included. On a re-run it also re-reads the repos already listed in those repos' Related repos sections.
+1. Which repos: specific paths, or a folder whose git repos (up to two levels down) it scans. The repo you're in is always included. On a re-run it also re-reads the repos already listed in those repos' Related repos sections.
+2. Which hosts and trackers you use: the hosts behind each repo's `origin`, and whether you use Jira. For each, it checks the CLI is installed and logged in (`gh`, `glab` for that host, `acli` for Jira), plus `jq`. It reports a short checklist and the command to fix each gap.
 3. How they relate, from evidence in the code only: package dependencies between them, one calling another's API, shared schemas or message topics, compose files, submodules. More than a few repos are scanned by parallel read-only subagents, one per repo. Each link becomes a line in both repos, in the form the README already shows: the repo's name, its path relative to this repo, and how they relate in a few words.
 4. Debug tools, for repos without a section: lines proposed from what the repo shows (cluster manifests, error-tracker config, compose files) and the connected tools in the session, for you to confirm or fill in.
-5. It shows the full set of changes per repo and writes nothing until you confirm. Then, per repo, it creates or updates `CLAUDE.local.md`: it adds lines and fixes a changed path, and never removes or rewrites lines already there. A new file in a repo that has `AGENTS.md` and no `CLAUDE.md` starts with an import of `AGENTS.md`. Before the first write, if git doesn't ignore `CLAUDE.local.md`, it offers to add it to your global git excludes file.
+5. It shows the full set of changes per repo and writes nothing until you confirm. Then, per repo, it creates or updates `CLAUDE.local.md`: it adds lines and fixes a changed path, and never removes or rewrites lines already there. A new file in a repo that has `AGENTS.md` and no `CLAUDE.md` starts with an import of `AGENTS.md`. Before the first write, if git doesn't ignore `CLAUDE.local.md`, it offers to add it to your global git excludes file. If you haven't set one, it gives you the command to run, since Claude Code protects git's default location.
 6. It replies with the checklist, each file it wrote and what it added, and anything left for you.
 
 `plan`'s task writer reads `## Related repos` from `CLAUDE.local.md` as well as `CLAUDE.md`, like the rest of `plan` and `review`.
