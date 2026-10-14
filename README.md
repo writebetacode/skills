@@ -84,7 +84,7 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 
 ### wbc:recap
 
-Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one.
+Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one. Claude never starts it on its own: type `/wbc:recap`, or name a day, like `/wbc:recap yesterday`.
 
 To send recaps to your notes, add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
 
