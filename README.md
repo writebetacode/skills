@@ -52,7 +52,7 @@ Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving y
 
 ### wbc:plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, or when something's broken and you need to know why. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, or when something's broken and you need to know why. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine.
 
 To tell it what it can use when it's chasing a bug, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 

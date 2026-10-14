@@ -1,3 +1,9 @@
+walks-path:
+  pass:
+    - "1. summary(items) prints `Total: ${total(items)}` (src/checkout.js:2)\n2. total([]) returns null before reducing (src/cart.js:2)\n"
+  fail:
+    - "1. summary(items) prints the total (src/checkout.js:2)\n2. total sums the items: assumed\n"
+    - "The early return in cart.js is the cause.\n"
 proves-in-worktree:
   pass:
     - 'W="${TMPDIR:-/tmp}/plan-empty-cart-null"; git worktree add --detach "$W" HEAD'
