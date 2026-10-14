@@ -34,6 +34,6 @@ Recommended: <N>, <why>.
 - <what>: <why>
 ```
 
-Timeline and Impact: incidents only. Empty section: "None."
+Timeline and Impact: incidents only; otherwise leave both out. Other empty sections: "None."
 
 Reply: the findings path; the likely cause and confidence in 1–2 sentences. Then: the fix fits one PR with no open design choices → suggest `build` with the findings; else offer to plan it (Plan step 3 on, the spec restating the cause).

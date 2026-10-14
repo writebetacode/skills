@@ -12,7 +12,7 @@ Look nothing up. Each reply, under 120 words, only:
 ✗ `Here's how I read it: … **Examples:** - … - … **Questions:** …`
 ✓ `You want product search to match names as you type: "lam" lists "Desk lamp", not posts that mention lamps. Match descriptions too? My guess: names only.`
 
-Repeat, folding in each answer, until the requester explicitly confirms the latest playback (a correction isn't confirmation). Then return this to the calling skill, if any, and carry on with the agreed request:
+Repeat, folding in each answer, until the requester explicitly confirms the latest playback (a correction isn't confirmation). Then reply with this block, which a calling skill takes as its input, and carry on with the agreed request:
 
 ```
 Agreed request: <actionable without this conversation>

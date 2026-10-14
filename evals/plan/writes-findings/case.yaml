@@ -21,11 +21,11 @@ graders:
   - name: proves-in-worktree
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\bgit (?:-C \S+ )?worktree add\b'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)git (?:-C \S+ )?worktree add\b'
   - name: removes-worktree
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\bgit (?:-C \S+ )?worktree remove\b'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)git (?:-C \S+ )?worktree remove\b'
   - name: findings-sections
     type: regex
     target: { source: file, path: .ai/plan/empty-cart-null/findings.md }

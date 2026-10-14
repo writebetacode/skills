@@ -8,7 +8,13 @@ execution:
   allowed_tools: [Skill, Read, Grep, Glob]
   max_turns: 15
   env:
-    WBC_SESSIONS_DIR: .sessions
+    EVAL_SESSIONS_DIR: .sessions
+  # Eval runs don't load a fixture's CLAUDE.md; this stands in for the user's global one.
+  append_system_prompt: |
+    Contents of /Users/dev/.claude/CLAUDE.md (user's private global instructions for all projects):
+
+    ## Recap
+    - File: vault/Daily/{date}.md, under `## Claude`
 graders:
   - name: skill-fired
     type: tool_used

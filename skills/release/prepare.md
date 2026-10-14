@@ -1,7 +1,7 @@
 Pass 1 (never commit or push):
 
 1. Fetch. Commits on `origin/<default>` since the last `v*` tag (none → all), oldest first, skipping merge and `chore(release)` commits.
-2. Version: last tag bumped by the biggest of: any `!` → major (below 1.0.0: minor); `feat` → minor; `fix`/`perf` → patch. No tag → `0.1.0`. No bump → say nothing to release; stop.
+2. Version: last tag bumped by the biggest of: any `!` → major (below 1.0.0: minor); `feat` → minor; `fix`/`perf` → patch. No tag → `0.1.0`. No bump → reply `Nothing to release since <last tag>` and why; stop.
 3. `branch` skill: `chore/release-v<version>`.
 4. Prepend to `CHANGELOG.md` (new file: under `# Changelog`), empty groups omitted:
 

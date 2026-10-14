@@ -29,11 +29,11 @@ graders:
   - name: stages-spec
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\bgit add [^"]*docs/specs/empty-cart-total\.md'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)git add (?:[^"\\]|\\.)*?docs/specs/empty-cart-total\.md'
   - name: never-stages-all
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*\bgit add (?:[^"]* )?(?:-A|--all|-u|\.)(?=[\s"\;&|])'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?(?:\\n|\b)git add (?:(?:[^"\\]|\\.)* )?(?:-A|--all|-u|\.)(?=[\s"\\;&|])'
     match: not_contains
   - name: ac-ticked
     type: regex

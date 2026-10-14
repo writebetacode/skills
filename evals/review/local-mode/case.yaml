@@ -19,7 +19,7 @@ graders:
   - name: stays-local
     type: regex
     target: trace
-    pattern: '"command":\s*"[^"]*(\bgh |\bglab |worktree add)|"file_path":\s*"[^"]*\.ai/reviews'
+    pattern: '"command":\s*"(?:[^"\\]|\\.)*?((?:\\n|\b)gh |(?:\\n|\b)glab |worktree add)|"file_path":\s*"[^"]*\.ai/reviews'
     match: not_contains
   - name: blocks-on-lock-bypass
     type: regex
