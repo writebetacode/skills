@@ -20,17 +20,31 @@ Each skill calls the CLI for the host it's working with, so install only the one
 - [GitHub CLI](https://github.com/cli/cli#installation) (`gh`) for GitHub pull requests, issues and releases.
 - [GitLab CLI](https://gitlab.com/gitlab-org/cli/-/blob/main/docs/installation_options.md) (`glab`) 1.115 or later for GitLab merge requests, issues and releases. `review`, and `build` when it answers review comments, need 1.122 or later.
 - [Atlassian CLI](https://developer.atlassian.com/cloud/acli/guides/install-acli/) (`acli`) for Jira work items.
-- [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `recap` uses to read your sessions, and the GitLab skills use to look up your username.
+- [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `daily` uses to read your sessions, and the GitLab skills use to look up your username.
 
 `/wbc:setup` checks which of these you have and whether you're logged in.
 
 ---
 
-## Setup skills
+## Setup and daily skills
 
 ### wbc:setup
 
 Use it when you install the plugin, and again when you start on another repo, so `plan` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git) once you confirm. Claude never starts it on its own: type `/wbc:setup`.
+
+### wbc:daily
+
+Use it to start your day knowing what's waiting on you, and to end it with a recap you don't have to write. In the morning, `/wbc:daily` gathers review requests, PRs to re-review, failing CI, unanswered mentions and messages, and your open tickets, then helps you settle on a plan for the day; `/wbc:daily recap` (or `/wbc:daily recap yesterday`) turns that day's Claude Code sessions, commits and activity into short bullets and lists what carried over. It only reads, except for your notes file, and Claude never starts it on its own.
+
+To choose your sources and notes file, run `/wbc:setup`, or add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
+
+```md
+## Daily
+- Notes: ~/vault/Daily/{date}.md, under `## Claude`
+- GitHub
+- Jira
+- Slack: Slack connector; DMs and mentions in #shop-dev
+```
 
 ---
 
@@ -91,17 +105,6 @@ To have it check repos that depend on this one, run `/wbc:setup`, or list them y
 ---
 
 ## Writing skills
-
-### wbc:recap
-
-Use it at the end of the day to see what you got done across all your Claude Code sessions, without digging back through them. It turns the day's sessions, and the commits you made that day in each repo they touched, into short, plain bullets and prints them, or adds them to a daily note; run it again and it replaces that day's recap rather than adding a second one. Claude never starts it on its own: type `/wbc:recap`, or name a day, like `/wbc:recap yesterday`.
-
-To send recaps to your notes, add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
-
-```md
-## Recap
-- File: ~/vault/Daily/{date}.md, under `## Claude`
-```
 
 ### wbc:voice
 
