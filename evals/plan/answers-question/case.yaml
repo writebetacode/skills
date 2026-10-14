@@ -1,6 +1,6 @@
 schema_version: "1.1"
-name: research-clear-request-report
-tags: [research]
+name: plan-answers-question
+tags: [plan]
 context:
   scaffold_script: fixture.sh
 execution:
@@ -12,7 +12,7 @@ graders:
   - name: skill-fired
     type: tool_used
     tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?research"'
+    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?plan"'
   - name: skips-same-page
     type: tool_used
     tool: Skill

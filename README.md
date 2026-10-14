@@ -52,7 +52,7 @@ Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving y
 
 ### wbc:plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, or when something's broken and you need to know why. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists, when something's broken and you need to know why, or when you need an answer before you decide, like how something works here, which pattern to follow or which versions you're on. It talks the request through with you, then writes a spec you approve and splits it into commit-sized tasks (the approved spec moves to `docs/specs/` and ships with the first change, complete enough to build from on its own, decisions and reasons included, and any older spec the change makes untrue gets updated too); for a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/plan/<name>/`, which stays on your machine. A plain question gets a cited report from the code, docs, web and connected tools, with nothing changed and no plan folder.
 
 To tell it what it can use when it's chasing a bug, list your tools in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 
@@ -80,11 +80,7 @@ To have it check repos that depend on this one, list them in the repo's `CLAUDE.
 
 ---
 
-## Research and writing skills
-
-### wbc:research
-
-Use it when you need an answer before you decide or act, like how something works here, which pattern to follow or which versions you're on. It digs through the code, docs, web and connected tools and hands back a cited report without changing anything.
+## Writing skills
 
 ### wbc:recap
 

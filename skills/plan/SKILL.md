@@ -1,7 +1,9 @@
 ---
 name: plan
-description: Plan work into a spec and tasks, or prove why something's broken. Use when asked to plan, spec or scope work; to debug a bug, error, failing test, incident or alert; or to write up findings or a postmortem.
+description: Plan work, answer questions with cited reports, or prove why something's broken. Use when asked to plan, spec or scope work; to look into how something works here, which pattern to follow or versions in use; to debug a bug, error, failing test, incident or alert; or to write up findings or a postmortem.
 ---
+
+Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md).
 
 Folder: `<git rev-parse --show-toplevel>/.ai/plan/<name>/` (no repo → `./.ai/plan/<name>/`), `<name>` 2–4 kebab-case words, not already under `.ai/plan/`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore`.
 
@@ -21,7 +23,7 @@ Talk to the user only in `same-page` rounds (the request, then each open choice 
 
 1. Inputs only, nothing else before `same-page`: ticket key or URL → `ticket` skill: view; `.ai/plan/<name>/findings.md` given → read it (its `research/` counts as step 3's: reuse, don't redo).
 2. `same-page` on the request, bugs too. Agreed, and it's something broken to track down (bug, error, failing test, incident, alert) → read [investigate.md](investigate.md); come back only to plan its fix. Several features that each ship alone → propose an epic in that round.
-3. Research quietly: `research` skill per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched, specs in `docs/specs/` it touches); save each report as `research/<topic>.md`.
+3. Research quietly per [research.md](research.md), one report per thing the spec needs (how it works here, patterns to follow, versions in use, other repos touched, specs in `docs/specs/` it touches), saved as `research/<topic>.md`.
 4. Invoke the `voice` skill (once per session); write `spec.md`. Each `docs/specs/` spec this change makes untrue → edit it to match, replacing each Decision it overturns with the new one and why it changed; git keeps the old wording.
 5. Walk it: path, then its decisions and open questions in ≤8 lines; ask to approve or change. Changes → `same-page` on them, edit, walk again; open questions → settle before approval. Explicit approval only → something to build: move the spec to `docs/specs/<name>.md` (epic feature: `docs/specs/<epic>/<feature>.md`, no `NN-`); `status.md` `spec: approved <date> <spec path>`, then each edited spec's path.
 6. Tasks, from the spec alone: read [tasks.md](tasks.md).

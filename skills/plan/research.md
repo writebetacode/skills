@@ -1,11 +1,6 @@
----
-name: research
-description: Investigate a question or problem; return a cited report. Use whenever something should be looked into or figured out before deciding or acting: how something works here, which pattern to follow, versions in use, why something behaves as it does. Reports only.
----
+Change nothing; ask nothing beyond `same-page`.
 
-Output only the report below; ask nothing beyond same-page; change nothing.
-
-Before any lookup: one reading ("What Next.js version are we on?") → go; several ("look into auth": provider? bug? audit?) → invoke `same-page` and research the agreed request.
+Just a question from the user (not Plan step 3 or another skill): before any lookup, one reading ("What Next.js version are we on?") → go; several ("look into auth": provider? bug? audit?) → `same-page`, then research the agreed request. Reply with only the report; write no files.
 
 Dig where the answer lives: code, docs, web, connected tools. Independent lines too big to read yourself → parallel `Explore` subagents, each briefed with the request, its line, where to start, "change nothing", and this template.
 

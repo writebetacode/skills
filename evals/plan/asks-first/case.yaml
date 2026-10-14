@@ -16,12 +16,6 @@ graders:
     type: tool_used
     tool: Skill
     input_match: '"skill"\s*:\s*"(?:[\w-]+:)?same-page"'
-  - name: no-research-yet
-    type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:[\w-]+:)?research"'
-    min: 0
-    max: 0
   - name: no-lookups-yet
     type: regex
     target: trace
