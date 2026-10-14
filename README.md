@@ -40,7 +40,7 @@ Use it to open, update or merge a pull request (or GitLab merge request) without
 
 ### wbc:release
 
-Use it to ship a version without assembling the changelog by hand or forgetting a version file. It drafts the changelog and bumps the version wherever your project keeps it (`package.json` and its lockfile, `pyproject.toml`, `Cargo.toml`, a plugin manifest) for you to edit, then opens, merges, tags and publishes the release.
+Use it to ship a version without assembling the changelog by hand or forgetting a version file. It drafts the changelog and bumps the version wherever your project keeps it (`package.json` and its lockfile, `pyproject.toml`, `Cargo.toml`, a plugin manifest) for you to edit, then opens, merges, tags and publishes the release. Claude never starts it on its own: type `/wbc:release` to draft, edit the changelog, then `/wbc:release go` to ship.
 
 ---
 
