@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Prints each Claude Code session active on a local day: start time, folder, branch, title, PRs, the user's prompts
 # and Claude's last reply that day; then that day's commits by you in each repo those sessions ran in. Skips subagent
-# transcripts and sessions run in temp dirs (evals, scratch).
-# Usage: sessions.sh [YYYY-MM-DD]   (default: today). EVAL_SESSIONS_DIR (evals): where sessions live; set, temp dirs count too.
+# transcripts and sessions run in temp dirs.
+# Usage: sessions.sh [YYYY-MM-DD]   (default: today).
 set -euo pipefail
 day=${1:-$(date +%F)}
-dir=${EVAL_SESSIONS_DIR:-${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects}
+dir=${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects
 [ -d "$dir" ] || { echo "no sessions folder: $dir" >&2; exit 1; }
 
 prog='
@@ -24,7 +24,7 @@ def command: if test("<command-name>") then
     | command | clip(300) | select(length > 0))) as $prompts
 | select($prompts | length > 0)
 | ($today | map(select(.cwd)) | last // {}) as $m
-| select($keeptemp == "1" or (($m.cwd // "") | test("^(/private)?/(tmp|var/folders)/") | not))
+| select(($m.cwd // "") | test("^(/private)?/(tmp|var/folders)/") | not)
 | ([$all[] | select(.type == "ai-title") | .aiTitle] | last // "") as $title
 | ([$today[] | select(.type == "pr-link") | .prUrl] | unique) as $prs
 | ([$today[] | select(.type == "assistant") | .message.content | text | select(length > 0)] | last // "" | clip(400)) as $last
@@ -37,9 +37,8 @@ def command: if test("<command-name>") then
 | "\($start)\t\($m.cwd // "")\t\(join("\u001f"))"
 '
 # One line per session (start, folder, block with \x1f for its newlines) so sessions sort by start time.
-keeptemp=$([ -n "${EVAL_SESSIONS_DIR:-}" ] && echo 1 || echo 0)
 lines=$(find "$dir" -name '*.jsonl' -newermt "$day" -print0 | while IFS= read -r -d '' f; do
-  jq -nrR --arg d "$day" --arg keeptemp "$keeptemp" "$prog" "$f" || echo "(couldn't read $f)" >&2
+  jq -nrR --arg d "$day" "$prog" "$f" || echo "(couldn't read $f)" >&2
 done | sort)
 [ -n "$lines" ] || { echo "No sessions on $day."; exit 0; }
 printf '%s\n' "$lines" | cut -f3- | tr '\037' '\n'

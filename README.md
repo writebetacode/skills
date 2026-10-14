@@ -1,6 +1,6 @@
 # writebetacode/skills
 
-Claude Code skills for engineering productivity: small, single-purpose and lean, each pinned by quick evals so it does its one job the same way every time.
+Claude Code skills for engineering productivity: small, single-purpose and lean, each doing one job well.
 
 ## Install
 
