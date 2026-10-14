@@ -13,8 +13,8 @@ Each idea has one status:
 | Idea | Status | Notes |
 | --- | --- | --- |
 | `wbc:setup` skill | Done | Checks your CLIs, links related repos and lists debug tools in each repo's `CLAUDE.local.md`. |
-| `wbc:daily` skill | Planned | Replaces `recap`: plans your morning from what's waiting on you, then recaps what you did. |
-| Ticket triage | Planned | Becomes part of `daily`'s morning instead of a skill of its own. |
+| `wbc:daily` skill | Done | Replaces `recap`: plans your morning from what's waiting on you, then recaps what you did. |
+| Ticket triage | Done | Becomes part of `daily`'s morning instead of a skill of its own. |
 | Upgrade path in `plan` | Planned | `plan` proposes the dependency upgrades a feature needs, and you withdraw the ones you don't want. Replaces a separate dependency-upgrade skill. |
 | `wbc:spec-checker` agent | Planned | Checks a draft spec against the spec rules, the repo's rules and earlier specs before `plan` walks you through it. |
 | Deploy and watch releases | Rejected | Watching the deploy after a release, checking health and offering a rollback. The maintainer doesn't want it. |
