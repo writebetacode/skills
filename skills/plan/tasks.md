@@ -1,4 +1,4 @@
-Tasks from the spec alone: never research, findings, tickets or this conversation.
+Tasks from the spec alone: never open `research/`, `findings.md` or tickets; ignore this conversation.
 
 `tasks/NN-<mr>.md`: terse, for an agent. MR = one branch that works and ships alone; MRs merge strictly in NN order, never in parallel. One repo per MR; work spanning repos → one MR per repo, each naming the others in `with:`.
 

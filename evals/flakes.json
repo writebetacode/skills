@@ -2,7 +2,7 @@
   "claude-opus-5-5": {
     "branch-name-taken": 1,
     "commit-ticket-from-branch": 1,
-    "plan-tasks-from-spec": 1,
+    "plan-tasks-from-spec": 2,
     "release-nothing-to-release": 2,
     "release-prepares-changelog": 2,
     "review-posts-file": 1,
