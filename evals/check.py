@@ -88,10 +88,11 @@ def changed_skills(base):
         elif parts[:2] == ["evals", "lib"]:
             names |= {s.parent.name if s.parent.parent == EVALS else s.parent.parent.name
                       for s in EVALS.glob("*/**/*.sh") if "lib/" in s.read_text()} - {"lib"}
-        elif parts[0] == "skills" or (len(parts) > 2 and (EVALS / parts[1]).is_dir()):
+        elif parts[0] == "skills" or len(parts) > 2:  # a skill's evals, even a removed skill's
             names.add(parts[1])
         elif parts[0] == "evals":
             return None
+    names &= {s.name for s in (EVALS.parent / "skills").iterdir()}  # a removed skill has no cases left to run
     if not names:
         sys.exit(f"{target}: no skill or eval differs from {base}")
     return sorted(names)
