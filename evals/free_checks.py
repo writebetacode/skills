@@ -30,9 +30,7 @@ errors, checks = [], []
 DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
 # Rules copied on purpose: every call needs them, and a shared file would cost a read each time. A skill file holding the
 # marker must hold the exact text, so changing one copy fails until every copy changes.
-SHARED = {"host": ("URL contains `github`", "`origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of"
-                   " `gh repo view` / `glab repo view` succeeds; both or neither → ask."),
-          "default branch": ("set-head origin -a", "`git remote set-head origin -a`, then `origin/HEAD` minus `origin/`")}
+SHARED = {}  # {name: (marker, text)}; a mechanical rule goes in a skill script instead
 
 
 def load_yaml(paths):

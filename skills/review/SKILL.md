@@ -5,7 +5,7 @@ description: Review a GitHub pull request or GitLab merge request into `.ai/revi
 
 Uncommitted local changes, no PR → read [local.md](local.md).
 
-Host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
+Host: `${CLAUDE_SKILL_DIR}/../pr/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
 
 - File: `<repo root>/.ai/reviews/<number>.md`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore` (ignores all of `.ai/`, itself included). Never stage it.
 - Code: `fetch-ref`, then `git worktree add --detach ${TMPDIR:-/tmp}/review-<repo>-<number> <head sha>` (exists → `git -C <it> checkout --detach <head sha>`). Read code only there. Never `--force`.

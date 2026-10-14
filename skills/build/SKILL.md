@@ -9,9 +9,9 @@ Input, first match:
 - A plan: `<repo root>/.ai/plan/<name>/` as named, else the only one outside `completed/` with a `status.md`; several → ask. No approved spec but a `findings.md` → as findings, below. Epic → its first `NN-<feature>/` not `done` in the epic's `status.md`; set it `building`. `spec: approved` missing → `plan`; stop.
 - A request, or findings (`.ai/plan/<name>/findings.md`: its recommended fix): fits one PR with no open design choices → one task, no folder; else → `plan` skill; stop. Request → `same-page` on it first; its examples are the ACs. Findings → its repro is the first AC.
 
-Plan: the spec at the first path on `status.md`'s `spec:` line is the source of truth: read it whole; never research, findings or tickets. Next task: the first `tasks/NN-*.md` with an unticked AC, its first task with one. None left, or no `tasks/` → read [finish.md](finish.md).
+Plan: the spec at the first path on `status.md`'s `spec:` line is the source of truth: read it whole; never `research/`, `findings.md` or tickets. Next task: the first `tasks/NN-*.md` with an unticked AC, its first task with one. None left, or no `tasks/` → read [finish.md](finish.md).
 
-Work in the MR's `repo:` path: `cd` there before tests, `branch`, `commit`, `pr`. Host, per repo: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. MR state: `view` in [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md); seen merged → `status.md` `merged`.
+Work in the MR's `repo:` path: `cd` there before tests, `branch`, `commit`, `pr`. Host, per repo: `${CLAUDE_SKILL_DIR}/../pr/host.sh` there (fails → ask). MR state: `view` in [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md); seen merged → `status.md` `merged`.
 
 ## Task
 

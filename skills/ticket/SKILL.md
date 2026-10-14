@@ -10,7 +10,7 @@ Tracker, first match:
 3. Bare `#123` → origin's host.
 4. Else ask once, offering origin's host: "GitHub (acme/shop)?". Never pick it silently.
 
-Origin's host: `origin` URL contains `github` → GitHub, `gitlab` → GitLab; else whichever of `gh repo view` / `glab repo view` succeeds; both or neither → ask. Read [github.md](github.md), [gitlab.md](gitlab.md) or [jira.md](jira.md); run remote commands only from its table.
+Origin's host: `${CLAUDE_SKILL_DIR}/../pr/host.sh` (fails → ask). Read [github.md](github.md), [gitlab.md](gitlab.md) or [jira.md](jira.md); run remote commands only from its table.
 
 List or search (`list`; Jira: `search`): any query, read-only, ≤20 results: key, title, status, assignee, URL.
 

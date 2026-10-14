@@ -15,7 +15,7 @@ with: <NN, … | none>
 - [ ] <spec scenario name | observable check when no scenario fits>
 ```
 
-- `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch name: `git remote set-head origin -a`, then `origin/HEAD` minus `origin/`: ✓ `base: trunk` ✗ `base: origin/trunk`.
+- `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch name, from `<this skill's base directory>/../branch/default-branch.sh <repo path>`: ✓ `base: trunk` ✗ `base: origin/trunk`.
 - `branch:` ticket from `status.md`: ✓ `feat/abc-77-login-lockout`.
 - Each spec scenario is an AC of exactly one task. Each task carries its own tests: never a tests-only or code-only task.
 - Another repo's path: `## Related repos` in loaded `CLAUDE.md`, else a sibling folder of that name; else ask.
