@@ -1,4 +1,4 @@
-Pass 2:
+Pass 2; a stopped one resumes at its first step not done (commit made, PR open or merged, tag pushed):
 
 1. Version = top heading as edited. Set the version files and the compare link to match.
 2. Commit only `CHANGELOG.md` and the version files as `chore(release): v<version>`.

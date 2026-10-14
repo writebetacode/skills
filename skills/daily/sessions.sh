@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Prints each Claude Code session active on a local day: start time, folder, branch, title, PRs, the user's prompts
-# and Claude's last reply that day; then that day's commits by you in each repo those sessions ran in. Skips subagent
-# transcripts and sessions run in temp dirs.
+# and Claude's last reply that day; then the commits you authored that day in each repo those sessions ran in. Skips
+# subagent transcripts and sessions run in temp dirs.
 # Usage: sessions.sh [YYYY-MM-DD]   (default: today).
 set -euo pipefail
 day=${1:-$(date +%F)}
@@ -45,11 +45,12 @@ printf '%s\n' "$lines" | cut -f3- | tr '\037' '\n'
 
 echo "# Commits on $day"
 # `if`, not `&&`: under set -e a folder outside git would end the loop early, and a repo with no commits that day would
-# fail the script.
+# fail the script. Author date, not commit date: a rebase recommits older work with today's commit date.
 printf '%s\n' "$lines" | cut -f2 | while IFS= read -r cwd; do
   if [ -d "$cwd" ]; then git -C "$cwd" rev-parse --show-toplevel 2>/dev/null || true; fi
 done | sort -u | while IFS= read -r repo; do
   email=$(git -C "$repo" config user.email) || continue
-  log=$(git -C "$repo" log --all --since="$day 00:00:00" --until="$day 23:59:59" --author="$email" --format='%h %s' | sort -u -k2) || continue
+  log=$(git -C "$repo" log --all --since="$day 00:00:00" --author="$email" --date=format-local:%F --format='%ad %h %s' |
+    awk -v d="$day" '$1 == d { sub(/^[^ ]+ /, ""); print }' | sort -u -k2) || continue
   if [ -n "$log" ]; then printf '## %s\n%s\n\n' "$repo" "$log"; fi
 done

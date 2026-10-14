@@ -5,7 +5,7 @@ description: Plan work, answer questions or prove why something's broken. Use wh
 
 Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md). A plan at `upgrades: draft` → resume step 6's walk; then `tasks/` exists → revise.md's task rewrite, else step 7.
 
-Folder: `<git rev-parse --show-toplevel>/.ai/plan/<name>/` (no repo → `./.ai/plan/<name>/`), `<name>` 2–4 kebab-case words, not already under `.ai/plan/`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore`.
+Folder: `<git rev-parse --show-toplevel>/.ai/plan/<name>/` (no repo → `./.ai/plan/<name>/`), `<name>` 2–4 kebab-case words, not already under `.ai/plan/` or `docs/specs/`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore`.
 
 ```
 spec.md              draft; approved with something to build → docs/specs/<name>.md

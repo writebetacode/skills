@@ -5,7 +5,7 @@ description: The current branch's GitHub pull request or GitLab merge request. U
 
 Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else `${CLAUDE_SKILL_DIR}/../branch/default-branch.sh`; never assume `main`.
 
-**Open** (the branch already has one → update it):
+**Open** (the branch has an open one → update it; merged or closed ones don't count). On the base branch → say it needs its own branch (`branch` skill); stop.
 
 1. Push: `git push -u origin <branch>` unless the remote has the same SHA. Never force; rejected → report; stop.
 2. Invoke the `voice` skill (once per session).
@@ -18,7 +18,7 @@ Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md)
    ## Summary
    <≤2 sentences: what changed and why>
    ## Merge order
-   1. <MR URL> <title> <(this) on this one>
+   1. <URL> <title> <"(this)" if it's this one>
    ## Changes
    - `<file>`: <one line>
    ```

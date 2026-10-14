@@ -13,7 +13,7 @@ Host: `${CLAUDE_SKILL_DIR}/../pr/host.sh` (fails → ask). Read [github.md](gith
 
 ## Review
 
-The file's `reviewed at` is the head → say it's current; stop, unless posting. Else:
+The file's `reviewed at` is the head → only answer new replies, as in Re-review; none → say it's current; stop, unless posting. Else:
 
 1. Context: the ticket the title, body or branch names (`ticket` skill: view); the PR description; the diff; code around the change both ways: callers, callees, readers of changed config or schemas, their tests. Repo rules: `CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`, nearest to each changed path; linter configs only to leave their rules to CI.
 2. Related repos (`## Related repos` in loaded `CLAUDE.md`/`CLAUDE.local.md`), only when the diff touches what an entry depends on: fetch its local checkout (listed path, else a sibling folder of that name) and read its default branch from a detached worktree; no checkout → shallow clone to a temp dir. Write nothing there. Can't confirm → `## Not checked`.
