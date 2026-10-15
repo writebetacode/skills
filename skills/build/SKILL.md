@@ -6,12 +6,14 @@ description: Build a plan, findings or small change test-first into reviewed PRs
 Input, first match:
 
 - PR/MR number or URL, or the current branch's when asked to get it green or through review → read [land.md](land.md).
-- A plan: `<repo root>/.ai/plan/<name>/` as named; nothing given → the only one outside `completed/` with a `status.md` or `findings.md`; several → ask. No approved spec but a `findings.md` → as findings, below. Epic → its first `NN-<feature>/` not `done` in the epic's `status.md`; set it `building`. `spec: approved` missing, or `upgrades: draft` → `plan`; stop.
+- A plan: `<${CLAUDE_SKILL_DIR}/../plan/ai-dir.sh plan>/<name>/` as named; nothing given → the only one outside `completed/` with a `status.md` or `findings.md`; several → ask. No approved spec but a `findings.md` → as findings, below. Epic → its first `NN-<feature>/` not `done` in the epic's `status.md`; set it `building`. `spec: approved` missing, or `upgrades: draft` → `plan`; stop.
 - A request, or findings (`.ai/plan/<name>/findings.md`: its recommended fix): fits one PR with no open design choices → one task, no folder; else → `plan` skill; stop. Request → `same-page` on it first; its examples are the ACs. Findings → its repro is the first AC.
 
 Plan: the spec at the first path on `status.md`'s `spec:` line is the source of truth: read it whole; never `research/`, `findings.md` or tickets. Next task: the first `tasks/NN-*.md` with an unticked AC, its first task with one. None left, or no `tasks/` → read [finish.md](finish.md).
 
-Work in the MR's `repo:` path: `cd` there before tests, `branch`, `commit`, `pr`. Host, per repo: `${CLAUDE_SKILL_DIR}/../pr/host.sh` there (fails → ask). MR state: `view` in [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md); seen merged → `status.md` `merged`.
+Work in the MR's `repo:` path (a main checkout), or in the current checkout when `${CLAUDE_SKILL_DIR}/../plan/main-checkout.sh` prints that path: `cd` there before tests, `branch`, `commit`, `pr`. Host, per repo: `${CLAUDE_SKILL_DIR}/../pr/host.sh` there (fails → ask). MR state: `view` in [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md); seen merged → `status.md` `merged`.
+
+Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, plain separate commands (a compound one is refused): `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. `ai-dir.sh --write` exits 1 → write that `.ai/.gitignore` holding `*` either way; run it again. A shell write or that rerun failing → say you can't reach the main checkout; stop. Never the worktree's copy.
 
 ## Task
 

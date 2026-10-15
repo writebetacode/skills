@@ -5,7 +5,9 @@ description: Plan work, answer questions or prove why something's broken. Use wh
 
 Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md). A plan at `upgrades: draft` → resume step 6's walk; then `tasks/` exists → revise.md's task rewrite, else step 7.
 
-Folder: `<git rev-parse --show-toplevel>/.ai/plan/<name>/` (no repo → `./.ai/plan/<name>/`), `<name>` 2–4 kebab-case words, not already under `.ai/plan/` or `docs/specs/`. `git check-ignore` fails on it → append `*` to `.ai/.gitignore`.
+Folder: `<${CLAUDE_SKILL_DIR}/ai-dir.sh --write plan>/<name>/` (the main checkout's, shared by its worktrees; exits 2 → say why; stop), `<name>` 2–4 kebab-case words, not already there or in `docs/specs/`.
+
+Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, plain separate commands (a compound one is refused): `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. `ai-dir.sh --write` exits 1 → write that `.ai/.gitignore` holding `*` either way; run it again. A shell write or that rerun failing → say you can't reach the main checkout; stop. Never the worktree's copy.
 
 ```
 spec.md              draft; approved with something to build → docs/specs/<name>.md
