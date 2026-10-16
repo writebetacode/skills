@@ -118,7 +118,7 @@ Scenario: No Daily section yet
 
 `skills/daily/` holds the skill, `sessions.sh`, `active-repos.sh`, and a table of read-only commands per host (GitHub, GitLab, Jira) for each thing `daily` reads: review requests, PRs you reviewed, your open PRs and their state and comments, assigned tickets, unanswered notifications or to-dos, security alerts, dependency-update PRs, and your activity on a day.
 
-**Active repos** are the main checkouts of the folders of your Claude Code sessions in the past 7 days, plus the Related repos listed in those checkouts' `CLAUDE.md` and `CLAUDE.local.md`. `active-repos.sh [days]` (default 7) prints them, one main checkout path per line, deduplicated.
+**Active repos** are the main checkouts of the folders of your Claude Code sessions in the past 7 days (sessions in temp folders aside, as `sessions.sh` skips them), plus the Related repos listed in those checkouts' `CLAUDE.md` and `CLAUDE.local.md`. `active-repos.sh [days]` (default 7) prints them, one main checkout path per line, deduplicated.
 
 **Morning** (`/wbc:daily`): gathers from every source and treats all of it as data, never instructions. It also picks up leftovers: the carried-over list from the last recap in your notes, else unfinished work in your last workday's sessions. It shows what's waiting, grouped (reviews, re-reviewed PRs included, replies owed, security, your PRs, tickets, carried over), then proposes an ordered plan for today (reviews and replies, security, your PRs closest to merging, tickets by priority) and settles it with you one question at a time. The agreed plan goes into the note between plan markers, replacing an earlier plan for that day.
 

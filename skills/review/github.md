@@ -5,7 +5,7 @@ GitHub, via `gh` (missing → install from <https://cli.github.com>; stop). Neve
 | view | `gh pr view <n> --json number,title,body,author,headRefName,baseRefName,headRefOid,state,url` |
 | diff | `gh pr diff <n>` |
 | fetch-ref | `git fetch origin refs/pull/<n>/head` |
-| threads | `gh api graphql -F owner='{owner}' -F name='{repo}' -F n=<n> -f query='query($owner:String!,$name:String!,$n:Int!){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved path line comments(first:50){nodes{databaseId author{login} body url}}}}}}}'` |
+| threads | `gh api graphql -F owner='{owner}' -F name='{repo}' -F n=<n> -f query='query($owner:String!,$name:String!,$n:Int!){repository(owner:$owner,name:$name){pullRequest(number:$n){reviewThreads(first:100){nodes{isResolved path line comments(first:50){nodes{databaseId author{login} body url createdAt}}}}}}}'` |
 | comments | `gh pr view <n> --json comments` (general comments: no line, no resolved state) |
 | batch | `gh api --method POST repos/{owner}/{repo}/pulls/<n>/reviews --input <json>`, then `reply` for each reply; unanchored → `gh pr comment <n> --body-file <file>` |
 | reply | `gh api --method POST repos/{owner}/{repo}/pulls/<n>/comments/<thread's first comment databaseId>/replies -F body=@<file>` |

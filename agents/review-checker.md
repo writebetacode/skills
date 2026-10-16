@@ -1,6 +1,6 @@
 ---
 name: review-checker
-description: Rechecks review findings in a fresh context. Only for review and build skills.
+description: Rechecks review findings in a fresh context. Only for review, build and daily skills.
 tools: Read, Grep, Glob
 model: inherit
 ---

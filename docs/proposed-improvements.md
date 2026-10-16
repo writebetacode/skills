@@ -28,10 +28,10 @@ Each idea has one status:
 | Living specs in `plan` | Done | One spec per domain area in a flat `docs/specs/`, named for the area and updated with every change to it. |
 | `build` hands doubt to `plan` | Done | `build` stops running `same-page` on requests. It builds what's already decided, and anything it isn't sure about goes to `plan`. |
 | Find related tickets before filing | Done | `ticket` searches open and closed tickets first. A closed match is linked as related, one in progress (on GitHub, one with an open PR) gets a follow-up ticket, and one not started gets updated instead. |
-| Catch up on PR activity in `daily` | Planned | `daily` re-reviews PRs you reviewed that have new pushes or replies, in your local review files only, and lists new comments on your own PRs. Asking to address a PR's comments goes to `build` for yours and `review` for ones you reviewed. |
+| Catch up on PR activity in `daily` | Done | `daily` re-reviews PRs you reviewed that have new pushes or replies, in your local review files only, and lists new comments on your own PRs. Asking to address a PR's comments goes to `build` for yours and `review` for ones you reviewed. |
 | Watch your PRs on a loop | Rejected | Fixing CI and drafting replies in a long-running loop. The maintainer wants to ask when they're ready instead. |
 | Share `.ai/` across worktrees | Done | Skills keep `.ai/` in the repo's main checkout, never in a worktree Claude spun up, so every plan and review is in one place. |
-| Security alerts in `daily` | Planned | `daily` lists security alerts and dependency-update PRs at any severity in every active repo (related repos, plus any with a session this past week), and checks the others for the same issue so `plan` can fix them together. |
+| Security alerts in `daily` | Done | `daily` lists security alerts and dependency-update PRs at any severity in every active repo (related repos, plus any with a session this past week), and checks the others for the same issue so `plan` can fix them together. |
 | Track down flaky tests | Done | When CI fails on a test that passes locally, `build` hands it to `plan`'s investigation to find what makes it fail only sometimes. |
 | CI for this repo | Skipped for now | Running `check.py` and markdownlint on PRs. Not needed while one person maintains it. |
 | README section check | Skipped for now | `check.py` checking that each skill has its README section. Not needed while one person maintains it. |
