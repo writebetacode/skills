@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 — 2026-10-15
+
+**Living specs, smarter daily, plans shared across worktrees**
+[v0.4.0...v0.5.0](https://github.com/writebetacode/skills/compare/v0.4.0...v0.5.0)
+
+### Breaking
+
+- feat!: Close workflow gaps across plan, build, review, ticket, daily and setup (#38) ([246c8d8](https://github.com/writebetacode/skills/commit/246c8d88e82846fd1edf267d7a1e182e414eb64e))
+
 ## 0.4.0 — 2026-10-14
 
 **Setup and daily skills, and sturdier plans**
