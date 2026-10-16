@@ -14,4 +14,4 @@ Origin's host: `${CLAUDE_SKILL_DIR}/../pr/host.sh` (fails → ask). Read [github
 
 List or search (`list`; Jira: `search`): any query, read-only, ≤20 results: key, title, status, assignee, URL.
 
-Any write (create, edit, comment, assign, link, close, reopen) → read [write.md](write.md) first.
+Any write (create, edit, comment, assign, link, close, reopen) → read [write.md](write.md) first; a create → [match.md](match.md) too.

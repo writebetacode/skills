@@ -72,7 +72,7 @@ Use it to ship a version without assembling the changelog by hand or forgetting 
 
 ### wbc:ticket
 
-Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving your session. Its tickets say what people see and why it matters, never how to fix it, so whoever picks one up is free to choose the fix.
+Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving your session. Its tickets say what people see and why it matters, never how to fix it, so whoever picks one up is free to choose the fix. Before filing, it looks for the same problem among the project's open and closed tickets: it links a closed or merely related one, files a follow-up to one already in progress, and adds your case to one nobody has started instead of filing a duplicate.
 
 ### wbc:plan
 
