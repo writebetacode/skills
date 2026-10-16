@@ -18,8 +18,8 @@ Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, p
 ## Task
 
 1. Branch: plan → the MR's `branch:` exists → switch to it. Else base = its `base:`; while that base is an MR branch whose MR has merged → that MR's `base:`. `branch` skill with both. `status.md` MR → `building`. Request or findings → `branch` skill, named from it.
-   Then plan specs: each on the `spec:` line for this repo whose `specs/` copy differs from the checkout's `docs/specs/` one: fetch; its `origin/<default>` version (`${CLAUDE_SKILL_DIR}/../branch/default-branch.sh`; or absence) matches, by blob id (`git rev-parse <commit>:<path>`; the copy: `git hash-object`), neither its entry commit's, the copy's, nor any commit's in `git log --format=%H origin/<default>..<branch> -- <path>` for this plan's MR branches, local or `origin/` → someone else changed it: hand the plan back to `plan` (revise); build nothing. Else write the copy into `docs/specs/`.
-2. A `from:` task → [carry.md](carry.md) too. Each AC: a test, written the repo's way, that fails for the reason the AC names; run it; see it fail. Then the least code that passes. Docs, write-ups, config → no test. Then the full suite and the repo's linter. Never weaken a test.
+   Then plan → [specs.md](specs.md).
+2. A `from:` task → [carry.md](carry.md) too. Each AC: a test, written the repo's way, that fails for the reason the AC names; run it; see it fail. Then the least code that passes. Docs, write-ups, config → no test. Then grep the repo for each name, term and behaviour changed; unasked, fix every spec, README, doc, docstring and comment now untrue. Never history (changelogs, migrations) or a spec on the `spec:` line. Then the full suite and the repo's linter. Never weaken a test.
 3. Review: one fresh `Agent`, briefed: `Follow ${CLAUDE_SKILL_DIR}/../review/SKILL.md for a local review of the uncommitted changes in <repo path>, against <this repo's docs/specs paths on the spec line, else the task file | findings path | the request, verbatim>; ACs: <names>; later work, not yet built: <the plan's later tasks and MRs, by title | none>.` Its findings and `git diff HEAD` plus untracked files (temp files), the spec, task or findings path (a request: temp file) and the repo path → `Agent` with `subagent_type: wbc:review-checker`. Fix each survivor, re-run tests, review again with new agents until none survive. A finding you think wrong → leave it for the user. 3 rounds → stop with what's left.
 4. Stop. Reply: the task; each AC with its test `path:line`; files changed; review: found → fixed per round; disputed findings. End: "Look it over; say go to commit."
 
@@ -27,6 +27,6 @@ The user asks for changes: code only → make them, steps 2–4 again. Changes w
 
 Go:
 
-1. Stage the task's files by path, never `-A` or `.`, plus each spec on `status.md`'s `spec:` line that's untracked or changed in this repo; `commit` skill.
+1. Stage the files this task changed by path, never `-A` or `.`, plus each spec on `status.md`'s `spec:` line that's untracked or changed in this repo; `commit` skill.
 2. Plan: tick the task's ACs. MR's last task → `status.md` `committed`. Start the next task unasked. The feature's last commit → [finish.md](finish.md).
 3. Request or findings: ask to open the PR. Yes → `pr` skill: open; then land.md.

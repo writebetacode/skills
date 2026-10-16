@@ -10,7 +10,7 @@ Specs in `docs/specs/` are the living definition of each domain area, and every 
 
 ## Scope
 
-In: specs in review's context; spec mismatches as blocking findings; sending comments on your own PR to `build`; the README's `review` section; marking "Spec clashes in `review`" Done in `docs/proposed-improvements.md`.
+In: specs in review's context; spec mismatches as blocking findings; sending comments on your own PR to `build`; the README's `review` section.
 Out: reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats these findings (the review-checker spec).
 
 ## Behaviour
@@ -66,7 +66,7 @@ The blocking bar gains a fourth case: code that no longer matches a part of a sp
 
 Asked to address a PR's comments, `review` compares the PR's author (from `view`) with your login, from `pr`'s `user` command, which review's rule on remote commands names alongside its own tables. A PR you wrote goes to `build`'s land step, and `review` stops. The check applies only to that ask: a review or re-review, `daily`'s included, always runs as one.
 
-The README's `review` section says it holds PRs to the repo's specs, and the row above moves to Done.
+The README's `review` section says it holds PRs to the repo's specs.
 
 Testing: the repo's check script and markdownlint, and a review of a sample PR that contradicts a spec.
 

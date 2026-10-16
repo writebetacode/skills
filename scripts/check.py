@@ -75,8 +75,8 @@ def check_skills():
 
 
 def check_proposals():
-    """A rejected idea must never come back built, and Done must be true, or the record stops meaning anything."""
-    f, statuses = ROOT / "docs/proposed-improvements.md", ("Proposed", "Planned", "Done", "Skipped for now", "Rejected")
+    """A rejected idea must never come back built, and a shipped one must leave, or the record stops meaning anything."""
+    f, statuses = ROOT / "docs/proposed-improvements.md", ("Proposed", "Planned", "Skipped for now", "Rejected")
     plugin = json.loads((ROOT / ".claude-plugin/plugin.json").read_text())["name"]
     for line in f.read_text().splitlines() if f.exists() else []:
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
@@ -87,10 +87,10 @@ def check_proposals():
             errors.append(f"docs/proposed-improvements.md: {idea}: status '{status}' isn't one of {', '.join(statuses)}")
         elif m := re.match(rf"`{plugin}:([\w-]+)`", idea):  # a skill or agent idea; a feature idea names none first
             built = (ROOT / "skills" / m[1] / "SKILL.md").exists() or (ROOT / "agents" / f"{m[1]}.md").exists()
-            if status == "Done" and not built:
-                errors.append(f"docs/proposed-improvements.md: {idea} is Done, but there's no skill or agent {m[0]}")
             if status == "Rejected" and built:
                 errors.append(f"docs/proposed-improvements.md: {idea} is Rejected, but {m[0]} exists")
+            elif built:
+                errors.append(f"docs/proposed-improvements.md: {idea} is {status}, but {m[0]} exists: delete its row")
 
 
 check_cli_flags()

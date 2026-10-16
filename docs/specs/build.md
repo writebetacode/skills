@@ -1,6 +1,6 @@
 # Build
 
-`build` builds what's already decided (a plan's specs and tasks, findings, or a small request with nothing in doubt) and works out the best way to do it. Anything in doubt goes to `plan`, because settling what to build is planning, and building on a guess wastes your review. It also ships a plan's specs from whichever checkout builds it, reuses a split branch's tested work instead of rewriting it, and hands CI failures it can't reproduce, and PRs you didn't write, to the skill that should handle them.
+`build` builds what's already decided (a plan's specs and tasks, findings, or a small request with nothing in doubt) and works out the best way to do it. Anything in doubt goes to `plan`, because settling what to build is planning, and building on a guess wastes your review. It also ships a plan's specs from whichever checkout builds it, reuses a split branch's tested work instead of rewriting it, and hands CI failures it can't reproduce, and PRs you didn't write, to the skill that should handle them. And it keeps the repo's docs true: whatever its change makes untrue in a spec, README or other doc gets fixed in the same commit, without asking.
 
 ## Context
 
@@ -10,7 +10,7 @@
 
 ## Scope
 
-In: which requests `build` takes and which go to `plan`; committing a plan's specs; building tasks from a split branch; CI failures that pass locally; PRs you didn't write; the README's `build` section; marking "`build` hands doubt to `plan`" Done in `docs/proposed-improvements.md`.
+In: which requests `build` takes and which go to `plan`; committing a plan's specs; building tasks from a split branch; CI failures that pass locally; PRs you didn't write; fixing the docs a change makes untrue; the README's `build` section.
 Out: how `plan` splits a branch or investigates a test (the plan spec).
 
 ## Behaviour
@@ -19,6 +19,12 @@ Out: how `plan` splits a branch or investigates a test (the plan spec).
 Scenario: An exact request is built directly
   When you ask build to fix the typo on line 3 of the README
   Then build fixes it without asking you anything first
+
+Scenario: Docs a change makes untrue are fixed with it
+  Given the README and docs/specs/checkout.md both describe the --express flag
+  When you ask build to rename --express to --fast
+  Then the same commit updates the README and that spec, without asking you
+  And the changelog's older entries still say --express
 
 Scenario: An unclear request goes to plan
   When you ask build to make checkout faster
@@ -113,6 +119,8 @@ Scenario: A PR you didn't write goes to review
 
 **A plan's specs.** `build` reads every spec on the plan's status line from the plan folder; the line names each spec's repo and the commit of that repo the plan was made on. Starting each task, before its tests, `build` writes into that checkout's `docs/specs/` every spec for this repo whose plan copy differs from the checkout's version, so its reviews check the code against them and the task's commit includes them; a spec `plan` revised mid-build ships the same way. Before writing, it checks nobody else changed the file on the base branch: an edited spec whose fetched base version differs from the one at the status line's commit, or a new spec whose path now exists on the base, goes back to `plan` to revise first, and `build` builds nothing until then. Copies `build` committed itself never count as someone else's change. A plan whose status reads `spec: none` (only upgrades) has no specs to write and is built from its tasks once its upgrades are approved.
 
+**Docs.** Once a change passes its tests, `build` searches the repo for every name, term and behaviour it touched and fixes each spec, README, doc, docstring and comment that's no longer true, in the same commit and without asking. Fixes it makes while landing, for CI or review comments, get the same treatment. History stays as it was: changelogs and migrations describe what was true then. The specs on a plan's status line are the plan's, so `build` leaves them alone; a change that contradicts one gets fixed to match it, or goes back to `plan` if the spec should change.
+
 **Worktrees.** A task file's `repo:` is the repo's main checkout; when you run `build` in a worktree of that repo, it works there instead. Closing a plan from a worktree compares each MR's branch with `origin/<default>` without switching branches, and keeps any branch still checked out in a worktree, saying why.
 
 **Split tasks.** On a task with a `from:` branch, `build` reads that branch as well as the specs and task. A task whose one criterion is the suite check takes its code from the branch, and the full suite passing is its check. Any other task takes its tests from the branch first and sees them fail, then takes its code and sees them pass. A carried test that passes before the code is added doesn't test this task, so `build` writes a failing test of its own for that criterion and keeps the carried one. A criterion with no test on the branch gets one written test-first. Carried code that doesn't pass its tests or the suite goes back to `plan` to revise the split. `build` never changes or deletes the `from:` branch.
@@ -127,14 +135,16 @@ Either fix becomes one task only when it fits one PR with nothing left to decide
 
 **PRs you didn't write.** `build` compares the PR's author with your login. A PR someone else wrote goes to `review`, and `build` stops.
 
-The README's `build` section says unclear work goes to `plan` first, and the row above moves to Done.
+The README's `build` section says unclear work goes to `plan` first, and that `build` fixes the docs its changes make untrue.
 
-Testing: the repo's check script and markdownlint; building a small exact request; building tasks from a sample split branch, including a carried test that already passes; landing a PR with a planted flaky test; landing a PR someone else wrote.
+Testing: the repo's check script and markdownlint; building a small exact request; building a rename that the README and a spec describe; building tasks from a sample split branch, including a carried test that already passes; landing a PR with a planted flaky test; landing a PR someone else wrote.
 
 ## Decisions
 
 - **`build` never asks what you mean**: Why: its job is to build what's decided; doubt means planning isn't finished. Not a `same-page` round inside `build`.
 - **Still one PR's worth for a direct request**: Why: splitting work into PRs is planning, however exact the request. Not one task of any size.
+- **`build` fixes stale docs itself, unasked**: Why: whoever makes a change knows best what it made untrue, and a stale doc misleads the next reader. Not flagging them for you to fix by hand.
+- **History and a plan's own specs stay as they are**: Why: a changelog records what was true then, and a plan's specs are what the code must match. Not rewriting them to fit the change.
 - **`build` commits the plan's specs with its first commit**: Why: specs ship with the first change that relies on them, from whichever checkout builds it. Not committing them on their own first.
 - **A changed spec goes back to `plan`**: Why: overwriting it would silently undo someone's change. Not merging the two by hand in `build`.
 - **`build` stays in your worktree**: Why: you chose to work there. Not switching to the main checkout: it would change the branch out from under another session.

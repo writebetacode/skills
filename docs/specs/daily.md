@@ -10,7 +10,7 @@ Only you start `daily` (`/wbc:daily`, or `/wbc:daily recap [day]`). Its sources 
 
 ## Scope
 
-In: the morning plan and the recap; sources and the notes file; re-reviewing PRs you reviewed; listing new comments on your PRs; security alerts and dependency-update PRs across active repos; the README's `daily` section; marking "Catch up on PR activity in `daily`" and "Security alerts in `daily`" Done in `docs/proposed-improvements.md`.
+In: the morning plan and the recap; sources and the notes file; re-reviewing PRs you reviewed; listing new comments on your PRs; security alerts and dependency-update PRs across active repos; the README's `daily` section.
 Out: posting, commenting, merging, fixing or moving tickets; first reviews of PRs; recaps longer than a day; calendars.
 
 ## Behaviour
@@ -132,7 +132,7 @@ Scenario: No Daily section yet
 
 **Writes**: only your notes file and review files. It never posts, replies, merges or moves a ticket. A source it can't reach is named as not checked, with why; a review file it can't write (the ai-folder spec's line for a refused write) skips that PR's re-review, saying why.
 
-The README's `daily` section mentions re-reviews into review files, comments on your PRs and security items, and its read-only sentence names review files; the two rows above move to Done.
+The README's `daily` section mentions re-reviews into review files, comments on your PRs and security items, and its read-only sentence names review files.
 
 Testing: the repo's check script (budgets, links, every CLI flag in the host tables against that CLI's help) and markdownlint; running both modes against this machine's real sessions and accounts, including a PR reviewed with `review` that has new pushes and replies, and `active-repos.sh` from a worktree.
 

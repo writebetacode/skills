@@ -12,7 +12,7 @@ Skills keep their own working files in the repos they work on only under `.ai/<a
 
 ## Scope
 
-In: where `.ai/` lives; the scripts every skill uses to find the main checkout and `.ai/`; plans found from any worktree; writing `.ai/` from a session Claude Code isolates in a worktree; the AGENTS.md rule on where skills write; the README's mentions of `.ai/`; marking "Share `.ai/` across worktrees" Done in `docs/proposed-improvements.md`.
+In: where `.ai/` lives; the scripts every skill uses to find the main checkout and `.ai/`; plans found from any worktree; writing `.ai/` from a session Claude Code isolates in a worktree; the AGENTS.md rule on where skills write; the README's mentions of `.ai/`.
 Out: the throwaway code worktrees `review` and `plan` make; moving `.ai/` folders that already exist in worktrees.
 
 ## Behaviour
@@ -92,8 +92,6 @@ Scenario: .ai stays out of git
 In a session Claude Code isolates in a worktree, commands for that session's repo run in the worktree, never pointed at the main checkout; only the files above are written there. `plan`, `build`, `review`, `daily` and `setup` (for `CLAUDE.local.md`) each carry the same line for writing into the main checkout. When Edit or Write on one of those files is refused, they make its folder with one shell command, then write the file's whole text with another that expands nothing in it and can't end early inside it, each a plain command on its own, since Claude Code refuses a compound command it can't verify. When `ai-dir.sh --write` exits 1 (a sandbox stops its shell write from any worktree), they write `.ai/.gitignore` holding `*` themselves, either way, and run it again. When a shell write or that rerun fails, they say they can't reach the main checkout and stop; `daily`'s copy ends with its own spec's skip instead. They never write the worktree's copy instead.
 
 The AGENTS.md rule on where skills write names the scripts and the line for a refused write. The README says plans and reviews stay in the repo's main folder, even when made from a worktree.
-
-The "Share `.ai/` across worktrees" row in `docs/proposed-improvements.md` moves to Done.
 
 Testing: the repo's check script (the scripts are linked and executable) and markdownlint; running both scripts from the main checkout, from a linked worktree, from a worktree of a bare repo, from a Claude Code worktree of a bare repo's worktree, from a submodule, from a submodule inside a linked worktree, inside a bare git folder, in the bare layout's own folder, for a removed Claude Code worktree, and outside a repo; a lookup without `--write` in a repo with no `.ai/`; and, in a session isolated in a Claude Code worktree of this repo, a Write into the main checkout's `.ai/` that's refused, then the shell write that follows.
 

@@ -10,7 +10,7 @@ GitHub lists the open PRs linked to an issue; GitLab lists the merge requests re
 
 ## Scope
 
-In: searching before every new ticket; acting on the match; the write rules this changes; the in-progress reads each table needs; a named repo other than the current folder's; the README's `ticket` section; marking "Find related tickets before filing" Done in `docs/proposed-improvements.md`.
+In: searching before every new ticket; acting on the match; the write rules this changes; the in-progress reads each table needs; a named repo other than the current folder's; the README's `ticket` section.
 Out: searching before edits, comments or other writes to a ticket you named; searching other repos or projects.
 
 ## Behaviour
@@ -51,7 +51,7 @@ In progress means a linked open PR on GitHub, an open related merge request on G
 
 Text another skill hands over with your OK (`setup`'s issue drafts) is filed exactly as given, with only the link lines added. The write rules change to match: the match a search finds counts as the named ticket for that edit and comment, one ticket per write as before, and these related links need no asking. The search-and-act step lives in its own file beside the skill, read before every create. Each tracker's table gains the in-progress read, and the GitHub and GitLab tables gain their CLI's repo option for a named repo other than the current folder's (how `setup` files on writebetacode/skills from any folder).
 
-The README's `ticket` section says it looks for a match before filing, and the row above moves to Done.
+The README's `ticket` section says it looks for a match before filing.
 
 Testing: the repo's check script, which checks every new command flag against that CLI's help, and markdownlint; filing against a sample tracker with a closed, an in-progress, a not-started and a merely related match.
 
