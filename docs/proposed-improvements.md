@@ -32,6 +32,6 @@ Each idea has one status:
 | Watch your PRs on a loop | Rejected | Fixing CI and drafting replies in a long-running loop. The maintainer wants to ask when they're ready instead. |
 | Share `.ai/` across worktrees | Done | Skills keep `.ai/` in the repo's main checkout, never in a worktree Claude spun up, so every plan and review is in one place. |
 | Security alerts in `daily` | Planned | `daily` lists security alerts and dependency-update PRs at any severity in every active repo (related repos, plus any with a session this past week), and checks the others for the same issue so `plan` can fix them together. |
-| Track down flaky tests | Planned | When CI fails on a test that passes locally, `build` hands it to `plan`'s investigation to find what makes it fail only sometimes. |
+| Track down flaky tests | Done | When CI fails on a test that passes locally, `build` hands it to `plan`'s investigation to find what makes it fail only sometimes. |
 | CI for this repo | Skipped for now | Running `check.py` and markdownlint on PRs. Not needed while one person maintains it. |
 | README section check | Skipped for now | `check.py` checking that each skill has its README section. Not needed while one person maintains it. |

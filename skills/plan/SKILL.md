@@ -3,7 +3,7 @@ name: plan
 description: Plan work, answer questions or prove why something's broken. Use when asked to plan, spec or scope work, or split a branch; to look into how something works here, which pattern to follow or versions in use; to debug a bug, error, failing test, incident or alert; or to write up findings or a postmortem.
 ---
 
-Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md). Splitting a branch → plan it as below, with [split.md](split.md). A plan at `upgrades: draft` → resume step 6's walk; then `tasks/` exists → revise.md's task rewrite, else step 7.
+Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md). Splitting a branch → plan it as below, with [split.md](split.md). A failing CI test handed over by `build` → read [handover.md](handover.md). A plan at `upgrades: draft` → resume step 6's walk; then `tasks/` exists → revise.md's task rewrite, else step 7.
 
 Folder: `<${CLAUDE_SKILL_DIR}/ai-dir.sh --write plan>/<name>/` (the main checkout's, shared by its worktrees; exits 2 → say why; stop), `<name>` 2–4 kebab-case words, not already there.
 
