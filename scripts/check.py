@@ -67,7 +67,7 @@ def check_skills():
                 errors.append(f"{rel}: links to missing {os.path.relpath(target, root)}")
             linked.add(target.resolve())
         if m := re.search(r"(?:as|per) the `[\w-]+` skill \w+", t):
-            errors.append(f"{rel}: '{m.group(0)}' points at a skill that may not be loaded: inline the rule or link its file")
+            errors.append(f"{rel}: '{m.group(0)}' points at a skill that may not be loaded: invoke that skill, or inline the rule")
         fm = re.match(r"---\n(.*?)\n---\n", t, re.S)
         if fm:
             n = len((re.search(r"^description: (.*)$", fm.group(1), re.M) or [""])[0].split()) - 1
