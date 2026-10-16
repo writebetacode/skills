@@ -30,7 +30,7 @@ Each skill calls the CLI for the host it's working with, so install only the one
 
 ### wbc:setup
 
-Use it when you install the plugin, and again when you start on another repo, so `plan` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git), along with `daily`'s sources in your global `~/.claude/CLAUDE.md`, once you confirm. Claude never starts it on its own: type `/wbc:setup`.
+Use it when you install the plugin, and again when you start on another repo, so `plan` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git), along with `daily`'s sources in your global `~/.claude/CLAUDE.md`, once you confirm. Run it again and it also looks through your last two weeks of sessions: a correction you keep making in a repo becomes a rule in its `CLAUDE.local.md`, and a time a wbc skill went wrong becomes an issue draft for this plugin, retold with made-up details so nothing in it points back to your work, filed only if you say so. Claude never starts it on its own: type `/wbc:setup`.
 
 ### wbc:daily
 

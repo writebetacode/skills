@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Prints each Claude Code session active on a local day: start time, folder, branch, title, PRs, the user's prompts
-# and Claude's last reply that day; then the commits you authored that day in each repo those sessions ran in. Skips
-# subagent transcripts and sessions run in temp dirs.
+# Prints each Claude Code session active on a local day: start time, folder, branch, title, PRs, the skills Claude ran,
+# the user's prompts and Claude's last reply that day; then the commits you authored that day in each repo those
+# sessions ran in. Skips subagent transcripts and sessions run in temp dirs.
 # Usage: sessions.sh [YYYY-MM-DD]   (default: today).
 set -euo pipefail
 day=${1:-$(date +%F)}
@@ -27,10 +27,13 @@ def command: if test("<command-name>") then
 | select(($m.cwd // "") | test("^(/private)?/(tmp|var/folders)/") | not)
 | ([$all[] | select(.type == "ai-title") | .aiTitle] | last // "") as $title
 | ([$today[] | select(.type == "pr-link") | .prUrl] | unique) as $prs
+| ([$today[] | select(.type == "assistant") | .message.content | arrays | .[]
+    | select(.type? == "tool_use" and .name == "Skill") | .input.skill | strings] | unique) as $skills
 | ([$today[] | select(.type == "assistant") | .message.content | text | select(length > 0)] | last // "" | clip(400)) as $last
 | ($today[0].timestamp | local("%H:%M")) as $start
 | [ "## \($start) \($m.cwd // "?") (\($m.gitBranch // "no branch"))\(if $title != "" then " · " + $title else "" end)",
     (if ($prs | length) > 0 then "PRs: " + ($prs | join(" ")) else empty end),
+    (if ($skills | length) > 0 then "Skills: " + ($skills | join(", ")) else empty end),
     ($prompts[:40][] | "> " + .),
     "Last reply: \($last)",
     "" ]

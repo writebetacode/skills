@@ -34,7 +34,7 @@ Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, p
 
 ## Recap
 
-1. `${CLAUDE_SKILL_DIR}/sessions.sh <YYYY-MM-DD>`: each session that day, by start time (folder, branch, title, PRs, the user's prompts, Claude's last reply), then the user's commits that day per repo. Plus each source's activity that day. Leave out daily's own runs.
+1. `${CLAUDE_SKILL_DIR}/sessions.sh <YYYY-MM-DD>`: each session that day, by start time (folder, branch, title, PRs, the skills Claude ran, the user's prompts, Claude's last reply), then the user's commits that day per repo. Plus each source's activity that day. Leave out daily's own runs.
 2. Invoke the `voice` skill (once per session), then write bullets:
    - One per thing done or decided, not per session, prompt or source; merge what several say about the same thing. Commits say what shipped; prompts only what was asked.
    - Past tense, ≤15 words; the repo when there's more than one; PR and ticket numbers when known.
