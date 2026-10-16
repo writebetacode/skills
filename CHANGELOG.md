@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 — 2026-10-16
+
+**Leaner skills, and research splits from plan**
+[v0.5.0...v0.6.0](https://github.com/writebetacode/skills/compare/v0.5.0...v0.6.0)
+
+### Breaking
+
+- feat!: Slim the skills back to one domain each, with research split from plan (#41) ([e7e2018](https://github.com/writebetacode/skills/commit/e7e201885ff09c97ac89ca22014e127ace2bd023))
+
+### Features
+
+- feat: Build fixes the docs it makes untrue; daily archives finished reviews ([083e766](https://github.com/writebetacode/skills/commit/083e766eade5c8ed361df70625da3834a570bcbb))
+
 ## 0.5.0 — 2026-10-15
 
 **Living specs, smarter daily, plans shared across worktrees**
