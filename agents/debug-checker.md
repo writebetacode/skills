@@ -1,6 +1,6 @@
 ---
 name: debug-checker
-description: Challenges a debugging conclusion against its evidence in a fresh context. Only for the plan skill.
+description: Challenges a debugging conclusion against its evidence in a fresh context. Only for the research skill.
 tools: Read, Grep, Glob
 model: inherit
 ---

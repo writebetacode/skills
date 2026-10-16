@@ -1,4 +1,4 @@
-A failing CI test handed over by `build` (the test, the CI job and its log, the PR's branch, its head and base commits): the problem is exact, so no `same-page`; name the folder from the test. Follow [investigate.md](investigate.md), reproducing this way in its worktree, at the head commit:
+A failing CI test handed over by `build` (the test, the CI job and its log, the PR's branch, its head and base commits): the problem is exact, so no `same-page`; the folder is the test's name in kebab case. Follow [investigate.md](investigate.md), reproducing this way in its worktree, at the head commit:
 
 1. The test alone, up to 50 runs, stopping at the first failure. Never fails → the whole suite in CI's order, up to 5 runs.
 2. It failed → before patching or logging anything, rerun the same way at the PR's base commit (`git -C <worktree> checkout --detach <it>`), then check the head out again, so the findings say whether the PR's change causes it.

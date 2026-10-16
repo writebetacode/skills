@@ -5,7 +5,7 @@ description: Write or tighten text an agent reads: skills, agents, prompts, suba
 
 Reply with only the prompt, or only the written file paths. No summary, notes or caveats.
 
-Several readings → `same-page`. Missing conventions → research per [../plan/research.md](../plan/research.md); use its report, don't relay it.
+Several readings → `same-page`. Missing conventions → `research` skill; use its report, don't relay it.
 
 Readers are LLMs. Write the leanest text that produces the behavior:
 
