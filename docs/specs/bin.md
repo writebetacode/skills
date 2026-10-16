@@ -33,7 +33,7 @@ Scenario: Related repos have one parser
 - `host.sh` prints `github` or `gitlab` for `origin`, asking `gh` and `glab` when the URL doesn't say; it exits 1 when it can't tell.
 - `default-branch.sh [path]` prints `origin`'s default branch name, refreshed from `origin`.
 
-`check.py` resolves every path form above, failing on a missing script or one that isn't executable, on a `bin/` script nothing runs, and on any skill file or script that runs a script from another skill's folder. That last check lands once `setup` stops running `daily`'s `sessions.sh`. AGENTS.md's rule on skill scripts names `bin/`, and its rule on a mechanical rule every skill needs points to a `bin/` script.
+`check.py` resolves every path form above, failing on a missing script or one that isn't executable, on a `bin/` script nothing runs, and on any skill file or script that runs a script from another skill's folder. AGENTS.md's rule on skill scripts names `bin/`, and its rule on a mechanical rule every skill needs points to a `bin/` script.
 
 Testing: the repo's check script and markdownlint; `related-repos.sh` on a checkout whose files list a relative, a `~`, an absolute and a missing path.
 

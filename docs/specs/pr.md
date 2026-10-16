@@ -38,7 +38,7 @@ One line in `pr`: never comment on a PR's size.
 
 After a merge, `pr` runs `prune-merged.sh <branch>…` from the plugin's `bin/`, which `build` also runs when it closes a plan. In a linked worktree, or when it can't switch (uncommitted changes, the default branch checked out elsewhere), it only fetches with pruning and stays put; otherwise it switches to the default branch and pulls with pruning. Then each named branch that's checked out nowhere and fully merged, judged by whether merging it into `origin`'s default branch, as just fetched, would change nothing (so squash merges count), is deleted. A step that fails keeps the branch; nothing is deleted on a failed check. It prints each branch it keeps and why.
 
-The README's `pr` section says it handles one PR per branch, never sizes it, and deletes a local branch only once all its work has merged; it drops "to break a branch up, use `plan`".
+The README's `pr` section says it handles one PR per branch, never sizes it, and deletes a local branch only once all its work has merged.
 
 Testing: the repo's check script and markdownlint; opening a PR from a sample branch that touches many files, and merging one.
 

@@ -55,7 +55,7 @@ Scenario: A test that fails only in CI
 
 In a worktree session, `research` carries the ai-folder spec's line for a refused write.
 
-The README's `research` section covers questions and bugs, with the Debug tools example that used to sit in `plan`'s.
+The README's `research` section covers questions and bugs, with the Debug tools example.
 
 Testing: the repo's check script and markdownlint; a version question; a planted bug and a planted flaky test in a scratch repo.
 

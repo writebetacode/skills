@@ -7,4 +7,4 @@ No `tasks/`, or every MR `merged` → Close. Every MR `open` or `merged` → [la
 
 ## Close
 
-In each MR `repo:` (`cd` there): `<this skill's base directory>/../../bin/prune-merged.sh <its MRs' branch:>`; say what it kept and why. Then ask "Done? I'll archive `<folder>`." Yes → move it to `completed/<YYYY-MM-DD>-<name>/` beside it (target exists → stop). Never merge.
+In each MR's repo, where SKILL.md says to work (your worktree, if you're in one): `<this skill's base directory>/../../bin/prune-merged.sh <its MRs' branch:>`; say what it kept and why. Then ask "Done? I'll archive `<folder>`." Yes → move it to `completed/<YYYY-MM-DD>-<name>/` beside it (target exists → stop). Never merge.

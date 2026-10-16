@@ -67,7 +67,7 @@ After `same-page`, `plan` works out which areas the request touches and writes e
 
 **Folder.** `specs/`, `status.md` (ticket, spec, `from:`, each MR's progress), `research/` and `tasks/`. Related repos come from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, through the shared `related-repos.sh`.
 
-The README's `plan` section describes living specs, the spec checker and splitting a branch, and sends bugs and questions to `research`; its Debug tools example moves to `research`'s section.
+The README's `plan` section describes living specs, the spec checker and splitting a branch, and sends bugs and questions to `research`.
 
 Testing: the repo's check script and markdownlint; planning a change to an existing spec, to a new area, and one that slims a spec; splitting a sample branch with a version bump.
 
