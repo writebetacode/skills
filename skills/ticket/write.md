@@ -17,7 +17,7 @@ Body, exactly; Steps to reproduce for bugs only; Jira: no checkboxes:
 
 Links (parent, blocks, blocked by, related): native where the tracker file has a command; else, or when native is rejected, a line at the body's end: `Parent: #40`, `Blocked by: #50`, `Blocks: #53`, `Related: #47`. Building out a parent's children → every child gets its parent. A related link [match.md](match.md) calls for needs no asking. Else links and labels only when asked.
 
-- Draft from the request and context; ask only for a required field you can't derive (Jira project key, type); never invent one. Text another skill hands over with the user's OK (`setup`'s issue drafts): file it exactly as given, adding only link lines.
+- Draft from the request and context; ask only for a required field you can't derive (Jira project key, type); never invent one.
 - Write directly; show a draft first only when asked.
 - New tickets: assigned to the user; refused only for that → create unassigned, saying so.
 - Edits: change only what's named; keep the rest byte-for-byte.

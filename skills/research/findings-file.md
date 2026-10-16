@@ -36,4 +36,4 @@ Recommended: <N>, <why>.
 
 Timeline and Impact: incidents only; otherwise leave both out. Other empty sections: "None."
 
-Reply: the findings path; the likely cause and confidence in 1–2 sentences. Then: the fix fits one PR with no open design choices → suggest `build` with the findings; else offer to plan it (Plan step 3 on, the spec restating the cause).
+Reply: the findings path; the likely cause and confidence in 1–2 sentences. Called by `plan` → that's all. Else: the fix fits one PR with no open design choices → suggest `/wbc:build <findings path>`; else `/wbc:plan <findings path>`.

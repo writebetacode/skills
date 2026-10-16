@@ -1,4 +1,4 @@
-GitHub, via `gh` (missing → install from <https://cli.github.com>; stop). Never add a flag not shown; on failure, report gh's error. `{owner}`/`{repo}` stay literal; gh fills them.
+GitHub, via `gh`. Never add a flag not shown. `{owner}`/`{repo}` stay literal; gh fills them.
 
 | Operation | Command |
 | --- | --- |

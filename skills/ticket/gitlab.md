@@ -1,4 +1,4 @@
-GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitlab-org/cli>; stop). Never add a flag not shown; on failure, report glab's error. A repo other than the current folder's → `--repo <path>` on each `glab issue` command, its path after `glab repo view`, and in `glab api` its URL-encoded path for `:id` plus `--hostname <its host>`.
+GitLab, via `glab` ≥1.115.0. Never add a flag not shown. A repo other than the current folder's → `--repo <path>` on each `glab issue` command, its path after `glab repo view`, and in `glab api` its URL-encoded path for `:id` plus `--hostname <its host>`.
 
 | Operation | Command |
 | --- | --- |
@@ -12,7 +12,6 @@ GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitl
 | comment | `glab issue note <n> --message "$(cat <file>)"` |
 | close | `glab issue close <n>` |
 | reopen | `glab issue reopen <n>` |
-| in progress | `glab api projects/:id/issues/<n>/related_merge_requests`: any `state` `opened` → in progress |
 
 - Native links: related; blocks/blocked by and epics on paid tiers only. Parent issue → body line.
 - `--linked-issues` takes one `--link-type` per create; other types → `link` after.

@@ -3,7 +3,7 @@ name: pr
 description: The current branch's GitHub pull request or GitLab merge request. Use when asked to open, update, draft, ready or merge a PR/MR, or when another skill needs one.
 ---
 
-Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else `${CLAUDE_SKILL_DIR}/../branch/default-branch.sh`; never assume `main`.
+Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md) and run remote commands only from its table. Say "pull request" or "merge request" to match. Base: the caller's (stacking), else `${CLAUDE_PLUGIN_ROOT}/bin/default-branch.sh`; never assume `main`.
 
 **Open** (the branch has an open one → update it; merged or closed ones don't count). On the base branch → say it needs its own branch (`branch` skill); stop.
 
@@ -30,6 +30,6 @@ Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md)
 
 **Merge**: read [merge.md](merge.md).
 
-One PR on one branch: never split it or comment on its size. Asked to split a branch → `plan` skill; open nothing.
+Never comment on a PR's size.
 
 No AI attribution in titles or descriptions.

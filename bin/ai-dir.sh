@@ -7,7 +7,7 @@
 write=
 [ "$1" = --write ] && { write=1; shift; }
 area=${1:?usage: ai-dir.sh [--write] <area> [path]}
-root=$("$(dirname "$0")/main-checkout.sh" "${2:-.}")
+root=$("$(dirname "$0")/main-checkout.sh" "${2:-.}" 2>/dev/null)
 case $? in
   0) ;;
   1) root=$(cd "${2:-.}" 2>/dev/null && pwd -P) || { echo "no such folder: ${2:-.}" >&2; exit 1; } ;;
@@ -21,6 +21,6 @@ if [ -n "$write" ]; then
     if [ -s "$ign" ] && [ -n "$(tail -c 1 "$ign")" ]; then echo >> "$ign"; fi
     echo '*' >> "$ign" 2>/dev/null
   fi
-  grep -qx '\*' "$ign" 2>/dev/null || { echo "can't write $root/.ai/: check its permissions" >&2; exit 1; }
+  grep -qx '\*' "$ign" 2>/dev/null || { echo "can't write $ign: write it holding * with a plain shell command, then run ai-dir.sh again" >&2; exit 1; }
 fi
 echo "$root/.ai/$area"

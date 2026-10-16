@@ -1,4 +1,4 @@
-GitLab, via `glab` ≥1.122.0 (missing or older → install or upgrade from <https://gitlab.com/gitlab-org/cli>; stop). Never add a flag not shown; on failure, report glab's error.
+GitLab, via `glab` ≥1.122.0. Never add a flag not shown.
 
 | Operation | Command |
 | --- | --- |

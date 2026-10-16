@@ -1,4 +1,4 @@
 1. `checks`; any failure → report; stop. Fetch; the local branch has commits `origin/<branch>` lacks → report; stop (merging deletes it).
 2. Squash unless the caller asks for a merge commit. Squash message: subject = the PR title; body = the ≤5 most important why-bullets from the squashed commits, then the newest squashed `Co-Authored-By` line, copied exactly (none → no trailer).
 3. `merge`, deleting the remote branch; refused → report why; stop.
-4. Switch to the default branch, `git pull --prune`; can't switch (uncommitted changes, or it's checked out in another worktree) → `git fetch --prune` and stay. Local branch still there → delete it only if it isn't checked out and `git merge-tree --write-tree origin/<default> <branch>` prints `git rev-parse origin/<default>^{tree}`: `git branch -D` (squash merges defeat `-d`); else keep it, say why.
+4. `<this skill's base directory>/../../bin/prune-merged.sh <branch>`; say what it kept and why.
