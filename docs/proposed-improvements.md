@@ -19,3 +19,4 @@ Each idea has one status:
 | CI for this repo | Skipped for now | Running `check.py` and markdownlint on PRs. Not needed while one person maintains it. |
 | README section check | Skipped for now | `check.py` checking that each skill has its README section. Not needed while one person maintains it. |
 | Test the skill scripts | Rejected | `check.py` running `main-checkout.sh` and `ai-dir.sh` in throwaway repos for the ai-folder spec's cases. The maintainer doesn't want it. |
+| One host table per host for pr, review and build | Rejected | Merging the GitHub and GitLab PR commands those three share into one table per host, so build stops reading the other two skills' tables. pr and review would each load commands they never run, just to save build one cross-read. |
