@@ -1,4 +1,4 @@
-Jira, via `acli` (missing → install from <https://developer.atlassian.com/cloud/acli/>; stop). Never add a flag not shown, never `--jql` or `--filter` outside `search`, never `--from-file`, `--from-json` or `--editor`; on failure, report acli's error. Project key: the key's prefix (`ABC-123` → `ABC`).
+Jira, via `acli`. Never add a flag not shown, never `--jql` or `--filter` outside `search`, never `--from-file`, `--from-json` or `--editor`. Project key: the key's prefix (`ABC-123` → `ABC`).
 
 | Operation | Command |
 | --- | --- |

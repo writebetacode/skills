@@ -1,4 +1,4 @@
-GitHub, via `gh` (missing → install from <https://cli.github.com>; stop). Never add a flag not shown; on failure, report gh's error.
+GitHub, via `gh`. Never add a flag not shown.
 
 | Operation | Command |
 | --- | --- |

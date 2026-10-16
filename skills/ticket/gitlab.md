@@ -1,4 +1,4 @@
-GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitlab-org/cli>; stop). Never add a flag not shown; on failure, report glab's error. A repo other than the current folder's → `--repo <path>` on each `glab issue` command, its path after `glab repo view`, and in `glab api` its URL-encoded path for `:id` plus `--hostname <its host>`.
+GitLab, via `glab` ≥1.115.0. Never add a flag not shown. A repo other than the current folder's → `--repo <path>` on each `glab issue` command, its path after `glab repo view`, and in `glab api` its URL-encoded path for `:id` plus `--hostname <its host>`.
 
 | Operation | Command |
 | --- | --- |

@@ -1,4 +1,4 @@
-Never add a flag not shown; on failure, report the CLI's error. `<day>`: YYYY-MM-DD, local time.
+Never add a flag not shown. `<day>`: YYYY-MM-DD, local time.
 
 GitHub:
 

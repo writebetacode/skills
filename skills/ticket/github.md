@@ -1,4 +1,4 @@
-GitHub, via `gh` (missing → install from <https://cli.github.com>; unknown flag → upgrade gh; stop). Never add a flag not shown; on failure, report gh's error. A repo other than the current folder's → `--repo <owner/name>` on each command.
+GitHub, via `gh`. Never add a flag not shown. A repo other than the current folder's → `--repo <owner/name>` on each command.
 
 | Operation | Command |
 | --- | --- |
