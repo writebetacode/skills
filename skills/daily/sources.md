@@ -6,7 +6,6 @@ GitHub:
 | --- | --- |
 | login | `gh api user --jq .login` |
 | review requests | `gh search prs --review-requested=@me --state=open --json number,title,repository,url` |
-| re-reviews | `gh search prs --reviewed-by=@me --state=open --sort updated --json number,title,repository,url,author`, skipping your own; each: `gh pr view <n> --repo <owner/name> --json headRefOid,reviews`; your latest review's `commit.oid` isn't `headRefOid` → re-review |
 | your PRs | `gh search prs --author=@me --state=open --json number,title,repository,url,isDraft`; repeat with `--checks=failure`, `--review=changes_requested`, `--review=approved` |
 | tickets | `gh search issues --assignee=@me --state=open --json number,title,repository,url,labels` |
 | replies owed | `gh api notifications`, skipping reasons `subscribed`, `ci_activity`; link: `subject.url` with `api.github.com/repos/` → `github.com/`, `/pulls/` → `/pull/` |

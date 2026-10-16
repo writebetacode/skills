@@ -1,4 +1,4 @@
-GitHub, via `gh` (missing → install from <https://cli.github.com>; unknown flag → upgrade gh; stop). Never add a flag not shown; on failure, report gh's error.
+GitHub, via `gh` (missing → install from <https://cli.github.com>; unknown flag → upgrade gh; stop). Never add a flag not shown; on failure, report gh's error. A repo other than the current folder's → `--repo <owner/name>` on each command.
 
 | Operation | Command |
 | --- | --- |
@@ -9,5 +9,6 @@ GitHub, via `gh` (missing → install from <https://cli.github.com>; unknown fla
 | comment | `gh issue comment <n> --body-file <file>` |
 | close | `gh issue close <n>`, plus `--reason <completed\|not planned>` if given, or `--duplicate-of <original>` for a duplicate |
 | reopen | `gh issue reopen <n>` |
+| in progress | `gh issue view <n> --json closedByPullRequestsReferences`, then `gh pr view <url> --json state` each: any `OPEN` → in progress |
 
 Native links: parent, blocked by, blocking. Related → body line.

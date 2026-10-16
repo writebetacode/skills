@@ -30,4 +30,6 @@ Host: `${CLAUDE_SKILL_DIR}/host.sh` (fails → ask). Read [github.md](github.md)
 
 **Merge**: read [merge.md](merge.md).
 
+One PR on one branch: never split it or comment on its size. Asked to split a branch → `plan` skill; open nothing.
+
 No AI attribution in titles or descriptions.
