@@ -15,14 +15,14 @@ case $p in
     case $sub in */*) rest=${sub#*/} ;; *) rest= ;; esac
     if [ -n "$rest" ] && [ -d "$base/$rest" ]; then p=$base/$rest; else p=$base; fi ;;
 esac
-cd "$p" 2>/dev/null || exit 1
+cd "$p" 2>/dev/null || { echo "no such folder: ${1:-.}" >&2; exit 1; }
 for q in --is-inside-git-dir --is-bare-repository; do
-  [ "$(git rev-parse "$q" 2>/dev/null)" = true ] && exit 2
+  [ "$(git rev-parse "$q" 2>/dev/null)" = true ] && { echo "${1:-.} is a git folder or a bare repo's own folder, with no checkout" >&2; exit 2; }
 done
-top=$(git rev-parse --show-toplevel 2>/dev/null) || exit 1
+top=$(git rev-parse --show-toplevel 2>/dev/null) || { echo "not in a git repo: ${1:-.}" >&2; exit 1; }
 # A submodule checked out in a linked worktree maps as the same submodule in its superproject's main checkout does.
 sup=$(git rev-parse --show-superproject-working-tree 2>/dev/null)
-if [ -n "$sup" ] && smain=$("$self" "$sup") && [ "$smain" != "$sup" ] && [ -e "$smain/${top#"$sup"/}/.git" ]; then
+if [ -n "$sup" ] && smain=$("$self" "$sup" 2>/dev/null) && [ "$smain" != "$sup" ] && [ -e "$smain/${top#"$sup"/}/.git" ]; then
   exec "$self" "$smain/${top#"$sup"/}"
 fi
 # The first block of the porcelain list is the main checkout, the bare git folder (marked "bare"), or a git folder: a

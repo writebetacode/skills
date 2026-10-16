@@ -5,7 +5,7 @@ description: Plan work, answer questions or prove why something's broken. Use wh
 
 Just a question to answer (how something works here, which pattern to follow, versions in use) → follow only [research.md](research.md). A change to an existing plan, asked or handed back by `build` → read [revise.md](revise.md). Splitting a branch → plan it as below, with [split.md](split.md). A failing CI test handed over by `build` → read [handover.md](handover.md). A plan at `upgrades: draft` → resume step 6's walk; then `tasks/` exists → revise.md's task rewrite, else step 7.
 
-Folder: `<${CLAUDE_SKILL_DIR}/ai-dir.sh --write plan>/<name>/` (the main checkout's, shared by its worktrees; exits 2 → say why; stop), `<name>` 2–4 kebab-case words, not already there.
+Folder: `<${CLAUDE_PLUGIN_ROOT}/bin/ai-dir.sh --write plan>/<name>/` (exits 2 → stop), `<name>` 2–4 kebab-case words, not already there.
 
 Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, plain separate commands (a compound one is refused): `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. `ai-dir.sh --write` exits 1 → write that `.ai/.gitignore` holding `*` either way; run it again. A shell write or that rerun failing → say you can't reach the main checkout; stop. Never the worktree's copy.
 
@@ -21,7 +21,7 @@ tasks/NN-<mr>.md     one per MR; NN = merge order
 
 Epic (several features that each ship alone): its own `spec.md` (Design: its features in build order, a line each) and `status.md`, plus `NN-<feature>/` sub-folders in build order, each laid out as above.
 
-Related repos and Debug tools: those sections of the `CLAUDE.md` and `CLAUDE.local.md` in `${CLAUDE_SKILL_DIR}/main-checkout.sh`'s checkout, wherever you run; each path resolved from it.
+Related repos: `${CLAUDE_PLUGIN_ROOT}/bin/related-repos.sh` (name, path, how). Debug tools: that section of the `CLAUDE.md` and `CLAUDE.local.md` in `${CLAUDE_PLUGIN_ROOT}/bin/main-checkout.sh`'s checkout.
 
 Talk to the user only in `same-page` rounds (the request, then each open choice the spec needs), the spec and upgrade walks, and the final reply. Never ask them to approve research. Write only this folder; outside investigate.md, run no experiments.
 

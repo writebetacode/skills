@@ -7,7 +7,7 @@
 write=
 [ "$1" = --write ] && { write=1; shift; }
 area=${1:?usage: ai-dir.sh [--write] <area> [path]}
-root=$("$(dirname "$0")/main-checkout.sh" "${2:-.}")
+root=$("$(dirname "$0")/main-checkout.sh" "${2:-.}" 2>/dev/null)
 case $? in
   0) ;;
   1) root=$(cd "${2:-.}" 2>/dev/null && pwd -P) || { echo "no such folder: ${2:-.}" >&2; exit 1; } ;;

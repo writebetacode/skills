@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
-orphan files and agents, executable skill scripts, skill and agent word budgets, pointers to another skill's rules, and
-proposed-improvement statuses."""
+orphan files, agents and bin/ scripts, executable scripts run only from bin/ or their own skill, skill and agent word
+budgets, pointers to another skill's rules, and proposed-improvement statuses."""
 import itertools, json, os, re, shutil, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -37,19 +37,33 @@ def check_cli_flags():
         print(f"· {tool} not installed: its host tables go unchecked", flush=True)
 
 
+def check_runs(f, run, ran):
+    """A script must exist and be executable, and live in bin/ or the caller's own skill folder, so no skill depends on
+    another skill's files."""
+    rel, own = f.relative_to(ROOT), f.relative_to(ROOT).parts[:2]
+    for s in (s for s in run if s.suffix != ".md"):
+        r = s.resolve()
+        ran.add(r)
+        if not s.exists():
+            errors.append(f"{rel}: runs missing {os.path.relpath(s, ROOT)}")
+        elif not os.access(s, os.X_OK):
+            errors.append(f"{rel}: runs {os.path.relpath(s, ROOT)}, which isn't executable")
+        elif (p := r.relative_to(ROOT).parts)[0] == "skills" and p[:2] != own:
+            errors.append(f"{rel}: runs {os.path.relpath(s, ROOT)}, another skill's script: move it to bin/")
+
+
 def check_skills():
     """Progressive disclosure only works if every pointer resolves and every sibling file is pointed at."""
-    root, linked, descs = ROOT, set(), 0
+    root, linked, descs, ran = ROOT, set(), 0, set()
     for f in sorted([*root.glob("skills/*/*.md"), *root.glob("agents/*.md")]):
         t, rel = f.read_text(), f.relative_to(root)
         targets = [f.parent / l for l in re.findall(r"\]\(([^)\s#]+)\)", t) if not re.match(r"[a-z]+:|<", l)]
-        run = [f.parent / l for l in re.findall(r"\$\{CLAUDE_SKILL_DIR\}/([\w./-]+\w)", t)]
+        run = [f.parent / l for l in re.findall(r"(?:\$\{CLAUDE_SKILL_DIR\}|<this skill's base directory>)/([\w./-]+\w)", t)]
+        run += [root / l for l in re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/([\w./-]+\w)", t)]
         targets += run
-        for s in run:
-            if s.suffix != ".md" and s.exists() and not os.access(s, os.X_OK):
-                errors.append(f"{rel}: runs {os.path.relpath(s, root)}, which isn't executable")
+        check_runs(f, run, ran)
         for target in targets:
-            if not target.exists():
+            if not target.exists() and not (target in run and target.suffix != ".md"):
                 errors.append(f"{rel}: links to missing {os.path.relpath(target, root)}")
             linked.add(target.resolve())
         if m := re.search(r"(?:as|per) the `[\w-]+` skill \w+", t):
@@ -64,6 +78,12 @@ def check_skills():
             errors.append(f"{rel}: {n} words (budget {cap})")
     if descs > DESCS_MAX:
         errors.append(f"skills: descriptions total {descs} words (budget {DESCS_MAX})")
+    for f in sorted(p for p in [*root.glob("skills/*/*"), *root.glob("bin/*")] if p.is_file() and p.suffix != ".md"):
+        check_runs(f, [f.parent / l for l in re.findall(r'\$\(dirname "\$0"\)/([\w./-]+\w)', f.read_text())], ran)
+    for f in sorted(root.glob("bin/*")):
+        if f.resolve() not in ran:
+            errors.append(f"{f.relative_to(root)}: no skill or script runs it")
+    linked |= ran
     for f in sorted(p for p in root.glob("skills/*/*") if p.is_file()):
         if f.name != "SKILL.md" and f.resolve() not in linked:
             errors.append(f"{f.relative_to(root)}: no skill file links to it, so it never loads")

@@ -1,4 +1,4 @@
-Security (Plan step 1), in each active repo (`<this skill's base directory>/active-repos.sh`), at every severity. Host: `<this skill's base directory>/../pr/host.sh` there (fails → `Not checked: <repo>: <why>`, never ask); `<owner/name>` from its `origin`. Remote commands only from this table; one refused → `Not checked`. GitLab alerts empty → `Not checked: <repo>: none shown; GitLab lists them only on Ultimate`.
+Security (Plan step 1), in each active repo (`<this skill's base directory>/active-repos.sh`), at every severity. Host: `<this skill's base directory>/../../bin/host.sh` there (fails → `Not checked: <repo>: <why>`, never ask); `<owner/name>` from its `origin`. Remote commands only from this table; one refused → `Not checked`. GitLab alerts empty → `Not checked: <repo>: none shown; GitLab lists them only on Ultimate`.
 
 | Need | Command |
 | --- | --- |
