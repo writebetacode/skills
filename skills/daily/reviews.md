@@ -11,5 +11,3 @@ Each reviewed PR's repo: the active repo whose `origin` is the PR's repo. Its re
 
 - It exists, and its `reviewed at` isn't the head, or a thread holding one of its `posted:` findings has someone else's reply (`createdAt`; GitLab `created_at`) newer than the file → re-review it now, one PR at a time: the `review` skill on it, that checkout as the repo, each command one call starting `cd <checkout> &&` (the shell's folder resets; a worktree session's own repo: the worktree, no `cd`). List it under Reviews: what changed in its file, and `/wbc:review <number>` to look it over and post.
 - No file, or no active repo, and new pushes since your latest review (GitHub: that review's commit isn't the head; GitLab: commits newer than your last word) → list it under Reviews with `/wbc:review <url>`; run nothing.
-
-Each other `<number>.md` in an active repo's review folder: `view` its PR (per its checkout's `origin`). Merged or closed → unasked, `mkdir -p <folder>/completed`, then `mv -n` it there; reply `Archived: <repo> #<number>`. Still there → say why.
