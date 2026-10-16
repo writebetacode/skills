@@ -93,7 +93,7 @@ Use it to turn a plan, a bug write-up or a small change into tested, reviewed pu
 
 ### wbc:review
 
-Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
+Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. It holds every pull request to your repo's specs: code that no longer matches a spec the pull request didn't update is blocking, asked as a question about which should change. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one. Asking it to address comments on your own pull request hands it to `build`.
 
 To have it check repos that depend on this one, run `/wbc:setup`, or list them yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` reads the same list):
 
