@@ -30,6 +30,6 @@ Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](gith
 
 **Merge**: read [merge.md](merge.md).
 
-One PR on one branch: never split it or comment on its size. Asked to split a branch → `plan` skill; open nothing.
+Never comment on a PR's size.
 
 No AI attribution in titles or descriptions.

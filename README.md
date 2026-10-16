@@ -60,7 +60,7 @@ Use it so your history explains why things changed, without you writing the mess
 
 ### wbc:pr
 
-Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style, fills your template, squashes on merge by default, and handles drafts and stacked PRs that have to merge in order. It won't open one from your default branch or merge while your branch has commits you haven't pushed, and it deletes a local branch only once all its work has merged. It handles one PR for one branch and never splits it; to break a branch up, use `plan`.
+Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style, fills your template, squashes on merge by default, and handles drafts and stacked PRs that have to merge in order. It won't open one from your default branch or merge while your branch has commits you haven't pushed, and it deletes a local branch only once all its work has merged. It handles one PR per branch and never comments on its size.
 
 ### wbc:release
 
@@ -97,7 +97,7 @@ Use it to turn a plan, a bug write-up or a small change into tested, reviewed pu
 
 ### wbc:review
 
-Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. It holds every pull request to your repo's specs: code that no longer matches a spec the pull request didn't update is blocking, asked as a question about which should change. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one. Asking it to address comments on your own pull request hands it to `build`.
+Use it to get a careful review of a pull request or merge request that you can edit before anyone sees it: findings land in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), a separate checker agent, which sees none of the review's reasoning, rechecks each one, and nothing posts until you say so. It holds every pull request to your repo's specs: code that no longer matches a spec the pull request didn't update is blocking, asked as a question about which should change. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
 
 To have it check repos that depend on this one, run `/wbc:setup`, or list them yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` and `research` read the same list):
 

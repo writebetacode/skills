@@ -7,7 +7,7 @@ Input, first match:
 
 - PR/MR number or URL, or the current branch's when asked to get it green or through review → read [land.md](land.md).
 - A plan: `<${CLAUDE_PLUGIN_ROOT}/bin/ai-dir.sh plan>/<name>/` as named; nothing given → the only one outside `completed/`; several → ask. `spec:` neither `approved` nor `none` (only upgrades) → `plan`; stop.
-- A request, or findings (`.ai/research/<name>/findings.md`: its recommended fix): fits one PR and nothing about it is in doubt (what changes, where, what done looks like) → one task, no folder; else (splitting a branch included) → `plan` skill; stop. Never `same-page` a request: write its ACs from it as asked. Findings → its repro is the first AC.
+- A request, or findings (`.ai/research/<name>/findings.md`: its recommended fix): fits one PR and nothing about it is in doubt (what changes, where, what done looks like) → one task, no folder; else → `plan` skill; stop. Never `same-page` a request: write its ACs from it as asked. Findings → its repro is the first AC.
 
 Plan: the specs on `status.md`'s `spec:` line, read from the plan's `specs/`, are the source of truth: read each whole; never `research/`, `findings.md` or tickets. Next task: the first `tasks/NN-*.md` with an unticked AC, its first task with one. None left, or no `tasks/` → read [finish.md](finish.md).
 

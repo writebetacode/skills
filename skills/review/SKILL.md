@@ -1,13 +1,11 @@
 ---
 name: review
-description: Review a GitHub PR or GitLab MR into a file you edit before it posts. Use when asked to review or re-review a PR or MR, post a review, answer replies to review comments, or review local changes.
+description: Review a GitHub PR or GitLab MR into a file you edit before it posts. Use when asked to review or re-review a PR or MR, post a review, answer replies to your review comments, or review local changes.
 ---
 
 Uncommitted local changes, no PR → read [local.md](local.md).
 
-Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table, plus `user` from [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md). PR: number, branch or URL as given; else the current branch's.
-
-Asked to address a PR's comments: its author (`view`) is you (`user`) → `build` skill (it lands it); stop. A review or re-review always runs.
+Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md); run remote commands only from its table. PR: number, branch or URL as given; else the current branch's.
 
 - File: `<${CLAUDE_PLUGIN_ROOT}/bin/ai-dir.sh --write reviews>/<number>.md` (exits 2 → stop). Missing but in `completed/` (`daily` archived it) → `mv` it back first. Never stage it.
 - Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, each a plain command: `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too, or `ai-dir.sh` fails again → say you can't reach the main checkout; stop. Never the worktree's copy.
