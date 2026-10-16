@@ -12,7 +12,7 @@ Claude Code loads `CLAUDE.local.md` next to `CLAUDE.md`, and from parent folders
 
 ## Scope
 
-In: the CLI checks; related repos, with paths every reader resolves from the main checkout; debug tools; `daily`'s sources; learning from your sessions of the past 14 days; a `Skills:` line in `sessions.sh`; the README's `setup` section; marking "Learn from your sessions in `setup`" Done in `docs/proposed-improvements.md`.
+In: the CLI checks; related repos, with paths every reader resolves from the main checkout; debug tools; `daily`'s sources; learning from your sessions of the past 14 days; a `Skills:` line in `sessions.sh`; the README's `setup` section.
 Out: installing or logging in to CLIs for you; editing a repo's committed `CLAUDE.md`, `AGENTS.md` or `.gitignore`; filing an issue without your OK.
 
 ## Behaviour
@@ -154,7 +154,7 @@ Scenario: No gh login for github.com
 
 `sessions.sh` gains a `Skills:` line listing the skills each session ran, from Claude's skill calls, so a skill Claude started on its own can be named too. Across every session in those 14 days, mapped or not, a correction of a wbc skill's own behaviour (right after a `/wbc:` command or a wbc skill on its `Skills:` line, an interrupted request, "no, that's wrong") becomes an issue draft for writebetacode/skills, never a Learned line: what the skill did against what it should have done, retold in an invented sample repo with no names, paths, people, code or company details. A misfire with an open issue about it already on writebetacode/skills (searched through `ticket`, naming that repo) is skipped and named. Each draft is written in `ticket`'s title and body format, shown in full, and handed to `ticket` only when you say so; `ticket` files that text exactly as shown, adding only the link lines its search finds. With `gh` not logged in to github.com, drafts are still made, each marked as not checked against existing issues, and an OK'd draft is shown with the link to file it by hand.
 
-The skill's description and README section mention learning from sessions, and the row above moves to Done.
+The skill's description and README section mention learning from sessions.
 
 Testing: the repo's check script (budgets and links) and markdownlint; running it against a scratch folder of repos; and against a sessions folder with planted repeated and one-off corrections and a skill misfire, checking that the draft holds no names or paths.
 

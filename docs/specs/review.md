@@ -10,7 +10,7 @@ Specs in `docs/specs/` are the living definition of each domain area, and every 
 
 ## Scope
 
-In: specs in review's context; spec mismatches as blocking findings; sending comments on your own PR to `build`; the README's `review` section; marking "Spec clashes in `review`" Done in `docs/proposed-improvements.md`.
+In: specs in review's context; spec mismatches as blocking findings; sending comments on your own PR to `build`; moving back a review file `daily` archived; the README's `review` section.
 Out: reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats these findings (the review-checker spec).
 
 ## Behaviour
@@ -54,6 +54,12 @@ Scenario: Comments on your own PR go to build
   Given you wrote PR 45 and a reviewer commented on it
   When you ask Claude to address the comments on PR 45
   Then build lands it instead of review
+
+Scenario: A review file daily archived comes back
+  Given daily moved PR 50's review file to .ai/reviews/completed/50.md when PR 50 closed
+  And PR 50 was reopened
+  When you review PR 50
+  Then the file moves back to .ai/reviews/50.md, and the review carries on from it
 ```
 
 ## Design
@@ -66,7 +72,9 @@ The blocking bar gains a fourth case: code that no longer matches a part of a sp
 
 Asked to address a PR's comments, `review` compares the PR's author (from `view`) with your login, from `pr`'s `user` command, which review's rule on remote commands names alongside its own tables. A PR you wrote goes to `build`'s land step, and `review` stops. The check applies only to that ask: a review or re-review, `daily`'s included, always runs as one.
 
-The README's `review` section says it holds PRs to the repo's specs, and the row above moves to Done.
+A PR whose review file `daily` moved to `.ai/reviews/completed/`, once the PR merged or closed, gets the file moved back before the review starts. A move it can't make stops the review, as a refused write does.
+
+The README's `review` section says it holds PRs to the repo's specs.
 
 Testing: the repo's check script and markdownlint, and a review of a sample PR that contradicts a spec.
 
@@ -76,3 +84,4 @@ Testing: the repo's check script and markdownlint, and a review of a sample PR t
 - **Either fix clears it, with no reason required**: Why: what matters is that code and spec agree; the spec's own rules ask for a why only when a Decision changes. Not demanding the PR explain every spec edit.
 - **Specs found by area, not path**: Why: specs are written by area and aren't indexed by the files they cover. Not a path index: every spec would have to list and keep up every file it touches.
 - **Comments on your own PR go to `build`**: Why: they need code changes and reply drafts, which is landing. Not `review`: it answers replies to its own findings on PRs you reviewed.
+- **An archived review file moves back**: Why: the review carries on from its findings, keeping their numbers and the links to posted comments. Not a fresh file: numbers would restart and clash with comments already posted.

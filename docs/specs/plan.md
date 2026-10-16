@@ -14,7 +14,7 @@ For a bug, `plan` investigates: it reproduces the failure, walks the failing pat
 
 ## Scope
 
-In: where specs live, how they're named, grow and get checked, and how tasks come from them; requests that are only upgrades; the dependency-upgrade step; splitting a branch into tasks; investigating a test `build` hands over; the spec rules file; the README's `plan` section; marking "Living specs in `plan`", "Split a branch in `plan`" and "Track down flaky tests" Done in `docs/proposed-improvements.md`.
+In: where specs live, how they're named, grow and get checked, and how tasks come from them; requests that are only upgrades; the dependency-upgrade step; splitting a branch into tasks; investigating a test `build` hands over; the spec rules file; the README's `plan` section.
 Out: how `build` writes specs and carries a split branch's code (the build spec); how the spec checker works (the spec-checker spec); merging or deleting a split branch; upgrading dependencies the change doesn't touch.
 
 ## Behaviour
@@ -155,7 +155,7 @@ Each approved upgrade becomes the first task of the MR it ships in, or its own M
 
 **A test handed over by `build`.** `build` hands over the failing test, the CI job and its log, and the PR's branch and head commit. The problem is exact, so there's no `same-page` round. The investigation runs in a throwaway worktree at that head commit: the test alone up to 50 times, stopping at the first failure; if it never fails, the whole suite in CI's order up to 5 times. It fails sometimes → flaky: prove the cause as usual. It never fails → investigate what differs between CI and your machine (versions, settings, services, data) as an ordinary bug. Still no repro → the findings say so, with confidence at most medium. A failure it reproduces is rerun the same way at the PR's base, so the findings say whether the PR's change causes it. The findings go back to `build`, which decides what happens to the fix.
 
-The README's `plan` section describes living specs, splitting a branch and investigating a test `build` hands over, and the three rows above move to Done in `docs/proposed-improvements.md`. The upgrade-path spec becomes part of this one.
+The README's `plan` section describes living specs, splitting a branch and investigating a test `build` hands over. The upgrade-path spec becomes part of this one.
 
 Testing: the repo's check script and markdownlint; planning a change to an existing spec and to an area without one; a plan with an outdated dependency in a scratch repo; splitting a sample branch with a version bump; investigating a planted flaky test.
 
