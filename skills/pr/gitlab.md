@@ -3,7 +3,7 @@ GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitl
 | Operation | Command |
 | --- | --- |
 | merged | `glab mr list --merged --per-page 20 --output json` (`.title`) |
-| view | `glab mr view <branch> --output json` (`iid`, `title`, `description`, `state`, `draft`, `web_url`, `target_branch`) |
+| view | `glab mr view <branch> --output json` (`iid`, `title`, `description`, `state`, `draft`, `web_url`, `target_branch`, `author`) |
 | issue | `glab issue view <n> --output json` (`title`, `web_url`) |
 | user | `glab api user \| jq -r .username` |
 | create | `glab mr create --yes --title <title> --description-file <file> --target-branch <base> --source-branch <branch> --assignee <user>`, plus `--draft` if asked |

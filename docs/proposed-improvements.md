@@ -26,7 +26,7 @@ Each idea has one status:
 | Learn from your sessions in `setup` | Planned | Re-running `setup` combs recent sessions for corrections you keep making and proposes lines for each repo's `CLAUDE.local.md`. Where a wbc skill went wrong, it drafts an issue here from a made-up scenario, with nothing that identifies you. |
 | Split a branch in `plan` | Done | `plan` turns a branch that grew too big into tasks that reuse its code and tests. `pr` never splits: it handles one PR on one branch. |
 | Living specs in `plan` | Done | One spec per domain area in a flat `docs/specs/`, named for the area and updated with every change to it. |
-| `build` hands doubt to `plan` | Planned | `build` stops running `same-page` on requests. It builds what's already decided, and anything it isn't sure about goes to `plan`. |
+| `build` hands doubt to `plan` | Done | `build` stops running `same-page` on requests. It builds what's already decided, and anything it isn't sure about goes to `plan`. |
 | Find related tickets before filing | Planned | `ticket` searches open and closed tickets first. A closed match is linked as related, one in progress (on GitHub, one with an open PR) gets a follow-up ticket, and one not started gets updated instead. |
 | Catch up on PR activity in `daily` | Planned | `daily` re-reviews PRs you reviewed that have new pushes or replies, in your local review files only, and lists new comments on your own PRs. Asking to address a PR's comments goes to `build` for yours and `review` for ones you reviewed. |
 | Watch your PRs on a loop | Rejected | Fixing CI and drafting replies in a long-running loop. The maintainer wants to ask when they're ready instead. |

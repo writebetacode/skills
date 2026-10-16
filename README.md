@@ -89,7 +89,7 @@ To tell it what it can use when it's chasing a bug, run `/wbc:setup`, or list yo
 
 ### wbc:build
 
-Use it to turn a plan, a bug write-up or a small change into tested, reviewed pull requests while you stay in charge of every commit; anything too big for one pull request goes to `plan` first. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, and waits for your go before committing, then lands the pull requests: it rebases them after earlier ones merge, fixes failing CI from the job logs and drafts replies to review comments, and waits for your go again before it pushes or posts anything.
+Use it to turn a plan, a bug write-up or a small change into tested, reviewed pull requests while you stay in charge of every commit; anything unclear, or too big for one pull request, goes to `plan` first, so it never has to ask what you meant. A pull request someone else wrote goes to `review` instead. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, and waits for your go before committing, then lands the pull requests: it rebases them after earlier ones merge, fixes failing CI from the job logs and drafts replies to review comments, and waits for your go again before it pushes or posts anything.
 
 ### wbc:review
 
