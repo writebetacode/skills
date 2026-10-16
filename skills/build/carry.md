@@ -1,0 +1,5 @@
+A task with a `from:` branch (a split): read that branch as well as the specs and the task; carry what the task lists from the branch's own diff, so the base's later changes stay: whole files, `git diff --binary origin/<default>...<branch> -- <paths> | git apply -3`, a moved file by both its paths (`<default>`: `<this skill's base directory>/../branch/default-branch.sh`); hunks, only those hunks of that diff. Never change, rebase or delete that branch.
+
+- An AC reading `suite passes (… no new test)` (no behaviour change, or a version bump) → carry what it needs; the full suite passing is its check.
+- Else: carry its tests; run them; see them fail. Then carry its code; see them pass. A carried test that passes before the code doesn't test this task → also write a failing test of your own for that AC, keeping the carried one. An AC with no test on the branch → write one, test-first.
+- Carried code that fails its tests or the suite (it needs a hunk another task carries, say) → put every carried path back (`git restore --staged --worktree -- <paths>`), hand the plan back to `plan` to revise the split; commit nothing.

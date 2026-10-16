@@ -18,7 +18,7 @@ Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, p
 ## Task
 
 1. Branch: plan → the MR's `branch:` exists → switch to it. Else base = its `base:`; while that base is an MR branch whose MR has merged → that MR's `base:`. `branch` skill with both. `status.md` MR → `building`. Request or findings → `branch` skill, named from it.
-2. Each AC: a test, written the repo's way, that fails for the reason the AC names; run it; see it fail. Then the least code that passes. Docs, write-ups, config → no test. Then the full suite and the repo's linter. Never weaken a test.
+2. A `from:` task → [carry.md](carry.md) too. Each AC: a test, written the repo's way, that fails for the reason the AC names; run it; see it fail. Then the least code that passes. Docs, write-ups, config → no test. Then the full suite and the repo's linter. Never weaken a test.
 3. Review: one fresh `Agent`, briefed: `Follow ${CLAUDE_SKILL_DIR}/../review/SKILL.md for a local review of the uncommitted changes in <repo path>, against <spec path | findings path | the agreed request, verbatim>; ACs: <names>.` Its findings and `git diff HEAD` plus untracked files (temp files), the spec or findings path (a request: temp file) and the repo path → `Agent` with `subagent_type: wbc:review-checker`. Fix each survivor, re-run tests, review again with new agents until none survive. A finding you think wrong → leave it for the user. 3 rounds → stop with what's left.
 4. Stop. Reply: the task; each AC with its test `path:line`; files changed; review: found → fixed per round; disputed findings. End: "Look it over; say go to commit."
 
