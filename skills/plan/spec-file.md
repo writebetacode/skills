@@ -1,4 +1,4 @@
-`specs/<area>.md`: one per domain area (skill, agent, app area: `payments`), named for it, never for a plan or change; `docs/specs/` is flat. Every change to an area updates its spec. For readers who never saw the conversation, tickets or research: what it does and why, where that matters, enough to build it from alone. Links to nothing; no code or ticket keys. Omit sections with nothing to say.
+`specs/<area>.md`: one per domain area (skill, agent, app area: `payments`), named for it, never for a plan or change; `docs/specs/` is flat. Every change to an area updates its spec. For readers who never saw the conversation, tickets or research: what it does and why, where that matters, enough to build it from alone. Links to nothing; no code, ticket keys or dependency upgrades (those are tasks). Omit sections with nothing to say.
 
 - Area with a spec: its base version, rewritten to read as today's truth and to these rules; each overturned Decision → the new one and why. New area: only what this change defines.
 
