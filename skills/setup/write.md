@@ -6,4 +6,4 @@ Writes, once the user confirms (SKILL.md step 6). A write that fails stops here:
    - Section missing → append it. A repo already listed by name, in this file or the repo's `CLAUDE.md` → skip it. A listed path that no longer resolves from the main checkout → fix it in `CLAUDE.local.md`, in every repo you read (a stale `CLAUDE.md` line → tell the user). Else add its line. Never remove or reword other lines.
 3. Then `~/.claude/CLAUDE.md`: the Daily section as agreed. Refused → show the section for them to paste.
 
-Edit/Write refused on a main checkout's `CLAUDE.local.md` (worktree session) → Bash, plain separate commands (a compound one is refused): the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. That failing → say you can't reach the main checkout; stop. Never the worktree's copy.
+Edit/Write refused on a main checkout's `CLAUDE.local.md` (worktree session) → Bash, a plain command: the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too → say you can't reach the main checkout; stop. Never the worktree's copy.

@@ -7,7 +7,7 @@ Just a question to answer (how something works here, which pattern to follow, ve
 
 Folder: `<${CLAUDE_PLUGIN_ROOT}/bin/ai-dir.sh --write plan>/<name>/` (exits 2 → stop), `<name>` 2–4 kebab-case words, not already there.
 
-Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, plain separate commands (a compound one is refused): `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. `ai-dir.sh --write` exits 1 → write that `.ai/.gitignore` holding `*` either way; run it again. A shell write or that rerun failing → say you can't reach the main checkout; stop. Never the worktree's copy.
+Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, each a plain command: `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too, or `ai-dir.sh` fails again → say you can't reach the main checkout; stop. Never the worktree's copy.
 
 ```
 specs/<area>.md      one per domain area the change touches (step 4); build commits them

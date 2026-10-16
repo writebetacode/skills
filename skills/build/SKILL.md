@@ -13,7 +13,7 @@ Plan: the specs on `status.md`'s `spec:` line, read from the plan's `specs/`, ar
 
 Work in the MR's `repo:` path (a main checkout), or in the current checkout when `${CLAUDE_PLUGIN_ROOT}/bin/main-checkout.sh` prints that path: `cd` there before tests, `branch`, `commit`, `pr`. Host, per repo: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` there (fails → ask). MR state: `view` in [../pr/github.md](../pr/github.md) or [../pr/gitlab.md](../pr/gitlab.md); seen merged → `status.md` `merged`.
 
-Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, plain separate commands (a compound one is refused): `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` matching no line of it. `ai-dir.sh --write` exits 1 → write that `.ai/.gitignore` holding `*` either way; run it again. A shell write or that rerun failing → say you can't reach the main checkout; stop. Never the worktree's copy.
+Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, each a plain command: `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too, or `ai-dir.sh` fails again → say you can't reach the main checkout; stop. Never the worktree's copy.
 
 ## Task
 

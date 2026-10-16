@@ -21,6 +21,6 @@ if [ -n "$write" ]; then
     if [ -s "$ign" ] && [ -n "$(tail -c 1 "$ign")" ]; then echo >> "$ign"; fi
     echo '*' >> "$ign" 2>/dev/null
   fi
-  grep -qx '\*' "$ign" 2>/dev/null || { echo "can't write $root/.ai/: check its permissions" >&2; exit 1; }
+  grep -qx '\*' "$ign" 2>/dev/null || { echo "can't write $ign: write it holding * with a plain shell command, then run ai-dir.sh again" >&2; exit 1; }
 fi
 echo "$root/.ai/$area"
