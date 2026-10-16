@@ -1,4 +1,4 @@
-Writes, once the user confirms (SKILL.md step 7). A write that fails stops here: the reply names what was written and what wasn't.
+Writes, once the user confirms (SKILL.md step 6). A write that fails stops here: the reply names what was written and what wasn't.
 
 1. Before the first write: `git -C <repo> check-ignore -q CLAUDE.local.md` fails in any repo → ask once to add `CLAUDE.local.md`, on its own line, to the global excludes file: `git config --global --includes --path core.excludesFile` set → append it there; unset → give them `! mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/git" && printf '\nCLAUDE.local.md\n' >> "${XDG_CONFIG_HOME:-$HOME/.config}/git/ignore"` (Claude Code protects that path). Then `check-ignore` again; still failing → name those repos (it'll show as untracked there).
 2. Per repo, its main checkout's `CLAUDE.local.md`:
