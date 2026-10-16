@@ -12,7 +12,6 @@ GitLab, via `glab` ≥1.115.0 (missing → install from <https://gitlab.com/gitl
 | comment | `glab issue note <n> --message "$(cat <file>)"` |
 | close | `glab issue close <n>` |
 | reopen | `glab issue reopen <n>` |
-| in progress | `glab api projects/:id/issues/<n>/related_merge_requests`: any `state` `opened` → in progress |
 
 - Native links: related; blocks/blocked by and epics on paid tiers only. Parent issue → body line.
 - `--linked-issues` takes one `--link-type` per create; other types → `link` after.
