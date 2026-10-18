@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.2 — 2026-10-18
+
+**Specs say what and why; tasks say how**
+[v0.6.1...v0.6.2](https://github.com/writebetacode/skills/compare/v0.6.1...v0.6.2)
+
+### Fixes
+
+- fix: Keep specs to what and why, and put the how in tasks (#45) ([5aad19d](https://github.com/writebetacode/skills/commit/5aad19d1a5e1a2c29c44e2a5f408828d98fc0258))
+
 ## 0.6.1 — 2026-10-18
 
 **Lint-clean Markdown from every skill, in any repo**
