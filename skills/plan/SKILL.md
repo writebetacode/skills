@@ -9,6 +9,8 @@ Folder: `<${CLAUDE_PLUGIN_ROOT}/bin/ai-dir.sh --write plan>/<name>/` (exits 2 �
 
 Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, each a plain command: `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too, or `ai-dir.sh` fails again → say you can't reach the main checkout; stop. Never the worktree's copy.
 
+After writing or editing a `.md` file: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <file>…`; fix what it prints, rerun until clean.
+
 ```
 specs/<area>.md      one per domain area the change touches (step 4); build commits them
 status.md            ticket, spec, progress
@@ -40,5 +42,6 @@ spec: <none | draft | approved YYYY-MM-DD>[: <repo>@<commit> <docs/specs path>, 
 from: <split branch | none>
 
 ## MRs
+
 - NN-<mr>: <todo | building | committed | open <url> | merged>
 ```

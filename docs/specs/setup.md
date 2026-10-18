@@ -72,7 +72,7 @@ Scenario: Daily's sources
 `setup` lives in `skills/setup/`, runs only when you type it, and asks one thing at a time:
 
 1. Which repos: paths you name, or each git repo up to two levels under a folder, always with the one you're in. Each repo's lines go to its main checkout; a folder with no checkout is skipped, saying why. A re-run also re-reads the repos its Related repos sections list.
-2. Tools: for each repo's host and for Jira if you use it, whether the CLI is installed and logged in, plus `jq`, as a checklist with the command to fix each gap.
+2. Tools: for each repo's host and for Jira if you use it, whether the CLI is installed and logged in, plus `jq` and `npx`, as a checklist with the command to fix each gap.
 3. Links, from evidence in the code only: package dependencies, one calling another's API, shared schemas or topics, compose files, submodules. Each link is a line in both repos, in the form `related-repos.sh` reads (the bin spec): the other repo's name (its `origin`'s owner/repo, else its folder's name), its path relative to this repo's main checkout, and how they relate in a few words.
 4. Debug tools, for repos without the section: lines from what the repo shows (cluster manifests, error-tracker config, compose files, a read-only database named by its variable or secret, never a value) and the session's connected tools.
 5. `daily`'s sources, in the format the daily spec reads: logged-in hosts, and connected tools that read chat, docs or tickets with the channels to watch, plus a notes file with `{date}` and a heading. An existing `## Daily` only gains lines it lacks, and keeps one `Notes:` line, which your answer replaces.

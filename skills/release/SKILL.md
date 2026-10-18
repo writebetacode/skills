@@ -8,6 +8,8 @@ Two passes; the user edits between them. No `origin` → say a release needs one
 
 Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md).
 
+After writing or editing a `.md` file: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <file>…`; fix what it prints, rerun until clean.
+
 Once the version is known, before anything else: tag `v<version>` exists locally or on `origin` (`git ls-remote --tags origin v<version>`) → say so; stop.
 
 Version files: each manifest, hidden folders included, holding the project's version (`package.json`, `pyproject.toml`, `Cargo.toml`, `.claude-plugin/plugin.json`…) and the lockfile entries mirroring it (`package-lock.json`, `Cargo.lock`). JS: `npm version <version> --no-git-tag-version`. None → changelog only.

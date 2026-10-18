@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
 orphan files, agents and bin/ scripts, executable scripts run only from bin/ or their own skill, skill and agent word
-budgets, pointers to another skill's rules, and proposed-improvement statuses."""
-import itertools, json, os, re, shutil, subprocess, sys
+budgets, pointers to another skill's rules, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
+running lint-md.sh, and proposed-improvement statuses."""
+import itertools, json, os, re, shutil, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -94,6 +95,47 @@ def check_skills():
             errors.append(f"{a.relative_to(root)}: no skill names {plugin}:{a.stem}, so it never runs")
 
 
+def check_markdown():
+    """Skills write files from their templates, so a template that fails markdownlint fails in every file made from it;
+    a skill writing .ai/ files that never runs lint-md.sh leaves them all unlinted."""
+    for d in sorted(ROOT.glob("skills/*/")):
+        t = "".join(f.read_text() for f in sorted(d.glob("*.md")))
+        if "ai-dir.sh --write" in t and "bin/lint-md.sh" not in t:
+            errors.append(f"skills/{d.name}: writes .ai/ files but never runs bin/lint-md.sh")
+    if not shutil.which("npx"):
+        print("· npx not installed: templates go unlinted", flush=True)
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        where = {}  # temp file → (skill file, line of its opening fence)
+        for f in sorted(ROOT.glob("skills/*/*.md")):
+            lines, fence = f.read_text().splitlines(), None
+            for i, line in enumerate(lines):
+                if not (m := re.fullmatch(r"( *)(`{3,})(.*)", line)):
+                    continue
+                if fence is None:
+                    fence = (i, m[1], m[2], m[3].strip())
+                elif m[2].startswith(fence[2]) and not m[3].strip():  # a closer: as many backticks or more, no info
+                    start, indent, _, info = fence
+                    body = [l[len(indent):] for l in lines[start + 1:i]]
+                    if not info and any(re.match(r"#{1,6} ", l) for l in body):  # a bare fence holding headings
+                        name = f"{len(where)}.md"
+                        where[name] = (f.relative_to(ROOT), start + 1)
+                        Path(tmp, name).write_text("\n".join(body) + "\n")
+                    fence = None
+        # The repo's rules, plus placeholders like <name>, which read as inline HTML.
+        cfg = json.loads(re.sub(r"^\s*//.*$", "", (ROOT / ".markdownlint-cli2.jsonc").read_text(), flags=re.M))
+        cfg["config"]["MD033"] = False
+        Path(tmp, ".markdownlint-cli2.jsonc").write_text(json.dumps(cfg))
+        pin = re.search(r"markdownlint-cli2@[\d.]+", (ROOT / "bin/lint-md.sh").read_text())[0]
+        r = subprocess.run(["npx", "--yes", pin, *(f":{n}" for n in where)], cwd=tmp, capture_output=True, text=True,
+                           timeout=120)
+    if r.returncode not in (0, 1):
+        errors.append(f"markdownlint couldn't lint the templates: {r.stderr.strip()}")
+    for m in re.finditer(r"^(\d+\.md):(\d+)\S* (?:error )?(.*)$", r.stderr, re.M):
+        rel, start = where[m[1]]
+        errors.append(f"{rel}:{start + int(m[2])}: template fails markdownlint: {m[3]}")
+
+
 def check_proposals():
     """A rejected idea must never come back built, and a shipped one must leave, or the record stops meaning anything."""
     f, statuses = ROOT / "docs/proposed-improvements.md", ("Proposed", "Planned", "Skipped for now", "Rejected")
@@ -115,6 +157,7 @@ def check_proposals():
 
 check_cli_flags()
 check_skills()
+check_markdown()
 check_proposals()
 for e in errors:
     print(f"✗ {e}", flush=True)

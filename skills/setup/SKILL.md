@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Set up the wbc skills on this machine: check gh, glab, acli and jq, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
+description: Set up the wbc skills on this machine: check gh, glab, acli, jq and npx, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
 disable-model-invocation: true
 ---
 
@@ -17,6 +17,7 @@ Each repo's files live in its main checkout: `${CLAUDE_PLUGIN_ROOT}/bin/main-che
    | `glab` | `glab auth status --hostname <host>` | `glab auth login --hostname <host> --web` | <https://gitlab.com/gitlab-org/cli> |
    | `acli` | `acli jira auth status` | `acli jira auth login --web` | <https://developer.atlassian.com/cloud/acli/> |
    | `jq` | | | <https://jqlang.org/download/> |
+   | `npx` | | | <https://nodejs.org/en/download> |
 
 3. Links, from evidence in the code only, never names alone: package dependencies between them; one calling another's API (routes it serves vs clients and base URLs); shared schemas or message topics; compose services; submodules. Each link → a line in both repos: the other repo's name (its `origin`'s owner/repo, else its folder's name), its path relative to the main checkout whose file it's in, how they relate in ≤12 words:
    - ✓ `- acme/web (../web): imports @acme/cart; calls /api/cart/*`

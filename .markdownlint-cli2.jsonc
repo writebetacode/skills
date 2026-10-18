@@ -1,4 +1,5 @@
 {
+  // This repo's rules, and bin/lint-md.sh's wherever a repo has none or doesn't commit the file.
   // Agent-facing Markdown: no title heading, no hard wraps, bare code fences. Changelogs repeat group headings per release.
   "config": {
     "MD013": false,

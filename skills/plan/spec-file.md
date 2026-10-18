@@ -8,13 +8,16 @@
 <2–3 sentences: what it does, for whom, why.>
 
 ## Context
+
 <What it builds on: the code, repos and constraints involved.>
 
 ## Scope
+
 In: <…>
 Out: <…; each behaviour this change removes>
 
 ## Behaviour
+
 ```gherkin
 Scenario: <observable outcome>
   Given <state>
@@ -23,12 +26,15 @@ Scenario: <observable outcome>
 ```
 
 ## Design
+
 <How it works: components and where they live, interfaces and data in words, errors, how it's tested, repos touched and which ships first.>
 
 ## Decisions
+
 - **<Topic>**: <decision>. Why: <reason>. Not <alternative>: <why>.
 
 ## Questions
+
 - <question raised along the way> → <answer | Open: <assumption>>
 ````
 

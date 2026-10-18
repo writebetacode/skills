@@ -14,12 +14,19 @@ Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](gith
 
    ```
    ## Tickets
+
    - <ABC-123 | [#142](<url>) <issue title> | N/A>
+
    ## Summary
+
    <≤2 sentences: what changed and why>
+
    ## Merge order
+
    1. <URL> <title> <"(this)" if it's this one>
+
    ## Changes
+
    - `<file>`: <one line>
    ```
 

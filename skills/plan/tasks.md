@@ -4,6 +4,7 @@ Tasks from the plan's `specs/` alone; never `findings.md`, tickets, this convers
 
 ```
 # <NN>: <MR title>
+
 repo: <name> <local path>
 branch: <type>/<ticket>-<short-name>
 base: <branch>
@@ -12,7 +13,9 @@ with: <NN, … | none>
 from: <branch | none>
 
 ## 1. <task: one commit>
+
 <what changes, in spec terms; code areas>
+
 - [ ] <spec scenario name | observable check when no scenario fits>
 ```
 
