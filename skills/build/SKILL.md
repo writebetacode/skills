@@ -15,6 +15,8 @@ Work in the MR's `repo:` path (a main checkout), or in the current checkout when
 
 Edit/Write refused on a main-checkout `.ai/` file (worktree session) → Bash, each a plain command: `mkdir -p <folder>`, then the whole file via `cat > <file> <<'<TAG>'`, `<TAG>` in no line of it. Refused too, or `ai-dir.sh` fails again → say you can't reach the main checkout; stop. Never the worktree's copy.
 
+After writing or editing a `.md` file in the plan folder or `docs/specs/`: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <file>…`; fix what it prints, rerun until clean.
+
 ## Task
 
 1. Branch: plan → the MR's `branch:` exists → switch to it. Else base = its `base:`; while that base is an MR branch whose MR has merged → that MR's `base:`. `branch` skill with both. `status.md` MR → `building`. Request or findings → `branch` skill, named from it.

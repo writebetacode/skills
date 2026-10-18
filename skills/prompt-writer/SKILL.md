@@ -5,6 +5,8 @@ description: Write or tighten text an agent reads: skills, agents, prompts, suba
 
 Reply with only the prompt, or only the written file paths. No summary, notes or caveats.
 
+After writing or editing a `.md` file: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <file>…`; fix what it prints, rerun until clean.
+
 Several readings → `same-page`. Missing conventions → `research` skill; use its report, don't relay it.
 
 Readers are LLMs. Write the leanest text that produces the behavior:

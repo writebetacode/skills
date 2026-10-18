@@ -8,10 +8,15 @@ Body, exactly; Steps to reproduce for bugs only; Jira: no checkboxes:
 
 ```
 ## Description
+
 <≤3 sentences>
+
 ## Steps to reproduce
+
 - <step>
+
 ## Acceptance criteria
+
 - [ ] <observable outcome: it's done when…>
 ```
 

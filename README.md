@@ -21,6 +21,7 @@ Each skill calls the CLI for the host it's working with, so install only the one
 - [GitLab CLI](https://gitlab.com/gitlab-org/cli/-/blob/main/docs/installation_options.md) (`glab`) 1.115 or later for GitLab merge requests, issues and releases. `review`, and `build` when it answers review comments, need 1.122 or later.
 - [Atlassian CLI](https://developer.atlassian.com/cloud/acli/guides/install-acli/) (`acli`) for Jira work items.
 - [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `daily` uses to read your sessions, and the GitLab skills use to look up your username.
+- [Node.js](https://nodejs.org/en/download) (`npx`), which the skills use to run markdownlint on the Markdown files they write, like specs, changelogs, plans, findings and review files. A file your repo commits follows the repo's own markdownlint config if it has one.
 
 `/wbc:setup` checks which of these you have and whether you're logged in.
 
