@@ -43,7 +43,7 @@ Related repos come from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, t
 
 The context step gathers the specs in `docs/specs/` that share the diff's area, found by searching them for the diff's key terms (skill and feature names, behaviours, settings, paths), read from the PR's worktree, or from the checkout for a local review.
 
-A finding is blocking for broken behaviour, security, breakage elsewhere, or code that no longer matches a part of a spec (a scenario, Design text or a Decision) the PR didn't update. A spec mismatch asks which should change, the code or the spec, citing the spec's line. A mismatch that a later task or PR of the same plan will close isn't a finding, when the later tasks and MRs `build` names in asking for the local review, or the PR's merge order, include that later work.
+A finding is blocking for broken behaviour, security, breakage elsewhere, or code that no longer matches a part of a spec (a scenario or a Decision) the PR didn't update. A spec mismatch asks which should change, the code or the spec, citing the spec's line. A mismatch that a later task or PR of the same plan will close isn't a finding, when the later tasks and MRs `build` names in asking for the local review, or the PR's merge order, include that later work.
 
 The README's `review` section says it holds PRs to the repo's specs, with no sentence about handing your own PR's comments to `build` or moving archived files back.
 

@@ -88,7 +88,7 @@ Scenario: Closing a plan cleans up its branches
 
 **Docs.** Once a change passes its tests, `build` searches the repo for every name, term and behaviour it touched and fixes each spec, README, doc, docstring and comment that's no longer true, in the same commit. History stays as it was (changelogs, migrations), and so do the specs on a plan's status line: a change that contradicts one is fixed to match it, or goes back to `plan`.
 
-**Review.** Each change gets a fresh agent that invokes `review` for a local review against the specs, the task, the findings or the request, told which later tasks and MRs of the plan are still to come. The review checker then confirms its findings. `build` fixes each survivor and reviews again, at most three rounds.
+**Review.** Each change gets a fresh agent that invokes `review` for a local review against the plan's task and specs, the findings, or the request, told which later tasks and MRs of the plan are still to come. The review checker then confirms its findings. `build` fixes each survivor and reviews again, at most three rounds.
 
 **Worktrees.** A task's `repo:` is the repo's main checkout; run in a worktree of it, `build` works there.
 

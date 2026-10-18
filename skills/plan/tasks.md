@@ -1,6 +1,6 @@
-Tasks from the plan's `specs/` alone; never `findings.md`, tickets, this conversation or `research/` (but upgrades, below). Per spec, only its change since its `spec:` line commit (`git show <commit>:docs/specs/<area>.md` in its repo; missing → new): new → every scenario; edited → each scenario added or changed in behaviour, each Design behaviour change no scenario covers (observable check), each removal Scope's Out names (AC: behaviour gone); slimmed, reworded or merged → none. Each is an AC of exactly one task; never a tests-only or code-only task.
+ACs: the plan's `specs/` alone (upgrades: below); how: `research/`, `findings.md`, the code, the user's choices. Per spec, only its change since its `spec:` line commit (`git show <commit>:docs/specs/<area>.md` in its repo; missing → new): new → every scenario; edited → each scenario added or changed in behaviour, each other behaviour change (observable check), each removal Scope's Out names (AC: behaviour gone); slimmed, reworded or merged → none. Each is an AC of exactly one task; never a tests-only or code-only task.
 
-`tasks/NN-<mr>.md`: terse. MR = one branch that works and ships alone; MRs merge in NN order. One repo per MR; work spanning repos → one MR per repo, each naming the others in `with:`.
+`tasks/NN-<mr>.md`: terse. MR = one branch that works and ships alone; MRs merge in NN order. One repo per MR; spanning repos → one MR per repo, each naming the others in `with:`.
 
 ```
 # <NN>: <MR title>
@@ -14,7 +14,7 @@ from: <branch | none>
 
 ## 1. <task: one commit>
 
-<what changes, in spec terms; code areas>
+<how: components and where, interfaces, data, errors, tests; why behind non-obvious choices>
 
 - [ ] <spec scenario name | observable check when no scenario fits>
 ```

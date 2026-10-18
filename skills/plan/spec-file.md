@@ -1,6 +1,6 @@
-`specs/<area>.md`: one per domain area (skill, agent, app area: `payments`), named for it, never for a plan or change; `docs/specs/` is flat. Every change to an area updates its spec. For readers who never saw the conversation, tickets or research: what it does and why, where that matters, enough to build it from alone. Links to nothing; no code, ticket keys or dependency upgrades (those are tasks). Omit sections with nothing to say.
+`specs/<area>.md`: one per domain area (skill, agent, app area: `payments`), named for it, never for a plan or change; `docs/specs/` is flat. Every change to an area updates its spec. For readers who never saw the conversation, tickets or research: what it does, as users and callers see it, and why. Never how it's built (components, code layout, internal interfaces, storage, tests, repos, upgrades): tasks hold it. ✗ `LockoutService in auth/ stores the lock time in Redis` ✓ `A locked-out user sees when they can try again`. Links to nothing; no code or ticket keys. Omit sections with nothing to say.
 
-- Area with a spec: its base version, rewritten to read as today's truth and to these rules; each overturned Decision → the new one and why. New area: only what this change defines.
+- Area with a spec: its base version, rewritten to read as today's truth and to these rules (a Design section: its what and why → other sections; the rest goes); each overturned Decision → the new one and why. New area: only what this change defines.
 
 ````
 # <Area>
@@ -9,7 +9,7 @@
 
 ## Context
 
-<What it builds on: the code, repos and constraints involved.>
+<Where it fits: areas and people it works with, constraints.>
 
 ## Scope
 
@@ -24,10 +24,6 @@ Scenario: <observable outcome>
   When <action>
   Then <what a user or caller sees>
 ```
-
-## Design
-
-<How it works: components and where they live, interfaces and data in words, errors, how it's tested, repos touched and which ships first.>
 
 ## Decisions
 

@@ -32,7 +32,7 @@ Scenario: A finding that doesn't hold is withdrawn
 
 ## Design
 
-`agents/review-checker.md`, read-only, using the session's model, for `review` and `build`. It re-derives each finding from the code, and from the spec, ticket, task, findings file or request where the finding rests on what was asked. It keeps a finding only if the cited code is there, the claim holds, it traces to this change, it matters, and it isn't a duplicate, a preference or a linter rule. A blocking finding outside the bar (broken behaviour, security, breakage elsewhere, or code that no longer matches a part of a spec (a scenario, Design text or a Decision) the change didn't update) becomes non-blocking. A wrong example gets fixed or dropped, never the finding. It never adds findings, and its result is final.
+`agents/review-checker.md`, read-only, using the session's model, for `review` and `build`. It re-derives each finding from the code, and from the spec, ticket, task, findings file or request where the finding rests on what was asked. It keeps a finding only if the cited code is there, the claim holds, it traces to this change, it matters, and it isn't a duplicate, a preference or a linter rule. A blocking finding outside the bar (broken behaviour, security, breakage elsewhere, or code that no longer matches a part of a spec (a scenario or a Decision) the change didn't update) becomes non-blocking. A wrong example gets fixed or dropped, never the finding. It never adds findings, and its result is final.
 
 It replies with one line per finding, in order (kept, downgraded or withdrawn, with why in a few words), then the kept findings word for word, apart from downgrades and fixed examples.
 
