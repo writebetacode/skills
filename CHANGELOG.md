@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.6.1 — 2026-10-18
+
+**Lint-clean Markdown from every skill, in any repo**
+[v0.6.0...v0.6.1](https://github.com/writebetacode/skills/compare/v0.6.0...v0.6.1)
+
+### Fixes
+
+- fix: Lint every Markdown file the skills write ([16bb627](https://github.com/writebetacode/skills/commit/16bb6279de92ec87b887225b29b515fd5c8de115))
+
 ## 0.6.0 — 2026-10-16
 
 **Leaner skills, and research splits from plan**
