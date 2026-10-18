@@ -4,7 +4,7 @@ Before `plan` walks you through a spec, a fresh agent checks it against the spec
 
 ## Context
 
-`plan` writes each spec its change touches in its plan folder, then walks them with you. The spec rules say a spec stands alone, links to nothing, holds no code or ticket keys, keeps only what matters, and describes behaviour in scenarios, never how a test is built. Committed specs live in `docs/specs/`; a plan's specs stay in its gitignored plan folder, which searches skip, until `build` commits them.
+`plan` writes each spec its change touches in its plan folder, then walks them with you. The spec rules say a spec covers what its area does and why but not how it's built, stands alone, links to nothing, holds no code or ticket keys, keeps only what matters, and describes behaviour in scenarios, never how a test is built. Committed specs live in `docs/specs/`; a plan's specs stay in its gitignored plan folder, which searches skip, until `build` commits them.
 
 ## Scope
 
@@ -21,14 +21,14 @@ Scenario: A clash with another spec
   Then the checker flags the clash, citing both specs
 
 Scenario: Something missing
-  Given the draft's scope includes exporting to CSV, but no scenario or design covers it
+  Given the draft's scope includes exporting to CSV, but nothing in it describes the export
   When plan checks the draft
   Then the checker flags exporting to CSV as missing
 
 Scenario: Something that doesn't belong
-  Given the draft links to a ticket and holds a code snippet
+  Given the draft links to a ticket, holds a code snippet and names the class that stores lockouts
   When plan checks the draft
-  Then the checker flags both, citing the spec rules
+  Then the checker flags all three, citing the spec rules
 
 Scenario: Plan fixes, then asks you about the rest
   Given the checker returned findings
@@ -40,7 +40,7 @@ Scenario: Plan fixes, then asks you about the rest
 
 `agents/spec-checker.md`, read-only, using the session's model. `plan` calls it as that agent type, once per spec, with only paths: that spec, the spec rules file, the root of the repo the spec ships in and its `docs/specs/`, and the plan's other specs, which it reads whole. A `docs/specs/` spec with the file name of this spec or another of the plan's specs is that spec's old version, being replaced: no clash.
 
-It checks each spec against the spec rules, the repo's instruction files (`CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`) at its root and nearest each path the spec names, every other spec touching the same behaviours or terms (a contradiction, the same thing specified twice, a term used differently), and whether it can be built alone (an in-scope item with no scenario or design, an undefined term, a blocking open question). It replies with a verdict (ready, or gaps) and a numbered list, each finding naming its kind (missing, doesn't belong, clash, unclear), the section, the problem, its source and a fix.
+It checks each spec against the spec rules, the repo's instruction files (`CLAUDE.md`, `AGENTS.md`, `CONTRIBUTING.md`) at its root and nearest each path the spec names, every other spec touching the same behaviours or terms (a contradiction, the same thing specified twice, a term used differently), and whether it's complete on its own (an in-scope item nothing in it describes, an undefined term, a blocking open question). It replies with a verdict (ready, or gaps) and a numbered list, each finding naming its kind (missing, doesn't belong, clash, unclear), the section, the problem, its source and a fix.
 
 Testing: the repo's check script and markdownlint, and running the checker on a spec with a planted clash and a planted link.
 

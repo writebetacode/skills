@@ -20,13 +20,13 @@ tasks/NN-<mr>.md     one per MR; NN = merge order
 
 Related repos: `${CLAUDE_PLUGIN_ROOT}/bin/related-repos.sh` (name, path, how).
 
-Talk to the user only in `same-page` rounds (the request, then each open choice the spec needs), the spec walk, and the final reply. Never ask them to approve research. Write only this folder; run no experiments yourself.
+Talk to the user only in `same-page` rounds (the request, then each open choice the specs or tasks need), the spec walk, and the final reply. Never ask them to approve research. Write only this folder; run no experiments yourself.
 
 ## Plan
 
 1. Inputs only, nothing else before `same-page`: ticket key or URL → `ticket` skill: view; `.ai/research/<name>/findings.md` given → read it (its `research/` counts as step 3's: reuse, don't redo).
 2. `same-page` on the request, bugs too. Agreed, and it's something broken to track down (bug, error, failing test, incident, alert) → `research` skill on it; then plan its recommended fix. Only a dependency upgrade (from `build`, outgrowing one PR) → no spec (`spec: none`): steps 3, 6 and 7.
-3. Research quietly: `research` skill once per thing the spec needs (how it works here, patterns to follow, versions in use and which dependencies it needs newer (to what version, each breaking change with where), other repos touched, the domain areas it touches and their `docs/specs/` specs), saved as `research/<topic>.md`.
+3. Research quietly: `research` skill once per thing the specs or tasks need (how it works here, patterns to follow, versions in use and which dependencies it needs newer (to what version, each breaking change with where), other repos touched, the domain areas it touches and their `docs/specs/` specs), saved as `research/<topic>.md`.
 4. Invoke the `voice` skill (once per session); write `specs/<area>.md` for each area the request touches and each other area's spec it makes untrue: start each per [copy.md](copy.md), then write it per [spec-file.md](spec-file.md). Then check each: `Agent` with `subagent_type: wbc:spec-checker` (never a fork or another type), once per spec, given only paths: that spec, `${CLAUDE_SKILL_DIR}/spec-file.md`, the root and `docs/specs/` of the repo it ships in, and this plan's other `specs/*.md`. Fix each finding you agree with and rerun it (≤2 reruns); the rest → that spec's Questions as `Open:`, raised in the walk.
 5. Walk them: each path, then its decisions and open questions in ≤8 lines; ask to approve or change. Changes → `same-page` on them, edit, check, walk again; open questions → settle before approval. Explicit approval only → `status.md`'s `spec: draft` → `spec: approved <date>`, keeping its entries. The specs stay here until `build` commits them.
 6. Tasks: read [tasks.md](tasks.md), and [split.md](split.md) when `status.md` has a `from:` branch.
