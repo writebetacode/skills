@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.0 — 2026-10-19
+
+**Tougher reviews, with a reply for every open thread**
+[v0.7.0...v0.8.0](https://github.com/writebetacode/skills/compare/v0.7.0...v0.8.0)
+
+### Features
+
+- feat: Draft replies to every open review thread and tidy daily's notes ([a35a510](https://github.com/writebetacode/skills/commit/a35a510d149b104542e6a59e3bb3902bc8ce4c21))
+
 ## 0.7.0 — 2026-10-18
 
 **Spec existing code, and try ideas in research**
