@@ -15,6 +15,8 @@ To update, run `claude plugin update wbc@writebetacode`. You only get a new copy
 
 ## Requirements
 
+You need [Git](https://git-scm.com/downloads) 2.38 or later, which `pr` and `build` use to tell when a branch's work has merged, squash merges included.
+
 Each skill calls the CLI for the host it's working with, so install only the ones you use:
 
 - [GitHub CLI](https://github.com/cli/cli#installation) (`gh`) for GitHub pull requests, issues and releases.
@@ -23,7 +25,7 @@ Each skill calls the CLI for the host it's working with, so install only the one
 - [jq](https://jqlang.org/download/), which `review` uses to build GitHub comments, `daily` uses to read your sessions, and the GitLab skills use to look up your username.
 - [Node.js](https://nodejs.org/en/download) (`npx`), which the skills use to run markdownlint on the Markdown files they write, like specs, changelogs, plans, findings and review files. A file your repo commits follows the repo's own markdownlint config if it has one.
 
-`/wbc:setup` checks which of these you have and whether you're logged in.
+`/wbc:setup` checks which of these you have, whether you're logged in, and whether your git is new enough.
 
 ---
 
@@ -31,7 +33,7 @@ Each skill calls the CLI for the host it's working with, so install only the one
 
 ### wbc:setup
 
-Use it when you install the plugin, and again when you start on another repo, so `plan`, `research` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git), along with `daily`'s sources in your global `~/.claude/CLAUDE.md`, once you confirm. Run it again any time to add repos; it also fixes the path of a repo that moved. Claude never starts it on its own: type `/wbc:setup`.
+Use it when you install the plugin, and again when you start on another repo, so `plan`, `research` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, and that your git is new enough, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git), along with `daily`'s sources in your global `~/.claude/CLAUDE.md`, once you confirm. Run it again any time to add repos; it also fixes the path of a repo that moved. Claude never starts it on its own: type `/wbc:setup`.
 
 ### wbc:daily
 

@@ -4,7 +4,7 @@
 
 ## Context
 
-`plan`, `research`, `review` and `daily` read `## Related repos`, and `research` reads `## Debug tools`, from the `CLAUDE.md` and `CLAUDE.local.md` of a repo's main checkout; `daily` reads `## Daily` from your global `~/.claude/CLAUDE.md`. The skills call `gh`, `glab`, `acli` and `jq`. Claude Code loads `CLAUDE.local.md` next to `CLAUDE.md` but doesn't ignore it in git for you, and adding one to a repo that has only `AGENTS.md` stops Claude reading `AGENTS.md` unless the new file imports it.
+`plan`, `research`, `review` and `daily` read `## Related repos`, and `research` reads `## Debug tools`, from the `CLAUDE.md` and `CLAUDE.local.md` of a repo's main checkout; `daily` reads `## Daily` from your global `~/.claude/CLAUDE.md`. The skills call `git`, which some of them need at 2.38 or later, `gh`, `glab`, `acli` and `jq`. Claude Code loads `CLAUDE.local.md` next to `CLAUDE.md` but doesn't ignore it in git for you, and adding one to a repo that has only `AGENTS.md` stops Claude reading `AGENTS.md` unless the new file imports it.
 
 ## Scope
 
@@ -39,10 +39,11 @@ Scenario: A folder with no checkout is skipped
   Then it skips shop and says why
 
 Scenario: CLI checks
-  Given gh is installed but logged out, and acli isn't installed
+  Given gh is installed but logged out, acli isn't installed, and git is 2.34
   When you run setup
-  Then it shows a checklist of the CLI for each repo's host, Jira's if you use it, jq and npx, each installed and logged in or not
+  Then it shows a checklist of git, the CLI for each repo's host, Jira's if you use it, jq and npx, each installed and logged in or not
   And it says gh needs "gh auth login", which you can run with "!"
+  And it says git needs 2.38 or later, with git's install link
   And it gives the install link for acli, and runs no login or install itself
 
 Scenario: Link repos found in a folder
