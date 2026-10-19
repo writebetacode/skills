@@ -27,6 +27,33 @@ Each skill calls the CLI for the host it's working with, so install only the one
 
 `/wbc:setup` checks which of these you have, whether you're logged in, and whether your git is new enough.
 
+## How they fit together
+
+Most work moves through the skills in this order, each one handing off to the next:
+
+1. `ticket` files or finds the ticket for the work.
+2. `research` finds out what you need to know first, or why something's broken.
+3. `plan` agrees on specs with you, then splits the work into tasks.
+4. `build` builds the tasks test-first into pull requests and gets them through CI and review.
+5. `review` reviews the pull requests other people write.
+6. `release` ships a version.
+
+A small fix with nothing left to decide can go straight to `build`, and anything `build` isn't sure about goes back to `plan`. `daily` wraps around the rest: in the morning it lists what's waiting on you, with the skill that starts each item, and at the end of the day it recaps what you did. `branch`, `commit` and `pr` are the git steps the others use, and you can run them on their own too. `same-page` is how every skill asks you something, one question at a time, and `voice` keeps what they write for people sounding like a teammate wrote it.
+
+## What waits for you
+
+Nothing is committed, pushed, posted or merged until you say so:
+
+- `build` stops after each task for you to look it over, and commits only when you say go. It asks before opening pull requests, and pushes or posts replies only after another go. It never merges.
+- `build` starts on a plan only once you've approved its specs.
+- `review` writes its findings to a file you can edit, and posts only when you say "post it".
+- `research` changes nothing in your checkout. Its experiments run in throwaway worktrees.
+- `setup` shows you every change first, and writes only once you confirm.
+- `daily` only reads, apart from your notes file and the review files it refreshes. It never posts, merges or moves a ticket.
+- `release` stops once the changelog is drafted, and ships only when you run `/wbc:release go`.
+
+`ticket`, `commit` and `pr` act as soon as you ask them to, since asking is your go. If you'd like to see a ticket before it's filed, ask `ticket` for a draft. Claude never starts `setup`, `daily` or `release` on its own.
+
 ---
 
 ## Setup and daily skills
