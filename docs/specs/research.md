@@ -73,7 +73,8 @@ Scenario Outline: What the reply suggests
 Scenario: A test build hands over
   Given build hands over a checkout test that failed in CI on PR 45 and passed locally, with the CI job's log and PR 45's commits
   When research investigates it
-  Then there's no same-page round, and the findings folder is the test's name in kebab case, so build can find it again
+  Then there's no same-page round, and the findings folder is the test's name in kebab case plus PR 45's number, so build finds it again while landing PR 45
+  And findings for that test from other PRs are leads it rules in or out, never the answer
   And it runs the test alone up to 50 times at PR 45's head, then the whole suite in CI's order up to 5 times, stopping at the first failure
   And a failure it reproduces is rerun the same way at PR 45's base, so the findings say whether PR 45 caused it
   And a flaky cause is proven by the patched code passing those same runs

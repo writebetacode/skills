@@ -122,10 +122,15 @@ Scenario Outline: A CI failure PR 45 didn't cause is reported
     | it fails only because of how CI differs  |
     | no cause                                 |
 
-Scenario: A test research already looked into
-  Given .ai/research/ already holds findings for the failing test, in a folder named for it
-  When CI fails that test again
-  Then build doesn't hand it to research again
+Scenario Outline: A test research already looked into
+  Given .ai/research/ holds findings for the checkout test, made while landing <pr>
+  When CI fails that test on PR 45
+  Then <next>
+
+  Examples:
+    | pr     | next                                                                        |
+    | PR 45  | build uses those findings and doesn't hand the test to research again      |
+    | PR 30  | build hands the test to research, with PR 30's findings as a lead to check |
 
 Scenario: A PR you didn't write goes to review
   Given someone else wrote PR 50
@@ -148,5 +153,6 @@ Scenario: Closing a plan cleans up its branches
 - **`build` stays in your worktree**: Why: you chose to work there, and switching the main checkout would change the branch under another session.
 - **A split task carries the existing code and tests**: Why: the work is done and tested; a carried test that already passes gets a failing one beside it so the task still proves its change. Not rebuilding from scratch.
 - **The split's branch is never touched**: Why: it's the only complete copy until every piece merges, and you decide when it's safe to delete. Not cleaning it up with the merged MR branches.
+- **A failing test's findings are reused only for the PR they were made for**: Why: a test can fail on a later PR for a new reason, and old findings would answer with the old cause. Not reusing them for any PR. Not researching again on each CI round of the same PR.
 - **An older flaky test is only reported**: Why: its fix is separate work you start from the findings, and building it mid-landing mixes unrelated work into the run. Not opening a fix PR of its own unasked.
 - **PRs you didn't write go to `review`**: Why: you can't push to someone else's PR as yours. Not landing them.
