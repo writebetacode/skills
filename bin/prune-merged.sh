@@ -17,8 +17,13 @@ tree=$(git rev-parse "origin/$d^{tree}") || exit 1
 for b; do
   if ! git show-ref --verify -q "refs/heads/$b"; then echo "$b: no local branch"
   elif git worktree list --porcelain | grep -qx "branch refs/heads/$b"; then echo "kept $b: checked out in a worktree"
-  elif [ "$(git merge-tree --write-tree "origin/$d" "$b" 2>/dev/null)" != "$tree" ]; then echo "kept $b: not fully merged into origin/$d"
-  elif git branch -q -D "$b"; then echo "deleted $b"
-  else echo "kept $b: git branch -D failed"
+  else
+    # Exit 1 is a conflict, so not merged; above 1, git couldn't run it (--write-tree needs git 2.38).
+    m=$(git merge-tree --write-tree "origin/$d" "$b" 2>/dev/null); s=$?
+    if [ "$s" -gt 1 ]; then echo "kept $b: git merge-tree --write-tree failed: it needs git 2.38 or later"
+    elif [ "$m" != "$tree" ]; then echo "kept $b: not fully merged into origin/$d"
+    elif git branch -q -D "$b"; then echo "deleted $b"
+    else echo "kept $b: git branch -D failed"
+    fi
   fi
 done

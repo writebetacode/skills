@@ -1,18 +1,19 @@
 ---
 name: setup
-description: Set up the wbc skills on this machine: check gh, glab, acli, jq and npx, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
+description: Set up the wbc skills on this machine: check git, gh, glab, acli, jq and npx, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
 disable-model-invocation: true
 ---
 
-Walk the user through each step. Ask via `same-page`, one thing at a time; step 6's changes are shown in full outside it. Write nothing before step 6's confirm.
+Walk the user through each step. Ask via `same-page`; step 6's changes are shown in full outside it. Write nothing before step 6's confirm.
 
 Each repo's files live in its main checkout: `${CLAUDE_PLUGIN_ROOT}/bin/main-checkout.sh <path>` (fails → skip that path, saying why).
 
 1. Repos: the repo you're in, if any, plus the paths the user names, or each git repo up to two levels under a folder they name (`find <folder> -maxdepth 3 -name .git -type d`: skips worktrees and submodules). Re-run → also each repo already under `## Related repos` in those repos' `CLAUDE.md` or `CLAUDE.local.md`.
-2. Tools: in each repo, `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask) and the host from `git remote get-url origin` (an SSH alias → `ssh -G <alias> | awk '/^hostname /{print $2}'`); ask whether they use Jira. Per host, installed (`command -v`) and logged in. Never install or log in yourself; tell them to run the login with `!`.
+2. Tools: in each repo, `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask) and the host from `git remote get-url origin` (an SSH alias → `ssh -G <alias> | awk '/^hostname /{print $2}'`); ask whether they use Jira. Per host, installed (`command -v`) and logged in; `git --version` 2.38 or later. Never install or log in yourself; tell them to run the login with `!`.
 
    | Tool | Logged in | Login | Install |
    | --- | --- | --- | --- |
+   | `git` | | | <https://git-scm.com/downloads> |
    | `gh` | `gh auth status --hostname <host>` | `gh auth login --hostname <host> --web` | <https://cli.github.com> |
    | `glab` | `glab auth status --hostname <host>` | `glab auth login --hostname <host> --web` | <https://gitlab.com/gitlab-org/cli> |
    | `acli` | `acli jira auth status` | `acli jira auth login --web` | <https://developer.atlassian.com/cloud/acli/> |

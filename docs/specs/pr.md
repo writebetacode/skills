@@ -38,10 +38,15 @@ Scenario: A squash-merged branch counts as merged
   When pr cleans up after the merge
   Then it deletes feat/abc-12-login, since merging it into origin's default branch, as just fetched, would change nothing
 
-Scenario: A failed step keeps the branch
-  Given fetching from origin fails during cleanup
+Scenario Outline: A failed step keeps the branch
+  Given <step> fails during cleanup
   When pr cleans up after merging PR 12
-  Then feat/abc-12-login is kept, and pr says why
+  Then feat/abc-12-login is kept, and pr says <why>
+
+  Examples:
+    | step                                        | why                         |
+    | fetching from origin                        | why the fetch failed        |
+    | checking the merge, on git older than 2.38  | it needs git 2.38 or later  |
 ```
 
 ## Decisions
