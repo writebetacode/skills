@@ -30,5 +30,5 @@ The user asks for changes: code only → make them, steps 2–4 again. Changes w
 Go:
 
 1. Stage the files this task changed by path, never `-A` or `.`, plus each spec on `status.md`'s `spec:` line that's untracked or changed in this repo; `commit` skill.
-2. Plan: tick the task's ACs. MR's last task → `status.md` `committed`. Start the next task unasked. The feature's last commit → [finish.md](finish.md).
+2. Plan: tick the task's ACs. MR's last task → `status.md` `committed`. Start the next task unasked.
 3. Request or findings: ask to open the PR. Yes → `pr` skill: open; then land.md.

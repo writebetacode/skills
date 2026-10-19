@@ -4,7 +4,7 @@ description: Set up the wbc skills on this machine: check gh, glab, acli, jq and
 disable-model-invocation: true
 ---
 
-Walk the user through each step. Ask via `same-page`, one thing at a time; step 6's changes are shown in full outside it. Write nothing before step 6's confirm.
+Walk the user through each step. Ask via `same-page`; step 6's changes are shown in full outside it. Write nothing before step 6's confirm.
 
 Each repo's files live in its main checkout: `${CLAUDE_PLUGIN_ROOT}/bin/main-checkout.sh <path>` (fails → skip that path, saying why).
 

@@ -1,6 +1,6 @@
 ACs: the plan's `specs/` alone (upgrades: below); how: `research/`, `findings.md`, the code, the user's choices. Per spec, only its change since its `spec:` line commit (`git show <commit>:docs/specs/<area>.md` in its repo; missing → new): new → every scenario; edited → each scenario added or changed in behaviour, each other behaviour change (observable check), each removal Scope's Out names (AC: behaviour gone); slimmed, reworded or merged → none. Each is an AC of exactly one task; never a tests-only or code-only task.
 
-`tasks/NN-<mr>.md`: terse. MR = one branch that works and ships alone; MRs merge in NN order. One repo per MR; spanning repos → one MR per repo, each naming the others in `with:`.
+`tasks/NN-<mr>.md`: terse. MR = one branch that works and ships alone. One repo per MR; spanning repos → one MR per repo, each naming the others in `with:`.
 
 ```
 # <NN>: <MR title>
