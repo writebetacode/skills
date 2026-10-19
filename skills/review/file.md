@@ -1,7 +1,7 @@
 The review file:
 
 ````
-# <PR|MR> <#|!><number>: <title>
+# [<PR|MR> <#|!><number>](<url>): <title>
 
 <!-- reviewed at <head sha> -->
 
@@ -11,6 +11,8 @@ reply to: <thread url>
 linked: <thread url>
 posted: <YYYY-MM-DD> <url>
 
+Thread: <where it stands: who raised what, the latest word, what the head changed; ≤3 sentences>
+
 The ask: <one question or statement>
 
 <1–4 sentences, ≤200 words; cite file:line only where it helps>
@@ -18,10 +20,12 @@ The ask: <one question or statement>
 Example:
 
 ```<lang>
-<the problem reproduced, as an issue would show it; only when the summary doesn't make it clear>
+<code that locks in what the summary says: the problem reproduced, as an issue would show it, or the fix>
 ```
 
 Reply draft: <≤2 sentences>
+
+Nothing to add: <why, ≤15 words>
 
 ## Not checked
 
@@ -29,13 +33,14 @@ Reply draft: <≤2 sentences>
 
 ## Resolved
 
-### <N>. <heading> (resolved in <short sha>)
+### <N>. <heading> (resolved in <short sha>|thread resolved)
 
 ## Withdrawn
 
 ### <N>. <heading>
 ````
 
-- `reply to:`, `linked:`, `posted:`, Example, Reply draft and empty sections only when they apply.
-- Labels: praise, nitpick, suggestion, issue, todo, question, thought, chore, note.
+- Example whenever code makes the claim harder to misread. `reply to:`, `linked:`, `posted:`, `Thread:`, Reply draft, Nothing to add and empty sections only when they apply.
+- Nothing to add: in place of what would post next (an unposted thread finding's ask, summary and Example; a Reply draft); it never posts.
+- Labels: nitpick, suggestion, issue, todo, question, chore.
 - The user withdraws by moving a finding under `## Withdrawn`, or says `withdraw <N>`. Nothing under Resolved or Withdrawn posts.
