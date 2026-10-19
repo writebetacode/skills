@@ -27,7 +27,7 @@ Read only: change nothing but the notes file and review files (re-reviewed throu
    - Tickets assigned to them and not done, with status.
    - Leftovers: the latest earlier recap in the notes (≤7 days back): its `Carried over` list, if any. No recap → `${CLAUDE_SKILL_DIR}/sessions.sh <day>` for the last earlier day with sessions (≤7 days back), unfinished work only.
 2. Invoke the `voice` skill (once per session). Show what's waiting under Reviews (re-reviewed PRs included), Replies owed, Security, Your PRs, Tickets, Carried over (empty → leave out): each item linked, then why it's there in ≤15 words.
-3. Propose today's plan, numbered: unblocking others first (reviews, replies), then security fixes, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
+3. Propose today's plan, numbered, never checkboxes: unblocking others first (reviews, replies), then security fixes, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
 4. Settle it via `same-page`; show the changed plan in full outside it. Agreed → notes file set → write it per Notes as `Plan`. Reply: the plan, and the notes path if written.
 
 ## Recap

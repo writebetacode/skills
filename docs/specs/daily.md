@@ -30,7 +30,8 @@ Scenario: Morning: what's waiting on you
 Scenario: Morning: settle the plan
   Given daily has listed what's waiting
   When it proposes today's plan
-  Then reviews and replies come first, then security fixes, then your PRs closest to merging, then tickets by priority
+  Then it's a numbered list, without checkboxes
+  And reviews and replies come first, then security fixes, then your PRs closest to merging, then tickets by priority
   And each item names the skill to start it with, like "/wbc:review 42"
   And it settles the plan with you one question at a time
   And when a notes file is set, the plan you agree goes into today's note as a Plan section under your notes heading, replacing an earlier plan for that day
@@ -141,3 +142,4 @@ Scenario: No Daily section yet
 - **No `## Recap` fallback**: Why: no notes still use one, and `setup` no longer migrates it. Not reading an old `## Recap` section for the notes file.
 - **Plans are saved only in the notes file**: Why: it's the one place you already chose for your day. Not under `~/.claude/`, which Claude Code protects, or a repo's `.ai/`, since `daily` isn't tied to one repo.
 - **The plan and recap are headed sections in your notes**: Why: the notes are yours to read and edit, and a heading is enough for a rerun to find and replace what it wrote that day. Not hidden comment markers, which clutter the note in an editor.
+- **The plan is numbered, never checkboxes**: Why: it's an order to work through, and the recap, not ticking boxes, records what got done. Not a task list to check off.
