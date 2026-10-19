@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.1 — 2026-10-19
+
+**Reviews follow every change to where it's used**
+[v0.8.0...v0.8.1](https://github.com/writebetacode/skills/compare/v0.8.0...v0.8.1)
+
+### Fixes
+
+- fix: Trace every changed name to each place that uses it ([e0ce512](https://github.com/writebetacode/skills/commit/e0ce5125e560b1dfb85324bd27edb0b90b017d7e))
+
 ## 0.8.0 — 2026-10-19
 
 **Tougher reviews, with a reply for every open thread**
