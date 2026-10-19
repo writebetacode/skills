@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Set up the wbc skills on this machine: check gh, glab, acli, jq and npx, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
+description: Set up the wbc skills on this machine: check git, gh, glab, acli, jq and npx, link related repos and list debug tools in each repo's CLAUDE.local.md, and choose daily's sources. Run it again to add repos.
 disable-model-invocation: true
 ---
 

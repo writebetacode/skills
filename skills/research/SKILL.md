@@ -1,6 +1,6 @@
 ---
 name: research
-description: Find something out, cited, changing nothing. Use when asked how something works here, which pattern to follow or versions in use; to debug a bug, error, failing test, incident or alert; or for findings or a postmortem.
+description: Find something out, cited, changing nothing. Use when asked how something works here, which pattern to follow, versions in use or whether an approach would work; to debug a bug, error, failing test, incident or alert; or for findings or a postmortem.
 ---
 
 Change nothing; write only a broken thing's folder below; ask nothing beyond `same-page`.
