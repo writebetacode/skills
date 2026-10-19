@@ -4,11 +4,11 @@
 
 ## Context
 
-`pr` works on the current branch's PR on GitHub or GitLab. It matches the repo's title style, fills the repo's template, squashes on merge by default, and takes a base and merge order from its caller for stacked PRs. Skill descriptions send a request to split a branch to `plan`.
+`pr` works on the current branch's PR on GitHub or GitLab. It matches the repo's title style, fills the repo's template, squashes on merge by default, and takes a base and merge order from its caller for stacked PRs. A request to split a branch goes to `plan`, not `pr`. `build` cleans up merged branches the same way when it closes a plan.
 
 ## Scope
 
-In: the one-PR, one-branch rule; cleaning up after a merge; the README's `pr` section.
+In: the one-PR, one-branch rule; cleaning up after a merge; the README's `pr` section, which says it handles one PR per branch, never sizes it, and deletes a local branch only once all its work has merged.
 Out: everything else `pr` does, until a change touches it.
 
 ## Behaviour
@@ -27,23 +27,24 @@ Scenario Outline: Cleaning up after a merge
   And a branch it keeps is named, with why
 
   Examples:
-    | where                                         | moves                                              |
-    | shop's main checkout, with no uncommitted changes | switches to the default branch and pulls           |
-    | a linked worktree of shop                     | only fetches with pruning, staying on its branch   |
+    | where                                                    | moves                                            |
+    | shop's main checkout, with no uncommitted changes        | switches to the default branch and pulls         |
+    | a linked worktree of shop                                | only fetches with pruning, staying on its branch |
+    | shop's main checkout, with uncommitted changes           | only fetches with pruning, staying on its branch |
+    | shop's main checkout, with the default branch checked out elsewhere | only fetches with pruning, staying on its branch |
+
+Scenario: A squash-merged branch counts as merged
+  Given PR 12 was squash-merged, so feat/abc-12-login's commits aren't on the default branch
+  When pr cleans up after the merge
+  Then it deletes feat/abc-12-login, since merging it into origin's default branch, as just fetched, would change nothing
+
+Scenario: A failed step keeps the branch
+  Given fetching from origin fails during cleanup
+  When pr cleans up after merging PR 12
+  Then feat/abc-12-login is kept, and pr says why
 ```
-
-## Design
-
-One line in `pr`: never comment on a PR's size.
-
-After a merge, `pr` runs `prune-merged.sh <branch>…` from the plugin's `bin/`, which `build` also runs when it closes a plan. In a linked worktree, or when it can't switch (uncommitted changes, the default branch checked out elsewhere), it only fetches with pruning and stays put; otherwise it switches to the default branch and pulls with pruning. Then each named branch that's checked out nowhere and fully merged, judged by whether merging it into `origin`'s default branch, as just fetched, would change nothing (so squash merges count), is deleted. A step that fails keeps the branch; nothing is deleted on a failed check. It prints each branch it keeps and why.
-
-The README's `pr` section says it handles one PR per branch, never sizes it, and deletes a local branch only once all its work has merged.
-
-Testing: the repo's check script and markdownlint; opening a PR from a sample branch that touches many files, and merging one.
 
 ## Decisions
 
 - **`pr` never sizes a PR**: Why: a size warning pushes you to split, which is `plan`'s call, and `pr` can't act on it.
-- **No hand-off line for split requests**: Why: the skill descriptions already send them to `plan`. Not a line in `pr` repeating the routing.
-- **One cleanup script for `pr` and `build`**: Why: both delete merged branches the same way, including squash merges that defeat `git branch -d`. Not two copies of the steps.
+- **`pr` and `build` clean up merged branches the same way**: Why: both delete merged branches, including squash merges, which a plain `git branch -d` refuses. Not two ways that can drift apart.
