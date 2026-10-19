@@ -4,5 +4,9 @@
   "description": "Claude Code skills for engineering productivity.",
   "author": {
     "name": "writebetacode"
-  }
+  },
+  "homepage": "https://github.com/writebetacode/skills",
+  "repository": "https://github.com/writebetacode/skills",
+  "license": "MIT",
+  "keywords": ["git", "github", "gitlab", "jira", "code-review", "planning", "specs", "tdd", "release"]
 }
