@@ -8,7 +8,7 @@
 
 ## Scope
 
-In: where specs live, how they're named, written, checked and approved; the spec rules; tasks from specs; upgrade tasks; splitting a branch; the README's `plan` section, which describes living specs, the spec checker and splitting a branch, and sends bugs and questions to `research`.
+In: where specs live, how they're named, written, checked and approved; the spec rules; tasks from specs; upgrade tasks; splitting a branch; the README's `plan` section, which describes living specs, the spec checker, speccing an area as it is and splitting a branch, and sends bugs and questions to `research`.
 Out: answering questions and investigating bugs (the research spec); how `build` commits specs and carries a split branch's code (the build spec); how the spec checker works (the spec-checker spec); the `upgrades.md` walk, its withdraw list and the `upgrades:` status line; an upgrade-only request that fits one PR, which `build` takes; epics; a `spec.md` that defines no area; per-repo folders for two repos' specs with one area name.
 
 ## Behaviour
@@ -72,6 +72,13 @@ Scenario: A plan that only rewords specs still ships them
   When plan writes tasks
   Then shop gets one MR with one task that ships the reworded spec, with no new test
 
+Scenario: Spec an area as it is today
+  Given shop has no spec for checkout
+  When you ask plan to spec checkout as it is
+  Then the plan's specs/checkout.md says what checkout does now, and why, from its code and history
+  And a why nothing shows is an open question you settle in the walk
+  And once you approve it, shop gets one MR with one task that ships the spec, with no new test
+
 Scenario: A bug goes to research first
   When you ask plan to fix checkout returning 500 on empty carts
   Then research investigates it and hands its findings back to plan, not to build
@@ -123,5 +130,6 @@ Scenario: Carried code that doesn't work alone
 - **A split branch's version bump is redone, not carried**: Why: lockfile hunks rarely apply once the base has moved. Not carrying the hunk.
 - **A no-behaviour task, a version bump, or a task that only ships specs is marked by its criterion's fixed wording**: `suite passes (no behaviour change: no new test)`, `<package> <to>: suite passes (the bump is config: no new test)`, or `specs ship (docs only: no new test)`. Why: `build` needs to know when no failing test is possible, and the task format already holds criteria. Not a new field.
 - **Specs ship even when no task needs them**: a repo whose specs change but that gets no task gets an MR of its own, to ship them. Why: `build` commits specs only with a task, so approved specs with none were archived with the plan and never reached `docs/specs/`. Not committing them straight to the default branch: they'd skip review.
+- **An area specced as it is gets no criteria**: Why: its behaviour already works, so no test could fail first. Not a criterion per scenario, as for a new area.
 - **An upgrade-only request needs no spec**: Why: it changes no area's behaviour. Not an empty spec.
 - **No epics**: Why: a separate plan per feature does the same with one less layer to track. Not an epic folder holding features.
