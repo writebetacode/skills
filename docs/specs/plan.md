@@ -67,6 +67,11 @@ Scenario: Only behaviour a spec removes gets a "gone" task
   When plan writes tasks
   Then a task checks that the first behaviour is gone, and no task covers the second
 
+Scenario: A plan that only rewords specs still ships them
+  Given a plan only rewords shop's docs/specs/payments.md, so no criterion comes from it
+  When plan writes tasks
+  Then shop gets one MR with one task that ships the reworded spec, with no new test
+
 Scenario: A bug goes to research first
   When you ask plan to fix checkout returning 500 on empty carts
   Then research investigates it and hands its findings back to plan, not to build
@@ -116,6 +121,7 @@ Scenario: Carried code that doesn't work alone
 - **Scope's Out names each behaviour a change removes, and only that gets a "gone" task**: Why: slimming a spec removes scenarios whose behaviour still holds, and a task proving them gone would break them. Not a task for every removed scenario.
 - **Upgrades are tasks, never a spec or a separate walk**: `plan`'s research reads the version in use of each dependency the change touches, and one the change needs newer (for an API it uses, a bug it would hit, a security fix, or a deprecated version its new code would build on) becomes a task. Why: a spec says what an area does whatever versions you pick, and research already shows what the change needs. Not an `upgrades.md` with its own approval: a second walk for what the task list already shows.
 - **A split branch's version bump is redone, not carried**: Why: lockfile hunks rarely apply once the base has moved. Not carrying the hunk.
-- **A no-behaviour task, or a version bump, is marked by its suite-check criterion's fixed wording**: `suite passes (no behaviour change: no new test)`, or `<package> <to>: suite passes (the bump is config: no new test)`. Why: `build` needs to know when no failing test is possible, and the task format already holds criteria. Not a new field.
+- **A no-behaviour task, a version bump, or a task that only ships specs is marked by its criterion's fixed wording**: `suite passes (no behaviour change: no new test)`, `<package> <to>: suite passes (the bump is config: no new test)`, or `specs ship (docs only: no new test)`. Why: `build` needs to know when no failing test is possible, and the task format already holds criteria. Not a new field.
+- **Specs ship even when no task needs them**: a repo whose specs change but that gets no task gets an MR of its own, to ship them. Why: `build` commits specs only with a task, so approved specs with none were archived with the plan and never reached `docs/specs/`. Not committing them straight to the default branch: they'd skip review.
 - **An upgrade-only request needs no spec**: Why: it changes no area's behaviour. Not an empty spec.
 - **No epics**: Why: a separate plan per feature does the same with one less layer to track. Not an epic folder holding features.
