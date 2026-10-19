@@ -17,9 +17,11 @@ Related repos: `${CLAUDE_PLUGIN_ROOT}/bin/related-repos.sh` (name, path, how). D
 
 ## Questions
 
-Reply with only the report; write no files.
+Reply with only the report; write no files outside an experiment's worktree.
 
 Dig where the answer lives: code, docs, web, connected tools. Independent lines too big to read yourself → parallel `Explore` subagents, each briefed with the request, its line, where to start, "change nothing", and this template.
+
+Only trying answers it (will X work here, what breaks if Y, which of two approaches is smaller) → experiment: `git worktree add --detach ${TMPDIR:-/tmp}/research-<name> HEAD`; there, the least change that answers it; run what proves it (tests, build, a script). Cite each command and its output. Then `git worktree remove --force` it and stop each process you started; keep nothing.
 
 - Existing patterns beat generic best practice; conflicting ones → report both.
 - Read versions in use (manifests, lockfiles) before external docs; use docs for those versions; newer → Adjacent.

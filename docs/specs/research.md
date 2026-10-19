@@ -8,7 +8,7 @@ Questions are answered from the code, docs, the web and connected tools, preferr
 
 ## Scope
 
-In: questions; bugs, errors, failing tests, incidents and alerts; questions `plan` and `prompt-writer` hand over; tests `build` hands over; the findings file; calling the debug checker; the README's `research` section, which covers questions and bugs, with the Debug tools example.
+In: questions, including ones only an experiment answers; bugs, errors, failing tests, incidents and alerts; questions `plan` and `prompt-writer` hand over; tests `build` hands over; the findings file; calling the debug checker; the README's `research` section, which covers questions, experiments and bugs, with the Debug tools example.
 Out: fixing anything; planning the fix (`plan`); building it (`build`).
 
 ## Behaviour
@@ -18,6 +18,12 @@ Scenario: A plain question
   When you ask which Next.js version shop is on
   Then research replies with a report and writes no files
   And the report gives the request, the answer, assumptions, adjacent findings and what wasn't found, each claim cited by path and line, URL, or command and output
+
+Scenario: A question only trying can answer
+  When you ask whether swapping moment for date-fns in shop breaks anything
+  Then research makes the swap in a throwaway worktree and runs shop's tests there
+  And the report cites each command it ran and what it printed
+  And it removes the worktree and stops what it started, so nothing of the experiment is kept and your checkout is unchanged
 
 Scenario: A question with several readings
   When you ask research to look into auth
@@ -92,6 +98,7 @@ Scenario: A test that fails only in CI
 - **Questions and debugging in one skill, outside `plan`**: Why: both find something out and report it, changing nothing, and one skill costs one description in every session; `plan` only plans. Not two skills. Not modes of `plan`.
 - **Findings in `.ai/research/<name>/`**: Why: you hand them to `plan` or `build` by path, and a bug may need no plan. Not the plan folder.
 - **A plain question writes no files**: Why: the report is the answer. Not a folder per question.
+- **A question reading can't settle gets an experiment, thrown away after**: Why: some answers, like what breaks if you swap a library, show up only when you try, and the report's commands and output are the evidence. Not keeping the prototype: it's built to answer the question, not to ship. Not leaving these questions to `plan`, which runs no experiments.
 - **Proof by patching only the cause, in a throwaway worktree**: Why: evidence that fits isn't proof, and your checkout stays as it was. Not trusting a plausible cause.
 - **50 runs alone, then 5 of the suite**: Why: 50 catches a 1-in-20 flake with high odds and is quick for one test; a few suite runs catch flakes that need other tests first. Not unlimited.
 - **A reproduced flake is rerun at the base**: Why: whether the PR caused it decides where the fix goes. Not guessing from the diff.
