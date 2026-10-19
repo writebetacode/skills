@@ -18,10 +18,31 @@ Scenario: Only you start it
   Given a session where nobody typed /wbc:setup
   Then Claude never runs setup on its own
 
+Scenario: It asks one thing at a time
+  When you run setup
+  Then it asks which repos, then checks tools, links repos, proposes debug tools and sets daily's sources, one question at a time
+
+Scenario Outline: Which repos
+  Given you're in ~/code/acme/web
+  When you run setup and <answer>
+  Then its repos are <repos>, and each repo's lines go to its main checkout
+
+  Examples:
+    | answer                                   | repos                                                             |
+    | name ~/code/acme/api                     | web and api                                                       |
+    | point it at ~/code/acme                  | web and each git repo up to two levels under ~/code/acme          |
+    | run it again                             | web plus each repo web's Related repos sections list              |
+
+Scenario: A folder with no checkout is skipped
+  Given ~/code/acme/shop is a bare repo with no main checkout
+  When setup looks at the repos under ~/code/acme
+  Then it skips shop and says why
+
 Scenario: CLI checks
   Given gh is installed but logged out, and acli isn't installed
   When you run setup
-  Then it says gh needs "gh auth login", which you can run with "!"
+  Then it shows a checklist of the CLI for each repo's host, Jira's if you use it, jq and npx, each installed and logged in or not
+  And it says gh needs "gh auth login", which you can run with "!"
   And it gives the install link for acli, and runs no login or install itself
 
 Scenario: Link repos found in a folder
@@ -30,15 +51,21 @@ Scenario: Link repos found in a folder
   Then web's CLAUDE.local.md lists acme/api with its path and how web uses it, and api's lists acme/web the same way
   And infra gets no entry, because nothing ties it to the others
 
+Scenario: What makes a link
+  When setup looks for links between repos
+  Then it finds them only from evidence in the code: package dependencies, one calling another's API, shared schemas or topics, compose files, submodules
+  And each link's line names the other repo by its origin's owner/repo, else its folder's name, with its path relative to this repo's main checkout and how they relate in a few words
+
 Scenario: Nothing is written before you confirm
   Given setup has worked out its changes
   When you haven't confirmed them yet
-  Then no file has changed
+  Then it has shown you every change, and no file has changed
 
 Scenario: Run it again to add a repo
   Given web and api are linked, and you added a line of your own to web's Related repos
   When you run setup again and add billing, which api calls
   Then api and billing gain entries for each other, and every existing line stays as it was
+  And a repo already listed by name, in a CLAUDE.local.md or the repo's CLAUDE.md, gets no second entry
 
 Scenario: A linked repo that moved is healed
   Given web's CLAUDE.local.md lists acme/api at ../api, and api now lives at ~/code/acme/services/api
@@ -46,10 +73,21 @@ Scenario: A linked repo that moved is healed
   Then only that line's path changes, in every CLAUDE.local.md that lists api
   And if web's committed CLAUDE.md lists api at its old path, setup tells you instead of editing it
 
-Scenario: CLAUDE.local.md is kept out of git
-  Given git doesn't ignore CLAUDE.local.md in web
+Scenario: A moved repo it can't find
+  Given web's CLAUDE.local.md lists acme/legacy at a path that no longer resolves
+  And no repo in this run is named legacy
+  When setup runs
+  Then that line stays, and the reply lists it as left for you
+
+Scenario Outline: CLAUDE.local.md is kept out of git
+  Given git doesn't ignore CLAUDE.local.md in web, and <excludes>
   When setup is about to write it
-  Then it asks once to add CLAUDE.local.md to your global git excludes file
+  Then <offer>
+
+  Examples:
+    | excludes                               | offer                                                                         |
+    | you have a global git excludes file    | it asks once to add CLAUDE.local.md to that file                              |
+    | no global excludes file is set         | it gives you the "!" command that adds it at git's default location           |
 
 Scenario: A repo that only has AGENTS.md
   Given api has AGENTS.md and no CLAUDE.md
@@ -59,32 +97,35 @@ Scenario: A repo that only has AGENTS.md
 Scenario: Debug tools
   Given api has Kubernetes manifests and a Sentry config, and no Debug tools section
   When setup runs
-  Then it proposes Debug tools lines for logs and errors for you to confirm or fill in
+  Then it proposes Debug tools lines for logs and errors, from what api shows and the session's connected tools, for you to confirm or fill in
+  And a read-only database is named by its variable or secret, never its value
 
 Scenario: Daily's sources
   Given gh and acli are logged in and a Slack connector is connected
-  When you choose GitHub, Jira, Slack and a notes file
-  Then ~/.claude/CLAUDE.md gets a Daily section listing them, with your notes file on its one Notes line
+  When you choose GitHub, Jira, Slack with the channels to watch, and a notes file
+  Then ~/.claude/CLAUDE.md gets a Daily section listing them, with your notes file, its {date} and heading on its one Notes line
+  And an existing Daily section only gains lines it lacks, and your answer replaces its Notes line
+
+Scenario: A refused write to your global CLAUDE.md
+  Given you refuse setup's write to ~/.claude/CLAUDE.md
+  When setup carries on
+  Then it shows you the Daily section to paste yourself
+
+Scenario: A write that fails
+  Given setup has written web's CLAUDE.local.md
+  When its write to api's CLAUDE.local.md fails
+  Then it stops there, and the reply says what it wrote and what it didn't
+
+Scenario: A worktree session
+  Given a session Claude Code isolates in a worktree of api
+  When Claude Code refuses setup's write to api's main-checkout CLAUDE.local.md
+  Then setup writes it with shell commands, as the ai-folder spec says
+  And a $VAR in a Debug tools line stays written as its name
+
+Scenario: The reply
+  When setup is done
+  Then it replies with the CLI checklist, the lines it added to each file, and what's left for you
 ```
-
-## Design
-
-`setup` lives in `skills/setup/`, runs only when you type it, and asks one thing at a time:
-
-1. Which repos: paths you name, or each git repo up to two levels under a folder, always with the one you're in. Each repo's lines go to its main checkout; a folder with no checkout is skipped, saying why. A re-run also re-reads the repos its Related repos sections list.
-2. Tools: for each repo's host and for Jira if you use it, whether the CLI is installed and logged in, plus `jq` and `npx`, as a checklist with the command to fix each gap.
-3. Links, from evidence in the code only: package dependencies, one calling another's API, shared schemas or topics, compose files, submodules. Each link is a line in both repos, in the form `related-repos.sh` reads (the bin spec): the other repo's name (its `origin`'s owner/repo, else its folder's name), its path relative to this repo's main checkout, and how they relate in a few words.
-4. Debug tools, for repos without the section: lines from what the repo shows (cluster manifests, error-tracker config, compose files, a read-only database named by its variable or secret, never a value) and the session's connected tools.
-5. `daily`'s sources, in the format the daily spec reads: logged-in hosts, and connected tools that read chat, docs or tickets with the channels to watch, plus a notes file with `{date}` and a heading. An existing `## Daily` only gains lines it lacks, and keeps one `Notes:` line, which your answer replaces.
-6. It shows every change and writes nothing until you confirm. Before the first write, `CLAUDE.local.md` not ignored → it offers to append it to your global git excludes file; with none set, it gives you the `!` command for git's default location, which Claude Code protects. Then it writes each repo's main-checkout `CLAUDE.local.md`: a repo already listed by name, in that `CLAUDE.local.md` or the repo's `CLAUDE.md`, is skipped, a listed path that no longer resolves is replaced, in every repo's `CLAUDE.local.md` it reads, with the path of the same-named repo among this run's repos (one with no match stays and is listed as left for you), and no other line changes. A write that fails stops it there, and the reply says what it wrote and what it didn't.
-7. Then `~/.claude/CLAUDE.md` gets the Daily section; a refused write → it shows the section for you to paste.
-8. It replies with the checklist, the lines it added per file, and what's left for you.
-
-In a session Claude Code isolates in a worktree, a refused write to `CLAUDE.local.md` follows the ai-folder spec's line, writing the file's whole text so a `$VAR` in a Debug tools line stays a name.
-
-The README's `setup` section and the skill's description say nothing about learning from sessions or drafting issues.
-
-Testing: the repo's check script and markdownlint; running it against a scratch folder of repos, including one that moved.
 
 ## Decisions
 
@@ -93,7 +134,6 @@ Testing: the repo's check script and markdownlint; running it against a scratch 
 - **Related repos paths are relative to the main checkout**: Why: the file lives there, and a worktree sits deeper inside it. Not relative to wherever a skill runs.
 - **Self-healing, never removing**: Why: a stale path sends `plan`, `research` and `review` to the wrong place, while the sections may hold lines you wrote. Not regenerating a section, and not leaving a moved repo for you to fix by hand.
 - **Ignored through your global git excludes file**: Why: one change covers every repo. Not each repo's `.gitignore`, which you'd commit, or `.git/info/exclude`, which Claude Code protects. With no excludes file set, you get the command, since git's default location is under a folder Claude Code protects.
-- **setup reads and edits Related repos lines itself**: Why: it rewrites lines in place, which needs the raw text; the other skills only read, through `related-repos.sh`.
 - **Databases by variable or secret name, never a value**: Why: `CLAUDE.local.md` is plain text every session loads.
 - **Links only from evidence in the code, confirmed by you**: Why: a wrong link sends `review` and `plan` into repos that don't matter. Not guessing from names.
 - **`~/.claude/CLAUDE.md` is written once, after you confirm**: Why: that's where `daily` reads its sources, and Claude Code loads only that file in every session; it asks before each write there, so a refusal means you paste the section yourself.

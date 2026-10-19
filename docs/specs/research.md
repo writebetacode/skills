@@ -4,11 +4,11 @@
 
 ## Context
 
-Questions are answered from the code, docs, the web and connected tools, preferring the repo's existing patterns over generic advice and reading versions from manifests and lockfiles before external docs. Bugs are investigated with whatever the repo's `## Debug tools` section lists (in the main checkout's `CLAUDE.md` or `CLAUDE.local.md`, which `setup` writes) and the Related repos `setup` links. Working files live under `.ai/` in the repo's main checkout, shared by every worktree. `build` hands over a CI test that fails in CI but passes locally.
+Questions are answered from the code, docs, the web and connected tools, preferring the repo's existing patterns over generic advice and reading versions from manifests and lockfiles before external docs. Bugs are investigated with whatever the repo's `## Debug tools` section lists (in the main checkout's `CLAUDE.md` or `CLAUDE.local.md`, which `setup` writes) and the Related repos `setup` links. The debug checker (its own spec) challenges each claimed cause. Working files live under `.ai/` in the repo's main checkout, shared by every worktree; in a worktree session, `research` writes there the way the ai-folder spec says. `plan` and `prompt-writer` hand it questions they've already agreed with you, and `build` hands over a CI test that fails in CI but passes locally.
 
 ## Scope
 
-In: questions; bugs, errors, failing tests, incidents and alerts; tests `build` hands over; the findings file; calling the debug checker; `prompt-writer`'s pointer to these rules; the README's `research` section.
+In: questions; bugs, errors, failing tests, incidents and alerts; questions `plan` and `prompt-writer` hand over; tests `build` hands over; the findings file; calling the debug checker; the README's `research` section, which covers questions and bugs, with the Debug tools example.
 Out: fixing anything; planning the fix (`plan`); building it (`build`).
 
 ## Behaviour
@@ -16,48 +16,75 @@ Out: fixing anything; planning the fix (`plan`); building it (`build`).
 ```gherkin
 Scenario: A plain question
   When you ask which Next.js version shop is on
-  Then research replies with a cited report and writes no files
+  Then research replies with a report and writes no files
+  And the report gives the request, the answer, assumptions, adjacent findings and what wasn't found, each claim cited by path and line, URL, or command and output
 
 Scenario: A question with several readings
   When you ask research to look into auth
   Then it agrees with you on what you mean before looking anything up
 
+Scenario: A question another skill hands over
+  Given plan has agreed with you what it needs to know
+  When it hands research the question
+  Then there's no same-page round
+  And the report is saved in the plan's research/ folder and goes back to plan
+
 Scenario: A bug's cause is proven
   Given checkout returns 500 on empty carts
   When you ask research why
-  Then it reproduces the failure in a throwaway worktree and shows it passes with only the cause patched out
-  And it writes .ai/research/<name>/findings.md with the cause, its proof and confidence, and ways to fix it with a recommendation
-  And nothing in your checkout changes
+  Then it works in .ai/research/<name>/ in the main checkout, <name> being 2 to 4 kebab-case words no other folder there uses
+  And it walks the failing path in research/path.md there, a line per step citing what it read or marked assumed, with a note per lead as research/<lead>.md
+  And it reproduces the failure in a throwaway worktree, at HEAD plus your uncommitted changes when the bug needs them, and shows it passes with only the cause patched out
+  And the debug checker's verdict on the cause sets its confidence
+  And it writes findings.md there, for someone who saw none of it, with the cause, its proof and confidence, and ways to fix it with a recommendation
+  And it removes the worktrees it made and stops the processes it started
+  And nothing in your checkout changes, and no branch is made
+
+Scenario: Reading outside the repo
+  Given the bug needs logs from production and errors from the error tracker
+  When research investigates it
+  Then it only reads there, and redacts secrets and personal data from what it writes
+
+Scenario Outline: The debug checker's verdict
+  Given the debug checker <verdict> the claimed cause
+  When research carries on
+  Then <next>
+
+  Examples:
+    | verdict           | next                                                                        |
+    | names gaps in     | research checks those gaps and asks it again, at most twice                  |
+    | rejects           | research moves to the next cause, or the findings say none holds             |
+
+Scenario: A cause it can't reproduce
+  Given research can't make the failure happen
+  When it writes the findings
+  Then it can still report the likeliest cause, at most at medium confidence
+
+Scenario Outline: What the reply suggests
+  Given the findings recommend <fix>
+  When research replies
+  Then it gives the findings' path and the cause, and suggests <next> with the findings
+
+  Examples:
+    | fix                                        | next  |
+    | a fix that fits one PR, with nothing left to decide | build |
+    | anything bigger, or with choices left      | plan  |
 
 Scenario: A test build hands over
-  Given build hands over a checkout test that failed in CI on PR 45 and passed locally
+  Given build hands over a checkout test that failed in CI on PR 45 and passed locally, with the CI job's log and PR 45's commits
   When research investigates it
-  Then there's no same-page round
-  And it runs the test alone up to 50 times at PR 45's head, then the whole suite in CI's order up to 5 times
+  Then there's no same-page round, and the findings folder is the test's name in kebab case, so build can find it again
+  And it runs the test alone up to 50 times at PR 45's head, then the whole suite in CI's order up to 5 times, stopping at the first failure
   And a failure it reproduces is rerun the same way at PR 45's base, so the findings say whether PR 45 caused it
-  And the findings path goes back to build
+  And a flaky cause is proven by the patched code passing those same runs
+  And the findings path goes back to build, which carries on landing
 
 Scenario: A test that fails only in CI
   Given the handed-over test passes every one of those runs
   When research investigates it
   Then it looks for what differs between CI and your machine, as an ordinary bug
+  And if it still can't reproduce the failure, the findings say so, at most at medium confidence
 ```
-
-## Design
-
-`skills/research/` holds the skill (the question rules and report template), `investigate.md` (the debug path), `findings-file.md` and `handover.md`. The debug checker (its own spec) challenges a claimed cause.
-
-**Questions.** One reading → research it; several → `same-page` first. Independent lines too big to read alone go to parallel read-only subagents. The report has fixed sections (the request, the answer, assumptions, adjacent findings, what wasn't found), each claim cited by `path:line`, URL, or command and output. Called by `plan` or `prompt-writer`, which have already agreed the request with you, a question or bug gets no `same-page` round, and the report (saved in a plan's `research/`) or the findings path goes back to the caller.
-
-**Bugs.** A folder `.ai/research/<name>/` in the main checkout, `<name>` 2–4 kebab-case words not already there, holds the notes and `findings.md`. Outside the repo it only reads, and it redacts secrets and personal data. Inside that folder, it walks the failing path in `research/path.md`, a line per step citing what it read or marked `assumed`, and keeps a note per lead as `research/<lead>.md`. Experiments run only in a throwaway worktree under the temp folder, at `HEAD` plus your uncommitted changes when the bug needs them, never your checkout, and make no branches. A cause is proven only when the repro fails, then passes with only that cause patched out; one it can't reproduce can still be reported, at most medium confidence. The debug checker gets only paths and its verdict sets the confidence; gaps it names are checked and it reruns, at most twice. A cause it rejects sends `research` to the next one, or the findings say none holds. Then the worktrees it made are removed and the processes it started stopped. The findings are written for someone who saw none of it. The reply gives their path and the cause; a fix that fits one PR with nothing left to decide → it suggests `build` with the findings, else `plan`.
-
-**A test from `build`** comes with the job and its log, and the PR's branch, head and base commits. The folder is the test's name in kebab case, so `build` can find it again, and the worktree starts at the head, moving to the base for the rerun. The runs above stop at the first failure; flaky → the cause is proven with the patched code passing the same runs. Still no repro → the findings say so, confidence at most medium. The reply goes to `build`, which carries on landing.
-
-In a worktree session, `research` carries the ai-folder spec's line for a refused write.
-
-The README's `research` section covers questions and bugs, with the Debug tools example.
-
-Testing: the repo's check script and markdownlint; a version question; a planted bug and a planted flaky test in a scratch repo.
 
 ## Decisions
 
