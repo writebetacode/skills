@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.7.0 — 2026-10-18
+
+**Spec existing code, and try ideas in research**
+[v0.6.2...v0.7.0](https://github.com/writebetacode/skills/compare/v0.6.2...v0.7.0)
+
+### Features
+
+- feat: Spec existing areas, try ideas in research, and close plan and build gaps ([2de7508](https://github.com/writebetacode/skills/commit/2de7508a40a322ee55e7ec97b6ad809837d30137))
+
+### Other
+
+- docs: Keep every spec to what its area does and why ([4aae569](https://github.com/writebetacode/skills/commit/4aae569c873725abfed994e2bb575f0baab3bad5))
+
 ## 0.6.2 — 2026-10-18
 
 **Specs say what and why; tasks say how**
