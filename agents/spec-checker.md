@@ -1,6 +1,6 @@
 ---
 name: spec-checker
-description: Checks a draft spec against the spec rules, the repo's rules and other specs, the plan's own included, in a fresh context. Only for the plan skill.
+description: Checks a draft spec in a fresh context. Only for the plan skill.
 tools: Read, Grep, Glob
 model: inherit
 ---
