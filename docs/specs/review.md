@@ -8,7 +8,7 @@ Specs in `docs/specs/` are the living definition of each domain area, and every 
 
 ## Scope
 
-In: specs in the review's context; spec mismatches as blocking findings; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
+In: specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
 Out: praise, and comments that ask for nothing; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
 
 ## Behaviour
@@ -47,6 +47,23 @@ Scenario: Build's own reviews check specs too
   When build reviews them before you commit
   Then the review finds the same blocking mismatch
 
+Scenario Outline: A break outside the diff is found
+  Given a PR <change>
+  And <where it breaks>
+  When you review the PR
+  Then a blocking finding names that place
+
+  Examples:
+    | change                                              | where it breaks                                                        |
+    | renames the env var CART_TTL to CART_TTL_SECONDS    | the deploy config still sets CART_TTL                                  |
+    | makes orders.email required                         | orders saved before have no email, and the migration doesn't fill one  |
+    | renames the cart API's userId field to accountId    | a related repo's checkout page still reads userId                      |
+
+Scenario: A break in a related repo survives the checker
+  Given the review finds a related repo still reading a field the PR renamed
+  When the checker rechecks the finding
+  Then it reads that repo's code, and the finding stays
+
 Scenario: The review file links its PR
   When you review PR 42
   Then the review file's title links to PR 42
@@ -80,4 +97,6 @@ Scenario: Replies are current when they post
 - **Every open thread gets a finding, whoever started it**: Why: you see where each conversation stands, with a reply ready, without having to ask. Not only replies to your own comments: a teammate's open thread holds up the PR just as much.
 - **Nothing new to say is said, and never posted**: Why: a reply that repeats the thread is noise for the author, and a missing finding would leave you wondering whether the thread was read. Not leaving such threads out of the file.
 - **Draft hard, then rein it in**: Why: a reviewer that holds back while drafting misses real problems, and a checker in a fresh context cuts what doesn't hold and tones down what's overstated, so you never have to push back on a finding to get it right. Not a cautious first draft.
+- **Every name the change touches is followed to every use**: Why: a break outside the diff is the easiest to miss, and the checker only cuts findings, so nothing later catches what this skips. Not only callers and tests, and not a list in the review file of what was followed: the file changes only by gaining findings.
+- **Every related repo is searched**: Why: judging from a repo's description whether a change reaches it is how a consumer gets missed. Not only the repos whose description matches the diff.
 - **Findings only ask for changes or answers**: Why: the review is there to find what needs to change. Not praise, thoughts or notes.
