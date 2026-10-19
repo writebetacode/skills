@@ -27,8 +27,8 @@ Read only: change nothing but the notes file and review files (re-reviewed throu
    - Tickets assigned to them and not done, with status.
    - Leftovers: the latest earlier recap in the notes (≤7 days back): its `Carried over` list, if any. No recap → `${CLAUDE_SKILL_DIR}/sessions.sh <day>` for the last earlier day with sessions (≤7 days back), unfinished work only.
 2. Invoke the `voice` skill (once per session). Show what's waiting under Reviews (re-reviewed PRs included), Replies owed, Security, Your PRs, Tickets, Carried over (empty → leave out): each item linked, then why it's there in ≤15 words.
-3. Propose today's plan, numbered: unblocking others first (reviews, replies), then security fixes, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
-4. Settle it via `same-page`; show the changed plan in full outside it. Agreed → notes file set → write it per Notes between `<!-- plan:start -->` and `<!-- plan:end -->`. Reply: the plan, and the notes path if written.
+3. Propose today's plan, numbered, never checkboxes: unblocking others first (reviews, replies), then security fixes, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
+4. Settle it via `same-page`; show the changed plan in full outside it. Agreed → notes file set → write it per Notes as `Plan`. Reply: the plan, and the notes path if written.
 
 ## Recap
 
@@ -39,10 +39,10 @@ Read only: change nothing but the notes file and review files (re-reviewed throu
    - Unfinished → "Started …"; dead ends and chit-chat → left out. No secrets, paths or code.
    - ✗ `- Ran the build skill on .ai/plan/empty-cart-total; the review found 0 issues`
    - ✓ `- Fixed the empty-cart total in shop (PR #142)`
-3. That day's plan (between the plan markers in that day's note): each item no bullet covers → a `Carried over:` list after the bullets.
-4. Where: as asked; else the notes file, per Notes, between `<!-- recap:start -->` and `<!-- recap:end -->`; else the terminal.
+3. That day's plan (its note's `Plan` section): each item no bullet covers → a `Carried over:` list after the bullets.
+4. Where: as asked; else the notes file, per Notes, as `Recap`; else the terminal.
 5. Reply: the bullets; written to a file → its path too.
 
 ## Notes
 
-The day's file: create it if missing. An earlier block with the same markers → replace it; else add the block under the heading, else at the end. Keep the rest byte-for-byte.
+The day's file, created if missing; the Notes heading in it, added at the end if missing. `Plan` or `Recap`: a section with that title, one level below that heading (no heading → `##`). One already there → replace it, up to the next heading at its level or above; else add it at the end of the heading's section (no heading → of the file). Keep the rest byte-for-byte.

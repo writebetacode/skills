@@ -4,12 +4,12 @@
 
 ## Context
 
-Specs in `docs/specs/` are the living definition of each domain area, and every change to an area updates its spec in the same change. They're written by area, not indexed by the files they cover. `review` reads a PR as it stands at its head, so a spec the PR changed reads as changed, and keeps its findings in a gitignored review file in the main checkout until you say to post. It reads related repos from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, wherever it runs. A checker agent rechecks each finding in a fresh context. `review` answers replies to your review comments, on PRs you reviewed; a request to address comments on your own PR goes to `build`. `build` runs a local review of its own uncommitted changes through `review`, after writing its plan's specs into `docs/specs/`.
+Specs in `docs/specs/` are the living definition of each domain area, and every change to an area updates its spec in the same change. They're written by area, not indexed by the files they cover. `review` reads a PR as it stands at its head, so a spec the PR changed reads as changed, and keeps its findings in a gitignored review file in the main checkout until you say to post. It reads related repos from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, wherever it runs. It looks as hard as it can for anything that should change, and a checker agent rechecks each finding in a fresh context to rein that in. On PRs you review, it keeps a reply ready for every open thread, whoever started it; a request to address comments on your own PR goes to `build`. `build` runs a local review of its own uncommitted changes through `review`, after writing its plan's specs into `docs/specs/`.
 
 ## Scope
 
-In: specs in the review's context; spec mismatches as blocking findings; the README's `review` section, which says it holds PRs to the repo's specs.
-Out: reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
+In: specs in the review's context; spec mismatches as blocking findings; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
+Out: praise, and comments that ask for nothing; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
 
 ## Behaviour
 
@@ -46,12 +46,38 @@ Scenario: Build's own reviews check specs too
   Given build's uncommitted changes contradict docs/specs/auth.md
   When build reviews them before you commit
   Then the review finds the same blocking mismatch
+
+Scenario: The review file links its PR
+  When you review PR 42
+  Then the review file's title links to PR 42
+
+Scenario Outline: Every open thread gets a finding
+  Given an open thread on the PR, started by <who>
+  And <where it stands>
+  When you review or re-review the PR
+  Then the review file has a finding for the thread that says where its conversation stands
+  And <what it holds>
+
+  Examples:
+    | who        | where it stands                                                  | what it holds                                                  |
+    | you        | the author says empty carts never reach checkout, but they can   | a reply showing how an empty cart gets there                   |
+    | a teammate | the latest commit fixes what they asked for                      | a reply naming the commit that fixed it                        |
+    | a teammate | the author's answer holds and there's nothing new to say         | a note that there's nothing to add, which never posts          |
+
+Scenario: Replies are current when they post
+  Given a thread got a new comment, or was resolved, after the review file was written
+  When you say "post it"
+  Then review re-reviews the PR and stops for you to look again, posting nothing
 ```
 
 ## Decisions
 
 - **Every spec mismatch is blocking, asked as a question**: A finding blocks for broken behaviour, security, breakage elsewhere, or code that no longer matches a spec's scenario or Decision the PR didn't update. Why: specs must always match the code, and either fix is small. Not non-blocking for improvements: a stale spec misleads the next plan just the same.
 - **Either fix clears it, with no reason required**: Why: what matters is that code and spec agree. Not demanding the PR explain every spec edit.
-- **Comments on your own PR go to `build`**: Why: `review` answers replies to your own review comments, on PRs you reviewed. Not a check in `review` that reads your login to route them.
+- **Comments on your own PR go to `build`**: Why: `review` keeps replies ready on PRs you reviewed. Not a check in `review` that reads your login to route them.
 - **Review files stay in `.ai/reviews/`**: Why: nothing archives them any more (`daily` doesn't), so there's nothing to move back. Not moving files out of `completed/`.
 - **Specs found by area, not path**: Why: specs aren't indexed by the files they cover. Not a path index every spec would have to keep up.
+- **Every open thread gets a finding, whoever started it**: Why: you see where each conversation stands, with a reply ready, without having to ask. Not only replies to your own comments: a teammate's open thread holds up the PR just as much.
+- **Nothing new to say is said, and never posted**: Why: a reply that repeats the thread is noise for the author, and a missing finding would leave you wondering whether the thread was read. Not leaving such threads out of the file.
+- **Draft hard, then rein it in**: Why: a reviewer that holds back while drafting misses real problems, and a checker in a fresh context cuts what doesn't hold and tones down what's overstated, so you never have to push back on a finding to get it right. Not a cautious first draft.
+- **Findings only ask for changes or answers**: Why: the review is there to find what needs to change. Not praise, thoughts or notes.

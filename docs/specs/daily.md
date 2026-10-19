@@ -11,7 +11,7 @@ Only you start `daily` (`/wbc:daily`, or `/wbc:daily recap [day]`). Its sources 
 ## Scope
 
 In: the morning plan and the recap; sources and the notes file; re-reviewing PRs you reviewed, through `review`; new comments on your PRs; security alerts and dependency-update PRs across active repos; the README's `daily` section, which mentions re-reviews through `review`, comments on your PRs and security items.
-Out: posting, commenting, merging, fixing or moving tickets; first reviews; recaps longer than a day; calendars; archiving review files; reading an old `## Recap` section.
+Out: posting, commenting, merging, fixing or moving tickets; first reviews; recaps longer than a day; calendars; archiving review files; reading an old `## Recap` section; hidden markers around the plan and recap in your notes.
 
 ## Behaviour
 
@@ -30,10 +30,11 @@ Scenario: Morning: what's waiting on you
 Scenario: Morning: settle the plan
   Given daily has listed what's waiting
   When it proposes today's plan
-  Then reviews and replies come first, then security fixes, then your PRs closest to merging, then tickets by priority
+  Then it's a numbered list, without checkboxes
+  And reviews and replies come first, then security fixes, then your PRs closest to merging, then tickets by priority
   And each item names the skill to start it with, like "/wbc:review 42"
   And it settles the plan with you one question at a time
-  And when a notes file is set, the plan you agree goes into today's note between <!-- plan:start --> and <!-- plan:end -->, replacing an earlier plan for that day
+  And when a notes file is set, the plan you agree goes into today's note as a Plan section under your notes heading, replacing an earlier plan for that day
 
 Scenario Outline: Morning: yesterday's leftovers
   Given <yesterday>
@@ -106,7 +107,7 @@ Scenario Outline: Where the recap goes
   Examples:
     | setting                          | where                                                                                     |
     | you ask for it somewhere         | where you asked                                                                           |
-    | a notes file is set              | into the note between <!-- recap:start --> and <!-- recap:end -->, replacing an earlier recap of that day |
+    | a notes file is set              | into the note as a Recap section under your notes heading, replacing an earlier recap of that day |
     | no notes file is set             | to the terminal                                                                           |
 
 Scenario: Nothing posts or changes elsewhere
@@ -140,3 +141,5 @@ Scenario: No Daily section yet
 - **Review files stay where `review` puts them**: Why: `daily` lists only open PRs, so a merged PR's file is never revisited, and moving files is `review`'s business. Not archiving them into `completed/`: merged PRs' files now stay in `.ai/reviews/`.
 - **No `## Recap` fallback**: Why: no notes still use one, and `setup` no longer migrates it. Not reading an old `## Recap` section for the notes file.
 - **Plans are saved only in the notes file**: Why: it's the one place you already chose for your day. Not under `~/.claude/`, which Claude Code protects, or a repo's `.ai/`, since `daily` isn't tied to one repo.
+- **The plan and recap are headed sections in your notes**: Why: the notes are yours to read and edit, and a heading is enough for a rerun to find and replace what it wrote that day. Not hidden comment markers, which clutter the note in an editor.
+- **The plan is numbered, never checkboxes**: Why: it's an order to work through, and the recap, not ticking boxes, records what got done. Not a task list to check off.
