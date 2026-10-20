@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.2 — 2026-10-20
+
+**Reviews ask questions instead of handing down fixes**
+[v0.8.1...v0.8.2](https://github.com/writebetacode/skills/compare/v0.8.1...v0.8.2)
+
+### Fixes
+
+- fix: Ask every review finding as a question, never a fix ([e0d66c4](https://github.com/writebetacode/skills/commit/e0d66c4956da724f0d306711f0b37e87bedb5f35))
+
 ## 0.8.1 — 2026-10-19
 
 **Reviews follow every change to where it's used**
