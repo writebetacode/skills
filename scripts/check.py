@@ -2,7 +2,7 @@
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
 orphan files, agents and bin/ scripts, executable scripts run only from bin/ or their own skill, skill and agent word
 budgets, pointers to another skill's rules, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
-running lint-md.sh, and proposed-improvement statuses."""
+running lint-md.sh, every skill carrying the voice line, and proposed-improvement statuses."""
 import itertools, json, os, re, shutil, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -12,6 +12,8 @@ errors = []
 # Word budgets: descriptions sit in every session's context, except user-only skills' (disable-model-invocation), which
 # the total skips; bodies load on each call. Raise only with the user's OK.
 DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
+VOICE_LINE = ("Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per "
+              "session. Never for text only an agent reads.")
 
 
 def check_cli_flags():
@@ -97,6 +99,13 @@ def check_skills():
             errors.append(f"{a.relative_to(root)}: no skill names {plugin}:{a.stem}, so it never runs")
 
 
+def check_voice():
+    """voice is the one voice for everything people read, so every other skill loads it before it talks or writes."""
+    for f in sorted(ROOT.glob("skills/*/SKILL.md")):
+        if f.parent.name != "voice" and VOICE_LINE not in f.read_text():
+            errors.append(f"{f.relative_to(ROOT)}: lacks the voice line, word for word (VOICE_LINE in scripts/check.py)")
+
+
 def check_markdown():
     """Skills write files from their templates, so a template that fails markdownlint fails in every file made from it;
     a skill writing .ai/ files that never runs lint-md.sh leaves them all unlinted."""
@@ -159,6 +168,7 @@ def check_proposals():
 
 check_cli_flags()
 check_skills()
+check_voice()
 check_markdown()
 check_proposals()
 for e in errors:

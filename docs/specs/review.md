@@ -8,8 +8,8 @@ Specs in `docs/specs/` are the living definition of each domain area, and every 
 
 ## Scope
 
-In: findings as issues or questions, each asked as a question; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
-Out: praise, and comments that ask for nothing; suggestions, nitpicks, todos and chores; telling the author how to fix something, even as a question; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
+In: findings as issues or questions, each asked warmly as a question, offering a known way forward when there is one; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
+Out: praise, and comments that ask for nothing; suggestion, nitpick, todo and chore labels; telling the author what to do, even as a question; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
 
 ## Behaviour
 
@@ -64,11 +64,19 @@ Scenario: A break in a related repo survives the checker
   When the checker rechecks the finding
   Then it reads that repo's code, and the finding stays
 
-Scenario: A finding asks about the problem, never the fix
+Scenario Outline: A finding asks about the problem and offers a known way forward
   Given a PR's handler throws when there's no user
+  And <what the repo has>
   When you review the PR
-  Then the finding is an issue asking "What should happen here when there's no user?"
-  And nothing in it, its example included, says how to fix it, such as adding a null check
+  Then the finding is an issue asking "What would you like to happen here when there's no user?"
+  And <what it offers>
+  And it never tells the author what to do, such as "Could you add a null check here?"
+  And its example shows only the problem
+
+  Examples:
+    | what the repo has                                       | what it offers                                                    |
+    | requireUser() in auth.ts already returns early for that | requireUser() as one way forward, for the author to take or leave |
+    | nothing that handles a missing user                     | no way forward, just the question                                 |
 
 Scenario: The review file links its PR
   When you review PR 42
@@ -105,4 +113,5 @@ Scenario: Replies are current when they post
 - **Draft hard, then rein it in**: Why: a reviewer that holds back while drafting misses real problems, and a checker in a fresh context cuts what doesn't hold and tones down what's overstated, so you never have to push back on a finding to get it right. Not a cautious first draft.
 - **Every name the change touches is followed to every use**: Why: a break outside the diff is the easiest to miss, and the checker only cuts findings, so nothing later catches what this skips. Not only callers and tests, and not a list in the review file of what was followed: the file changes only by gaining findings.
 - **Every related repo is searched**: Why: judging from a repo's description whether a change reaches it is how a consumer gets missed. Not only the repos whose description matches the diff.
-- **Every finding is an issue or a question, asked as a question**: Why: a review should start a conversation, not hand down a solution, and it's there to find what needs to change. Not suggestions, nitpicks, todos, chores, praise, thoughts or notes, and never a fix, even one worded as a question: the author decides how to fix it.
+- **Every finding is an issue or a question, asked warmly as a question**: Why: a review should start a conversation, the way a good mentor would, and it's there to find what needs to change. Not suggestion, nitpick, todo or chore labels, praise, thoughts or notes, and never a fix the author is told to make, even one worded as a question: the author decides how to fix it.
+- **A known way forward is offered, never pushed**: Why: when the repo already has an answer, like a helper that does the job, pointing to it saves the author time, and offering it after the question leaves the choice with them. Not withholding what the review knows, and not a way forward the code doesn't back.

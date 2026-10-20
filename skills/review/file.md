@@ -13,7 +13,7 @@ posted: <YYYY-MM-DD> <url>
 
 Thread: <where it stands: who raised what, the latest word, what the head changed; ≤3 sentences>
 
-The ask: <one question>
+The ask: <one question about the problem, never a fix to make; a known way forward, if any, offered after it>
 
 <1–4 sentences, ≤200 words; cite file:line only where it helps>
 

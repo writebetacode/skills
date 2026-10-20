@@ -3,6 +3,8 @@ name: research
 description: Find something out, cited, changing nothing. Use when asked how something works here, which pattern to follow, versions in use or whether an approach would work; to debug a bug, error, failing test, incident or alert; or for findings or a postmortem.
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Change nothing; write only a broken thing's folder below; ask nothing beyond `same-page`.
 
 Called by `plan` or `prompt-writer`: the request is agreed, so no `same-page`; reply to the caller. Else, before any lookup: one reading ("What Next.js version are we on?") → go; several ("look into auth": provider? bug? audit?) → `same-page`, then research the agreed request.

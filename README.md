@@ -38,7 +38,7 @@ Most work moves through the skills in this order, each one handing off to the ne
 5. `review` reviews the pull requests other people write.
 6. `release` ships a version.
 
-A small fix with nothing left to decide can go straight to `build`, and anything `build` isn't sure about goes back to `plan`. `daily` wraps around the rest: in the morning it lists what's waiting on you, with the skill that starts each item, and at the end of the day it recaps what you did. `branch`, `commit` and `pr` are the git steps the others use, and you can run them on their own too. `same-page` is how every skill asks you something, one question at a time, and `voice` keeps what they write for people sounding like a teammate wrote it.
+A small fix with nothing left to decide can go straight to `build`, and anything `build` isn't sure about goes back to `plan`. `daily` wraps around the rest: in the morning it lists what's waiting on you, with the skill that starts each item, and at the end of the day it recaps what you did. `branch`, `commit` and `pr` are the git steps the others use, and you can run them on their own too. `same-page` is how every skill asks you something, one question at a time, and `voice` is how they all sound: everything they say to you or write for people goes through it, so it reads like one warm teammate wrote it.
 
 ## What waits for you
 
@@ -127,7 +127,7 @@ Use it to turn a plan, a bug write-up or a small change into tested, reviewed pu
 
 ### wbc:review
 
-Use it to get a tough review of a pull request or merge request that you can edit before anyone sees it. It hunts for everything that should change (never praise), following every name the change touches (functions, fields, config keys, env vars, routes) to each place that uses it, here and in your related repos. Each finding is an issue or a question, always asked as a question, so the review starts a conversation instead of telling the author how to fix things. Then a separate checker agent, which sees none of the review's reasoning, cuts what doesn't hold up and tones down what's overstated. What's left lands in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), under a link to the pull request, and nothing posts until you say so. Every open thread, whoever started it, gets a finding with a reply ready, or a note that there's nothing to add, which never posts. It holds every pull request to your repo's specs: code that no longer matches a spec the pull request didn't update is blocking, asked as a question about which should change. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
+Use it to get a thorough review of a pull request or merge request that you can edit before anyone sees it. It hunts for everything that should change (never praise), following every name the change touches (functions, fields, config keys, env vars, routes) to each place that uses it, here and in your related repos. Each finding is an issue or a question, asked warmly the way a good mentor would, so the review starts a conversation instead of telling the author what to do. When there's a known way forward, like a helper that already does the job, it offers it for the author to take or leave. Then a separate checker agent, which sees none of the review's reasoning, cuts what doesn't hold up and tones down what's overstated. What's left lands in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), under a link to the pull request, and nothing posts until you say so. Every open thread, whoever started it, gets a finding with a reply ready, or a note that there's nothing to add, which never posts. It holds every pull request to your repo's specs: code that no longer matches a spec the pull request didn't update is blocking, asked as a question about which should change. Run it again to pick up new pushes and replies, or point it at your uncommitted changes for a local review, against a spec if you have one.
 
 To have it check repos that depend on this one, run `/wbc:setup`, or list them yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` and `research` read the same list):
 
@@ -142,7 +142,7 @@ To have it check repos that depend on this one, run `/wbc:setup`, or list them y
 
 ### wbc:voice
 
-Use it when text is for people, so it reads like a teammate wrote it rather than an AI. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and gives the other skills' commits, PRs, tickets, reviews, changelogs and specs the same voice.
+Use it when text is for people, so it reads like a warm teammate wrote it rather than an AI, one who asks instead of telling and points to a way forward when there's a known one. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and every other skill runs what it says to you or writes for people through it, from questions and replies to commits, PRs, tickets, reviews, changelogs and specs.
 
 ### wbc:prompt-writer
 

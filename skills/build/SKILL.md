@@ -3,6 +3,8 @@ name: build
 description: Build a plan, findings or small change test-first into reviewed PRs, then land them: rebase, fix CI, answer threads. Use when asked to build or implement something, continue or close out a plan, or get a PR green or through review.
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Input, first match:
 
 - PR/MR number or URL, or the current branch's when asked to get it green or through review → read [land.md](land.md).

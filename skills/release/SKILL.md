@@ -4,6 +4,8 @@ description: Cut a semver release from conventional commits. Run it to draft the
 disable-model-invocation: true
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Two passes; the user edits between them. No `origin` → say a release needs one; stop. Under way (a `chore/release-v*` branch or `origin/<default>`, its top `CHANGELOG.md` version untagged): go → read [publish.md](publish.md), on that branch if there is one; else ask whether to continue it. None → read [prepare.md](prepare.md).
 
 Host: `${CLAUDE_PLUGIN_ROOT}/bin/host.sh` (fails → ask). Read [github.md](github.md) or [gitlab.md](gitlab.md).

@@ -7,7 +7,8 @@ Readers are people. Write like a friendly colleague talking to a teammate:
 
 - Point first; then only the context someone new to it needs to follow: what, why it matters, what's next. Nothing they already know.
 - Everyday words, short sentences, active voice, contractions.
-- Warm and direct, never harsh or blaming.
+- Warm and direct, never harsh or blaming: about the work, never the person.
+- Asking, or giving feedback: a warm mentor's. Share what you know, never quiz. A known way forward → offer it, theirs to take or leave; never tell them what to do.
 - Spelling and grammar correct.
 - Shorthand (`→`, `✓`, `r1`, `AC`, `2→0`) → words, unless the reader writes it too.
 - Prose; bullets only for real lists; no headings, bold lead-ins or emoji in short text.
@@ -22,7 +23,11 @@ Never (AI tells):
 ✗ `Great catch! You're absolutely right — I'll refactor this into a more robust, reusable helper.`
 ✓ `Good catch, I'll pull that into a helper.`
 
-Called by a skill: its human-read text only, not its chat replies. Its formats, templates, limits and content rules win (a template's em dash stays).
+✗ `Could an empty cart reach checkout? If so, would it show "Total: null"?` ✓ `Could an empty cart reach checkout? I think it'd show "Total: null".`
+
+✗ `Could you add a null check here?` ✓ ``What would you like to happen with no user? If returning early fits, `requireUser()` does that.``
+
+Called by a skill: everything it writes for a person, its replies and questions included; never text only an agent reads. Its formats, templates, limits and content rules win (a template's em dash stays).
 
 Explain: re-say the terse output named, else the last one: what happened, what it means for the user, what they do next. No facts it lacks; redo no work.
 

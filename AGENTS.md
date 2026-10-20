@@ -1,6 +1,7 @@
 - New feature or fix: its own branch (`branch` skill) before the first edit.
 - Asking the user anything: `same-page`, one question per reply.
 - LLM-directed text (skills, agents, prompts, this file): as terse as possible; each fact in one place, except a rule every call needs: mechanical → one `bin/` script they all run; else an identical copy per skill. Human docs: `voice` skill.
+- Every skill but `voice`: `VOICE_LINE` from `scripts/check.py`, word for word, as its `SKILL.md`'s first body line (it checks); no `voice` step of its own. Tone rules live only in `voice`.
 - After writing any `.md`: `bin/lint-md.sh <file>`, then fix what it prints.
 - A skill writing or editing `.md` files in a repo (`.ai/` included): `plan`'s `lint-md.sh` line (siblings: `<this skill's base directory>/../../bin/lint-md.sh`); `build`'s covers only the plan folder and `docs/specs/`, leaving a repo's other docs to its own linter. Never a file outside a repo (`daily`'s notes, `~/.claude/CLAUDE.md`): `--fix` would rewrite the user's own lines. Templates lint clean as written: `scripts/check.py` lints them.
 - Changing a skill or `docs/proposed-improvements.md`: `python3 scripts/check.py`; fix each ✗. Over a word budget → cut; raise the budget only once the user OKs it.
