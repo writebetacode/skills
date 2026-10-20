@@ -4,7 +4,7 @@ The review checker rechecks each drafted review finding in a fresh context, stri
 
 ## Context
 
-`review` drafts findings on a PR or on local changes it reviews itself, looking as hard as it can and counting on the checker to rein them in; on a PR, it also drafts a finding and reply for each open thread. `build` gets findings from the local review it asks for. Each hands the checker the findings, the diff, the code, and any threads, spec, ticket, task, findings file or request the change was reviewed against, and nothing of the conversation behind them. `daily`'s re-reviews run `review`, so they reach the checker through it. The checker judges and changes nothing.
+`review` drafts findings on a PR or on local changes it reviews itself, looking as hard as it can, setting aside those not worth posting, and counting on the checker to rein in the rest; on a PR, it also drafts a finding and reply for each open thread. `build` gets findings from the local review it asks for. Each hands the checker the findings, the diff, the code, and any threads, spec, ticket, task, findings file or request the change was reviewed against, and nothing of the conversation behind them. `daily`'s re-reviews run `review`, so they reach the checker through it. The checker judges and changes nothing.
 
 ## Scope
 

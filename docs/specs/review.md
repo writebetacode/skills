@@ -4,11 +4,11 @@
 
 ## Context
 
-Specs in `docs/specs/` are the living definition of each domain area, and every change to an area updates its spec in the same change. They're written by area, not indexed by the files they cover. `review` reads a PR as it stands at its head, so a spec the PR changed reads as changed, and keeps its findings in a gitignored review file in the main checkout until you say to post. It reads related repos from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, wherever it runs. It looks as hard as it can for anything that should change, and a checker agent rechecks each finding in a fresh context to rein that in. On PRs you review, it keeps a reply ready for every open thread, whoever started it; a request to address comments on your own PR goes to `build`. `build` runs a local review of its own uncommitted changes through `review`, after writing its plan's specs into `docs/specs/`.
+Specs in `docs/specs/` are the living definition of each domain area, and every change to an area updates its spec in the same change. They're written by area, not indexed by the files they cover. `review` reads a PR as it stands at its head, so a spec the PR changed reads as changed, and keeps its findings in a gitignored review file in the main checkout until you say to post. It reads related repos from the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, wherever it runs. It looks as hard as it can for anything that should change, sets aside each finding that isn't worth the author's time, and has a checker agent recheck the rest in a fresh context to rein that in. On PRs you review, it keeps a reply ready for every open thread, whoever started it; a request to address comments on your own PR goes to `build`. `build` runs a local review of its own uncommitted changes through `review`, after writing its plan's specs into `docs/specs/`.
 
 ## Scope
 
-In: findings as issues or questions, each asked warmly as a question, offering a known way forward when there is one; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; the README's `review` section, which says it holds PRs to the repo's specs.
+In: findings as issues or questions, each asked warmly as a question, offering a known way forward when there is one; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; scoring each drafted finding as worth posting or not, and listing those that aren't under Withdrawn; never raising a withdrawn finding again; the README's `review` section, which says it holds PRs to the repo's specs.
 Out: praise, and comments that ask for nothing; suggestion, nitpick, todo and chore labels; telling the author what to do, even as a question; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
 
 ## Behaviour
@@ -78,6 +78,22 @@ Scenario Outline: A finding asks about the problem and offers a known way forwar
     | requireUser() in auth.ts already returns early for that | requireUser() as one way forward, for the author to take or leave |
     | nothing that handles a missing user                     | no way forward, just the question                                 |
 
+Scenario: A finding not worth posting is set aside before the checker
+  Given a PR adds a log line that could also say which cart it's for
+  When you review the PR
+  Then the finding about the log line goes under Withdrawn in the review file, saying why it isn't worth posting
+  And the checker never sees it, and it never posts
+
+Scenario Outline: A withdrawn finding stays withdrawn
+  Given <who> put a finding about the log line under Withdrawn
+  When the PR gets a new push and review re-reviews it
+  Then no new finding about the log line appears
+
+  Examples:
+    | who        |
+    | you        |
+    | the review |
+
 Scenario: The review file links its PR
   When you review PR 42
   Then the review file's title links to PR 42
@@ -111,6 +127,8 @@ Scenario: Replies are current when they post
 - **Every open thread gets a finding, whoever started it**: Why: you see where each conversation stands, with a reply ready, without having to ask. Not only replies to your own comments: a teammate's open thread holds up the PR just as much.
 - **Nothing new to say is said, and never posted**: Why: a reply that repeats the thread is noise for the author, and a missing finding would leave you wondering whether the thread was read. Not leaving such threads out of the file.
 - **Draft hard, then rein it in**: Why: a reviewer that holds back while drafting misses real problems, and a checker in a fresh context cuts what doesn't hold and tones down what's overstated, so you never have to push back on a finding to get it right. Not a cautious first draft.
+- **Findings not worth posting are set aside before the checker**: Why: a finding can hold up and still not be worth the author's time, and weighing each one as soon as it's drafted spares the checker and the author both. Not a pass after the checker, and not dropping it unseen: it's listed under Withdrawn with why, so you can see what was set aside.
+- **Withdrawn stays withdrawn**: Why: a re-review that raises a withdrawn finding again makes you withdraw it again after every push. Not judging it afresh on each re-review.
 - **Every name the change touches is followed to every use**: Why: a break outside the diff is the easiest to miss, and the checker only cuts findings, so nothing later catches what this skips. Not only callers and tests, and not a list in the review file of what was followed: the file changes only by gaining findings.
 - **Every related repo is searched**: Why: judging from a repo's description whether a change reaches it is how a consumer gets missed. Not only the repos whose description matches the diff.
 - **Every finding is an issue or a question, asked warmly as a question**: Why: a review should start a conversation, the way a good mentor would, and it's there to find what needs to change. Not suggestion, nitpick, todo or chore labels, praise, thoughts or notes, and never a fix the author is told to make, even one worded as a question: the author decides how to fix it.
