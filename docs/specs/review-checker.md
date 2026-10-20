@@ -1,6 +1,6 @@
 # Review checker
 
-The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was, so only findings that hold up reach you, worded no stronger than the code shows and asked as questions. It keeps a finding about code that no longer matches the repo's specs blocking, since specs must always match the code.
+The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was, so only findings that hold up reach you, worded no stronger than the code shows and asked as questions, with any fix offered rather than told. It keeps a finding about code that no longer matches the repo's specs blocking, since specs must always match the code.
 
 ## Context
 
@@ -52,11 +52,22 @@ Scenario Outline: A finding that doesn't ask is reworded
   Then it keeps the finding, <reworded>
 
   Examples:
-    | problem                                                           | reworded                                                             |
-    | labelled suggestion                                               | labelled issue or question, whichever fits                           |
-    | whose ask is a statement: "This breaks checkout for empty carts." | asking "Could an empty cart reach checkout here?"                    |
-    | whose ask is a fix: "Could you add a null check here?"            | asking about the problem: "What should happen when there's no user?" |
-    | whose summary says how to fix it                                  | with the fix cut                                                     |
+    | problem                                                           | reworded                                                                                         |
+    | labelled suggestion                                               | labelled issue or question, whichever fits                                                       |
+    | whose ask is a statement: "This breaks checkout for empty carts." | asking "Could an empty cart reach checkout here?"                                                |
+    | whose ask is a fix: "Could you add a null check here?"            | asking "What would you like to happen when there's no user?", then offering the null check after |
+    | whose summary says how to fix it                                  | with the fix moved after the ask, offered as one way forward                                     |
+
+Scenario Outline: An offered way forward is kept only if it holds
+  Given review drafted a finding that offers requireUser() in auth.ts as one way forward
+  And <what the code shows>
+  When the checker rechecks it and the problem holds
+  Then it keeps the finding, <with the offer>
+
+  Examples:
+    | what the code shows                                   | with the offer |
+    | requireUser() is there and returns early for no user  | offer kept     |
+    | there's no requireUser() in auth.ts                   | offer cut      |
 
 Scenario Outline: A thread reply that doesn't hold up says there's nothing to add
   Given review drafted a reply for an open thread <problem>

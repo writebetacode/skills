@@ -31,7 +31,7 @@ Re-review also: a finding the head fixes, or whose thread is resolved → `## Re
 
 Only when told ("post it"): read [post.md](post.md).
 
-Tone, in the file and everything posted: inquisitive, about the code not the person. Never a fix, even as a question.
+Tone, in the file and everything posted: a warm mentor's, about the code not the person; adversarial only in what you look for. Share what you found, never quiz. Known way forward → offer it after the question, theirs to take or leave.
 
-- ✗ `This breaks checkout for empty carts.` ✓ `Could an empty cart reach checkout here? If so, would it show "Total: null"?`
-- ✗ `Could you add a null check here?` ✓ `What should happen here when there's no user?`
+- ✗ `This breaks checkout for empty carts.` ✓ `Could an empty cart reach checkout? I think it'd show "Total: null".`
+- ✗ `Could you add a null check here?` ✓ ``What would you like to happen with no user? If returning early fits, `requireUser()` does that.``
