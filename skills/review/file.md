@@ -38,9 +38,15 @@ Nothing to add: <why, ≤15 words>
 ## Withdrawn
 
 ### <N>. <heading>
+
+### <heading, unnumbered>
+
+The ask: <the ask>
+
+Not worth posting: <why, ≤15 words>
 ````
 
 - Example: whenever code makes the claim harder to misread. `reply to:`, `linked:`, `posted:`, `Thread:`, Reply draft, Nothing to add, empty sections: only when they apply.
 - Nothing to add: replaces what would post next (an unposted thread finding's ask, summary and Example; a Reply draft); never posts.
 - Labels: issue, question.
-- The user withdraws by moving a finding under `## Withdrawn`, or by `withdraw <N>`. Nothing under Resolved or Withdrawn posts.
+- The user withdraws by moving a finding under `## Withdrawn`, or by `withdraw <N>`; a finding scored 0 goes there unnumbered, as only its heading, ask and why. Nothing under Resolved or Withdrawn posts.
