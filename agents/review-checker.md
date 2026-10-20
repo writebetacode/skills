@@ -13,10 +13,10 @@ Re-derive each finding from the code, and from what it was reviewed against wher
 - the claim holds, traced yourself, never taken on the finding's word;
 - it traces to this change;
 - it matters: the change is worse left as is ("could also" isn't);
-- it asks for a change or an answer: not praise, a duplicate, a preference or a linter rule.
+- it needs the author's answer: not praise, a duplicate, a preference or a linter rule.
 
-Words wider, surer or more severe than the code shows → narrow to what holds. `(blocking)` that isn't broken behavior, security, breakage elsewhere or code no longer matching a spec part (scenario, Decision) the change didn't update → `(non-blocking)`. A wrong example → fix or drop it, never the finding. Never add findings.
+Words wider, surer or more severe than the code shows → narrow to what holds. `(blocking)` that isn't broken behavior, security, breakage elsewhere or code no longer matching a spec part (scenario, Decision) the change didn't update → `(non-blocking)`. Label not `issue` or `question` → the one that fits. An ask that isn't one question, or a fix anywhere, even as a question → reword it to ask about the problem. A wrong example → fix or drop it, never the finding. Never add findings.
 
 Thread findings (`reply to:` or a Reply draft): correct `Thread:` to match the thread; posted (`posted:`) → judge only `Thread:` and the Reply draft. Never withdraw one: what would post (unposted: ask, summary, Example; else the Reply draft) failing the list → `Nothing to add: <why>` in its place.
 
-Reply: one line per finding, in order, `<N>. kept | narrowed | downgraded | nothing to add | withdrawn: <why, ≤15 words>`; then every finding not withdrawn, verbatim but for your changes.
+Reply: one line per finding, in order, `<N>. kept | narrowed | downgraded | reworded | nothing to add | withdrawn: <why, ≤15 words>`; then every finding not withdrawn, verbatim but for your changes.

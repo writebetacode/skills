@@ -1,6 +1,6 @@
 # Review checker
 
-The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was, so only findings that hold up reach you, worded no stronger than the code shows. It keeps a finding about code that no longer matches the repo's specs blocking, since specs must always match the code.
+The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was, so only findings that hold up reach you, worded no stronger than the code shows and asked as questions. It keeps a finding about code that no longer matches the repo's specs blocking, since specs must always match the code.
 
 ## Context
 
@@ -8,7 +8,7 @@ The review checker rechecks each drafted review finding in a fresh context, stri
 
 ## Scope
 
-In: the review checker: what it keeps, narrows, downgrades and withdraws, how it treats thread replies, its reply, and who calls it.
+In: the review checker: what it keeps, narrows, downgrades, rewords and withdraws, how it treats thread replies, its reply, and who calls it.
 Out: how `review` drafts findings and finds spec mismatches (the review spec).
 
 ## Behaviour
@@ -46,6 +46,18 @@ Scenario: An overstated finding is narrowed
   When the checker rechecks it
   Then it keeps the finding, narrowed to empty carts
 
+Scenario Outline: A finding that doesn't ask is reworded
+  Given review drafted a finding <problem>
+  When the checker rechecks it and the problem holds
+  Then it keeps the finding, <reworded>
+
+  Examples:
+    | problem                                                           | reworded                                                             |
+    | labelled suggestion                                               | labelled issue or question, whichever fits                           |
+    | whose ask is a statement: "This breaks checkout for empty carts." | asking "Could an empty cart reach checkout here?"                    |
+    | whose ask is a fix: "Could you add a null check here?"            | asking about the problem: "What should happen when there's no user?" |
+    | whose summary says how to fix it                                  | with the fix cut                                                     |
+
 Scenario Outline: A thread reply that doesn't hold up says there's nothing to add
   Given review drafted a reply for an open thread <problem>
   When the checker rechecks it
@@ -57,14 +69,14 @@ Scenario Outline: A thread reply that doesn't hold up says there's nothing to ad
     | that repeats what the thread already says |
 
 Scenario: A wrong example is fixed, not the finding
-  Given a finding holds, but its example of the fix is wrong
+  Given a finding holds, but its example is wrong
   When the checker rechecks it
   Then it fixes or drops the example and keeps the finding
 
 Scenario: Its reply
   Given the checker rechecked three findings
   When it replies
-  Then it gives one line per finding, in order, saying kept, narrowed, downgraded, nothing to add or withdrawn and why in a few words
+  Then it gives one line per finding, in order, saying kept, narrowed, downgraded, reworded, nothing to add or withdrawn and why in a few words
   And then every finding it didn't withdraw, word for word apart from those changes and fixed examples
   And it adds no findings of its own
 ```
@@ -74,5 +86,5 @@ Scenario: Its reply
 - **Spec mismatches are part of the blocking bar**: Why: `review` blocks them, and a checker with an older bar would quietly undo that.
 - **Only `review` and `build` call it**: Why: `daily` reaches it only through `review`. Not a direct call from `daily`, or from every skill whose work it touches.
 - **Its result is final**: Why: a reviewer who argues with the checker brings back the bias it was there to remove. Not a second round with the reviewer.
-- **Overstated findings are narrowed, not withdrawn**: Why: the problem under the overstatement is still real, and the reviewer drafts boldly on purpose. Not withdrawing a finding for its wording.
+- **Overstated findings are narrowed, and ones that don't ask are reworded, not withdrawn**: Why: the problem under the wording is still real, and the reviewer drafts boldly on purpose. Not withdrawing a finding for its wording.
 - **Thread findings are never withdrawn**: Why: every open thread keeps its finding, so you can see it was read; a reply that fails says there's nothing to add instead. Not dropping the thread from the review.
