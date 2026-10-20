@@ -3,6 +3,8 @@ name: prompt-writer
 description: Write or tighten text an agent reads: skills, agents, prompts, subagent briefs. Use when asked to create, rewrite or tighten any of these.
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Reply with only the prompt, or only the written file paths. No summary, notes or caveats.
 
 After writing or editing a `.md` file: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <file>…`; fix what it prints, rerun until clean.

@@ -7,4 +7,4 @@ Find why it's broken; never fix it. Outside the repo (services, databases, ticke
 5. Ask the user only what nothing you can reach answers: via `same-page`, saying what you tried.
 6. Checker: `Agent` with `subagent_type: wbc:debug-checker` (never a fork or another type), given only paths: problem, claimed cause with proof (temp files), `research/`, repo. Its verdict sets the confidence, within step 4's cap. Gaps you can check → check them, rerun it (≤2 rounds); the rest → Not checked. Rejected → test the next cause, or say none holds.
 7. Clean up: repro, failing test, proof → `research/`; `git worktree remove --force` only the worktrees you made; stop each process you started.
-8. Invoke the `voice` skill (once per session), then write `findings.md` per [findings-file.md](findings-file.md).
+8. Write `findings.md` per [findings-file.md](findings-file.md).

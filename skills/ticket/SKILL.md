@@ -3,6 +3,8 @@ name: ticket
 description: GitHub or GitLab issues and Jira work items. Use when asked to file, open, log or write up a bug, feature or task as a ticket, issue or work item; to find tickets; or to view, edit, comment on, assign, link, close or reopen one.
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Tracker, first match:
 
 1. Jira key (`ABC-123`) → Jira. GitHub/GitLab URL or a named tracker → that one.

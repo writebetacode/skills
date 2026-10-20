@@ -3,6 +3,8 @@ name: same-page
 description: Agree on what a request means, one question at a time. Use before work when a request has more than one reading, whenever you'd ask the user more than one thing, or when a skill calls for it.
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Look nothing up. Each reply, under 120 words, only:
 
 - the request as you read it, in 2–3 plain sentences

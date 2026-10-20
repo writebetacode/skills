@@ -3,7 +3,9 @@ name: commit
 description: Commit staged changes as a ticket-scoped conventional commit. Use whenever the user asks to commit.
 ---
 
-Commit only what's staged; never stage. Nothing staged → say so and stop. Else invoke the `voice` skill (once per session), then write:
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
+Commit only what's staged; never stage. Nothing staged → say so and stop. Else write:
 
 ```
 <type>(<ticket>): <summary>

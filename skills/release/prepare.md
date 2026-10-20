@@ -22,6 +22,6 @@ Pass 1 (never commit or push):
    ### Other
    ```
 
-   Group: `!` or that footer → Breaking; else `feat` → Features; `fix`/`perf` → Fixes; rest → Other. No last tag → link `v<version>`'s commits instead of a compare. Theme: `voice` skill (once per session).
+   Group: `!` or that footer → Breaking; else `feat` → Features; `fix`/`perf` → Fixes; rest → Other. No last tag → link `v<version>`'s commits instead of a compare.
 5. Set the version files.
 6. Stop: ask the user to review and edit the diff, then say go (a later session: `/wbc:release go`).

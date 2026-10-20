@@ -4,6 +4,8 @@ description: Set up the wbc skills on this machine: check git, gh, glab, acli, j
 disable-model-invocation: true
 ---
 
+Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
+
 Walk the user through each step. Ask via `same-page`; step 6's changes are shown in full outside it. Write nothing before step 6's confirm.
 
 Each repo's files live in its main checkout: `${CLAUDE_PLUGIN_ROOT}/bin/main-checkout.sh <path>` (fails → skip that path, saying why).

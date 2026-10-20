@@ -38,7 +38,7 @@ Most work moves through the skills in this order, each one handing off to the ne
 5. `review` reviews the pull requests other people write.
 6. `release` ships a version.
 
-A small fix with nothing left to decide can go straight to `build`, and anything `build` isn't sure about goes back to `plan`. `daily` wraps around the rest: in the morning it lists what's waiting on you, with the skill that starts each item, and at the end of the day it recaps what you did. `branch`, `commit` and `pr` are the git steps the others use, and you can run them on their own too. `same-page` is how every skill asks you something, one question at a time, and `voice` keeps what they write for people sounding like a teammate wrote it.
+A small fix with nothing left to decide can go straight to `build`, and anything `build` isn't sure about goes back to `plan`. `daily` wraps around the rest: in the morning it lists what's waiting on you, with the skill that starts each item, and at the end of the day it recaps what you did. `branch`, `commit` and `pr` are the git steps the others use, and you can run them on their own too. `same-page` is how every skill asks you something, one question at a time, and `voice` is how they all sound: everything they say to you or write for people goes through it, so it reads like one warm teammate wrote it.
 
 ## What waits for you
 
@@ -142,7 +142,7 @@ To have it check repos that depend on this one, run `/wbc:setup`, or list them y
 
 ### wbc:voice
 
-Use it when text is for people, so it reads like a teammate wrote it rather than an AI. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and gives the other skills' commits, PRs, tickets, reviews, changelogs and specs the same voice.
+Use it when text is for people, so it reads like a warm teammate wrote it rather than an AI, one who asks instead of telling and points to a way forward when there's a known one. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and every other skill runs what it says to you or writes for people through it, from questions and replies to commits, PRs, tickets, reviews, changelogs and specs.
 
 ### wbc:prompt-writer
 

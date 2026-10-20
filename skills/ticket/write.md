@@ -1,4 +1,4 @@
-Content, in titles, bodies, edits and comments, after invoking the `voice` skill (once per session): what was seen or is wanted, and why it matters to users. Never how: no causes, code, files or fixes, even when the request names them.
+Content, in titles, bodies, edits and comments: what was seen or is wanted, and why it matters to users. Never how: no causes, code, files or fixes, even when the request names them.
 
 - ✗ `Add a null check in cartTotal()` ✓ `An empty cart's checkout shows 0.00`
 
