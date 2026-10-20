@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.3 — 2026-10-20
+
+**Every skill speaks in one warm voice**
+[v0.8.2...v0.8.3](https://github.com/writebetacode/skills/compare/v0.8.2...v0.8.3)
+
+### Fixes
+
+- fix: Give every skill one warm voice, and let reviews offer a way forward ([277171b](https://github.com/writebetacode/skills/commit/277171bad488ce4ff9f9068ac4e9365adcbb367c))
+
 ## 0.8.2 — 2026-10-20
 
 **Reviews ask questions instead of handing down fixes**
