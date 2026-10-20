@@ -5,7 +5,7 @@ The review file:
 
 <!-- reviewed at <head sha> -->
 
-## 1. <label> (blocking|non-blocking): <file>:<line>
+## 1. <issue|question> (blocking|non-blocking): <file>:<line>
 
 reply to: <thread url>
 linked: <thread url>
@@ -25,7 +25,7 @@ Example:
 
 Reply draft: <≤2 sentences>
 
-Nothing to add: <why, ≤15 words>
+Nothing to add: <why, ≤15 words; in place of what would post next>
 
 ## Not checked
 
@@ -39,7 +39,7 @@ Nothing to add: <why, ≤15 words>
 
 ### <N>. <heading>
 
-### <heading, unnumbered>
+### <a 0's heading, unnumbered>
 
 The ask: <the ask>
 
@@ -47,6 +47,4 @@ Not worth posting: <why, ≤15 words>
 ````
 
 - Example: whenever code makes the claim harder to misread. `reply to:`, `linked:`, `posted:`, `Thread:`, Reply draft, Nothing to add, empty sections: only when they apply.
-- Nothing to add: replaces what would post next (an unposted thread finding's ask, summary and Example; a Reply draft); never posts.
-- Labels: issue, question.
-- The user withdraws by moving a finding under `## Withdrawn`, or by `withdraw <N>`; a finding scored 0 goes there unnumbered, as only its heading, ask and why. Nothing under Resolved or Withdrawn posts.
+- The user withdraws by moving a finding under `## Withdrawn`, or by `withdraw <N>`. Nothing under Resolved or Withdrawn posts.
