@@ -8,7 +8,7 @@ Specs in `docs/specs/` are the living definition of each domain area, and every 
 
 ## Scope
 
-In: findings as issues or questions, each asked warmly as a question, offering a known way forward when there is one; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; a finding and a ready reply for every open thread; scoring each drafted finding as worth posting or not, and listing those that aren't under Withdrawn; never raising a withdrawn finding again; the README's `review` section, which says it holds PRs to the repo's specs.
+In: findings as issues or questions, each asked warmly as a question, offering a known way forward when there is one; specs in the review's context; spec mismatches as blocking findings; following each name the change touches to every place that uses it, here and in each related repo; the PR's link at the top of the review file; links from each line a finding cites to that line at the commit it reviewed; a finding and a ready reply for every open thread; scoring each drafted finding as worth posting or not, and listing those that aren't under Withdrawn; never raising a withdrawn finding again; the README's `review` section, which says it holds PRs to the repo's specs.
 Out: praise, and comments that ask for nothing; suggestion, nitpick, todo and chore labels; telling the author what to do, even as a question; reviewing a spec on its own; specs whose area the diff doesn't touch; how the review checker treats findings (the review-checker spec); moving back an archived review file; checking a PR's author to send comments on your own PR to `build`.
 
 ## Behaviour
@@ -97,6 +97,12 @@ Scenario Outline: A withdrawn finding stays withdrawn
 Scenario: The review file links its PR
   When you review PR 42
   Then the review file's title links to PR 42
+
+Scenario: A finding links the lines it cites
+  Given a finding cites auth.md's session rule and the requireUser() helper
+  When you review the PR
+  Then it names each, linking to its lines on GitHub or GitLab at the commit it reviewed
+  And each link sits on the words naming it, never on a citation added after them, like "(:248)"
 
 Scenario Outline: Every open thread gets a finding
   Given an open thread on the PR, started by <who>

@@ -15,7 +15,7 @@ Thread: <where it stands: who raised what, the latest word, what the head change
 
 The ask: <one question about the problem, never a fix to make; a known way forward, if any, offered after it>
 
-<1–4 sentences, ≤200 words; cite file:line only where it helps>
+<1–4 sentences, ≤200 words; cite only where it helps>
 
 Example:
 
@@ -47,4 +47,5 @@ Not worth posting: <why, ≤15 words>
 ````
 
 - Example: whenever code makes the claim harder to misread. `reply to:`, `linked:`, `posted:`, `Thread:`, Reply draft, Nothing to add, empty sections: only when they apply.
+- Below the heading, each place cited (code, spec, existing site): a `permalink` from the host's table, at the head sha (a related repo's: its `origin/<default>` sha, under `origin`'s web URL). Link the words that name it, never an added citation: ✗ `the spec (:248, :254-:258)` ✓ `the spec's [1-hour session rule](<permalink>)`, `[requireUser()](<permalink>)`. Code only the base has: plain `file:line`.
 - The user withdraws by moving a finding under `## Withdrawn`, or by `withdraw <N>`. Nothing under Resolved or Withdrawn posts.
