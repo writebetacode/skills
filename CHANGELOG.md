@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.5 — 2026-10-20
+
+**Review findings link the code they cite**
+[v0.8.4...v0.8.5](https://github.com/writebetacode/skills/compare/v0.8.4...v0.8.5)
+
+### Fixes
+
+- fix: Link review findings' citations to their lines at the reviewed commit ([b313f1d](https://github.com/writebetacode/skills/commit/b313f1df44954b82ef33cd73183dc5e8fcdd11b8))
+
 ## 0.8.4 — 2026-10-20
 
 **Reviews set aside findings not worth posting**
