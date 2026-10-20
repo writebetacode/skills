@@ -9,6 +9,7 @@ GitHub, via `gh`. Never add a flag not shown. `{owner}`/`{repo}` stay literal; g
 | comments | `gh pr view <n> --json comments` (general comments: no line, no resolved state) |
 | batch | `gh api --method POST repos/{owner}/{repo}/pulls/<n>/reviews --input <json>`, then `reply` for each reply; unanchored → `gh pr comment <n> --body-file <file>` |
 | reply | `gh api --method POST repos/{owner}/{repo}/pulls/<n>/comments/<thread's first comment databaseId>/replies -F body=@<file>` |
+| permalink | `<PR url before /pull/>/blob/<sha>/<path>#L<a>`, a range `#L<a>-L<b>` |
 | approve | `"event": "APPROVE"` in `batch`; alone: `gh pr review <n> --approve` |
 
 `batch` JSON, built with `jq -n --rawfile`, never by hand: `{"commit_id": "<head sha>", "event": "COMMENT" | "APPROVE" | "REQUEST_CHANGES", "comments": [{"path": "<path>", "line": <n>, "side": "RIGHT", "body": <body>}]}`; `"side": "LEFT"` for a removed line.
