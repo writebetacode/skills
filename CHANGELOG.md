@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.8.4 — 2026-10-20
+
+**Reviews set aside findings not worth posting**
+[v0.8.3...v0.8.4](https://github.com/writebetacode/skills/compare/v0.8.3...v0.8.4)
+
+### Fixes
+
+- fix: Set aside review findings not worth posting, and trim the review skill ([8df4ee6](https://github.com/writebetacode/skills/commit/8df4ee6cb7b97c0eb7d1627378966ca2b1387766))
+
 ## 0.8.3 — 2026-10-20
 
 **Every skill speaks in one warm voice**
