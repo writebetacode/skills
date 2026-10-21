@@ -15,9 +15,9 @@ It works on GitHub and GitLab, saying "pull request" or "merge request" to match
 - Asked to open one, it opens one PR for the branch, however many files or concerns it spans, and says nothing about its size or splitting it.
 - On the default branch, it won't open one, and says the work needs its own branch.
 - It won't merge while checks fail or the branch has commits you haven't pushed.
-- After a merge in the main checkout, with nothing uncommitted and the default branch checked out nowhere else, it switches to the default branch and pulls. Otherwise, as in a linked worktree, it only fetches and stays on its branch.
-- It then deletes the local branch once it's fully merged and checked out nowhere, squash merges included.
-- A branch it keeps is named, with why, like a failed fetch or git older than 2.38.
+- After a merge in the main checkout, if nothing's uncommitted and the default branch isn't checked out anywhere else, it switches to the default branch and pulls. Otherwise, as in a linked worktree, it only fetches and stays on its branch.
+- It then deletes the local branch once it's fully merged and not checked out anywhere, squash merges included.
+- When it keeps a branch, it names it and says why, like a failed fetch or git older than 2.38.
 
 ## Decisions
 

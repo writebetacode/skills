@@ -8,22 +8,22 @@ The review checker rechecks each drafted review finding in a fresh context, stri
 
 ## What
 
-`review` calls it on the findings it drafts, for a PR or for local changes, and `build` calls it on the findings of the local review it asks for each task. It gets the findings, the diff, the code, and whatever the change was reviewed against (threads, specs, the ticket, the task, findings or the request), and none of the conversation behind them. It edits no files.
+`review` calls it on the findings it drafts, for a PR or for local changes, and `build` calls it on the findings of the local review it asks for each task. It gets the findings, the diff, the code, and whatever the change was reviewed against (threads, specs, the ticket, the task, findings or the request), but none of the conversation behind them. It edits no files.
 
 ## Behaviour
 
-- A finding is withdrawn unless its cited code is there, its claim holds when traced afresh, it comes from this change, it matters, and it needs the author's answer (praise, preferences, duplicates and linter rules don't).
-- An overstated finding is narrowed to what the code shows.
-- Blocking stays only for broken behaviour, security, breakage elsewhere, an unmet ticket criterion, or code no longer matching a spec's behaviour or Decision the change didn't update; anything else is downgraded.
-- A finding labelled anything but issue or question is relabelled.
-- A finding whose ask isn't one question, or that tells a fix anywhere, even as a question, is reworded to ask about the problem, with the fix offered after it as one way forward.
-- An offered way forward that isn't there or wouldn't work is cut, and a wrong example fixed or dropped, keeping the finding.
-- A thread's finding is never withdrawn: its summary of the thread is corrected, and a reply that doesn't hold up becomes a note that there's nothing to add, so nothing posts.
+- It withdraws a finding unless its cited code is there, its claim holds when traced from scratch, it comes from this change, it matters, and it needs the author's answer (praise, preferences, duplicates and linter rules don't).
+- It narrows an overstated finding to what the code shows.
+- Blocking stays only for broken behaviour, security, breakage elsewhere, an unmet ticket criterion, or code no longer matching a spec's behaviour or Decision the change didn't update. It downgrades anything else.
+- It relabels any finding not labelled issue or question.
+- It rewords a finding whose ask isn't one question, or that tells a fix anywhere (even as a question), so it asks about the problem and then offers the fix as one way forward.
+- It cuts an offered way forward that isn't there or wouldn't work, and fixes or drops a wrong example, keeping the finding.
+- It never withdraws a thread's finding: it corrects the finding's summary of the thread, and turns a reply that doesn't hold up into a note that there's nothing to add, so nothing posts.
 - It never adds findings of its own.
 
 ## Sketch
 
-Its reply, one line per finding, then every finding it didn't withdraw, word for word but for its changes:
+It replies with one line per finding, then every finding it didn't withdraw, word for word apart from its changes:
 
 ```text
 1. kept: an empty cart reaches the null total

@@ -8,23 +8,23 @@ None of it is in the code, and paths differ per machine. Without it, `plan`, `re
 
 ## What
 
-It writes related repos and debug tools into each repo's `CLAUDE.local.md`, and `daily`'s sources into your global `~/.claude/CLAUDE.md`. Its repos are the one you're in, plus paths you name or every git repo up to two levels under a folder you name; a rerun adds those already linked.
+It writes related repos and debug tools into each repo's `CLAUDE.local.md`, and `daily`'s sources into your global `~/.claude/CLAUDE.md`. It covers the repo you're in, plus paths you name or every git repo up to two levels under a folder you name. A rerun adds those already linked.
 
 ## Behaviour
 
 - It asks one thing at a time (repos, tools, links, debug tools, `daily`'s sources), then shows every change and writes once you confirm.
-- It checks git (2.38 or later), each host's CLI, Jira's if you use it, jq and npx, giving the install link or a login command for you to run with `!`; it never runs either.
+- It checks git (2.38 or later), each host's CLI, Jira's if you use it, jq and npx. It gives you the install link or a login command to run with `!`, and never runs either.
 - A repo with no debug tools listed gets proposed lines for its logs and errors, to confirm or fill in.
 - A rerun keeps existing lines and never lists a repo twice.
-- A linked repo that moved gets its new path in every `CLAUDE.local.md`; one it can't find, or a stale path in a committed `CLAUDE.md`, is reported for you to fix.
-- A new `CLAUDE.local.md` in a repo with only `AGENTS.md` imports it first, so Claude keeps reading it.
-- An existing `## Daily` section only gains missing source lines; your notes answer replaces its `Notes:` line.
+- A linked repo that moved gets its new path in every `CLAUDE.local.md`. It reports one it can't find, or a stale path in a committed `CLAUDE.md`, for you to fix.
+- A new `CLAUDE.local.md` in a repo with only `AGENTS.md` imports `AGENTS.md` first, so Claude keeps reading it.
+- An existing `## Daily` section only gains missing source lines. Your answer about notes replaces its `Notes:` line.
 - Refuse its write to `~/.claude/CLAUDE.md`, and you get the section to paste.
-- A failed write stops it; the reply lists the tool checklist, lines added per file, anything not written, and what's left for you.
+- A failed write stops it. Its reply lists the tool checklist, lines added per file, anything not written, and what's left for you.
 
 ## Sketch
 
-A repo's `CLAUDE.local.md`; a link names the other repo by its origin's owner/repo, else its folder.
+A repo's `CLAUDE.local.md`. A link names the other repo by its origin's owner/repo, or its folder.
 
 ```md
 ## Related repos
@@ -40,7 +40,7 @@ A repo's `CLAUDE.local.md`; a link names the other repo by its origin's owner/re
 - **Links in each repo's `CLAUDE.local.md`, both ways**: Why: paths differ per machine, so they'd be wrong in the committed `CLAUDE.md`; each repo needs to know about the other.
 - **Written to the main checkout, paths relative to it**: Why: one place per repo, which its worktrees load too; a worktree's copy would vanish with it.
 - **Heal, never remove**: Why: a stale path misleads `plan`, `research` and `review`, and the sections may hold lines you wrote.
-- **Out of git through your global excludes file**: Why: one change covers every repo. Not a repo's `.gitignore`, which you'd commit, or `.git/info/exclude`, which Claude Code protects, like git's default excludes file: with none set, you get the command.
+- **Out of git through your global excludes file**: Why: one change covers every repo. Not a repo's `.gitignore`, which you'd commit, or `.git/info/exclude`, which Claude Code protects, like git's default excludes file. With none set, you get the command.
 - **Links only from evidence in the code, confirmed by you**: package dependencies, API calls, shared schemas or topics, compose files, submodules. Why: a wrong link sends `review` and `plan` into repos that don't matter.
 - **Databases by variable or secret name, never a value**: Why: `CLAUDE.local.md` is plain text every session loads.
 - **Only you start it**: Why: it writes into many repos and your git config.
