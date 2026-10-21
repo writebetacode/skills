@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.0 — 2026-10-21
+
+**Specs as white papers, with tickets per PR**
+[v0.8.5...v0.9.0](https://github.com/writebetacode/skills/compare/v0.8.5...v0.9.0)
+
+### Features
+
+- feat: White-paper specs, with tickets between specs and tasks ([5ba6066](https://github.com/writebetacode/skills/commit/5ba606628f7b614fb9203161766bcdc5a83485b9))
+
 ## 0.8.5 — 2026-10-20
 
 **Review findings link the code they cite**
