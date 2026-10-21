@@ -1,4 +1,4 @@
-`tickets/NN-<mr>.md`: one per MR, NN = merge order, its tasks file's NN: that MR's slice of the specs, its what and why, and the ACs its tasks target. Never how. Written per [../ticket/templates.md](../ticket/templates.md), its kind's template, so filing it needs no rewrite.
+`tickets/NN-<mr>.md`, for people (the voice line applies): one per MR, NN = merge order, its tasks file's NN: that MR's slice of the specs, its what and why, and the ACs its tasks target. Never how. Written per [../ticket/templates.md](../ticket/templates.md), its kind's template, so filing it needs no rewrite.
 
 ACs: observable, each in exactly one ticket. ✗ `SavedSearch rows persist` ✓ `A saved search reruns with its filters`. From the plan's `specs/` alone, per spec only its change since its `spec:` line commit (`git show <commit>:<path>` in its repo; missing → new): new → each behaviour; edited → each behaviour added or changed, each removal Out of scope names (AC: behaviour gone); slimmed, reworded or merged → none. An area specced as it is → none.
 

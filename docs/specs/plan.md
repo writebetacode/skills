@@ -15,11 +15,11 @@ Code written before you agree on what to build gets rewritten. The next change n
 - It agrees on the request with you, one question at a time; a bug goes to `research` first.
 - Each area the change touches, or whose spec it makes untrue, gets one spec: the file specifying that area today, whatever its name.
 - A new area's spec goes in the folder with the most specs, named like them, else `docs/specs/`.
-- A spec is a short white paper of what the area does, why, and how it behaves; an older one is rewritten that way when next changed.
+- A spec is a short white paper of what the area does, why, and how it behaves, in `voice`'s plain words; an older one is rewritten that way when next changed.
 - After the spec checker, `plan` walks you through each spec's decisions and open questions, approving it only when you say so.
 - Each MR gets a ticket (what, why, acceptance criteria) and tasks, one commit each, holding the how; each criterion sits under one task.
 - Criteria come only from what the specs change, a removal only when Out of scope names it; rewording or slimming adds none.
-- Tickets follow `ticket`'s templates, or your tracker's recent ones, and are filed only when you ask.
+- Tickets follow `ticket`'s templates, or your tracker's recent ones, in `voice`'s words too, filed only when you ask.
 - A dependency the change needs newer gets its own task first, or its own MR if its breaking changes reach untouched code.
 - Speccing an area as it is writes what it does now and why, with no criteria.
 - Splitting a branch plans pieces that each ship alone, carrying its code; the branch is never touched.
