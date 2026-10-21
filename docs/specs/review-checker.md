@@ -1,101 +1,44 @@
 # Review checker
 
-The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was, so only findings that hold up reach you, worded no stronger than the code shows and asked as questions, with any fix offered rather than told. It keeps a finding about code that no longer matches the repo's specs blocking, since specs must always match the code.
+The review checker rechecks each drafted review finding in a fresh context, stricter than the reviewer was. Only findings that hold up reach you, worded no stronger than the code shows and asked as questions, with any fix offered rather than told.
 
-## Context
+## Why
 
-`review` drafts findings on a PR or on local changes it reviews itself, looking as hard as it can, setting aside those not worth posting, and counting on the checker to rein in the rest; on a PR, it also drafts a finding and reply for each open thread. `build` gets findings from the local review it asks for. Each hands the checker the findings, the diff, the code, and any threads, spec, ticket, task, findings file or request the change was reviewed against, and nothing of the conversation behind them. `daily`'s re-reviews run `review`, so they reach the checker through it. The checker judges and changes nothing.
+`review` drafts as hard as it can on purpose, so it overreaches: findings that don't hold, that overstate, or that tell the author what to do. Without a second, independent look, you'd be the one pushing back on each of them.
 
-## Scope
+## What
 
-In: the review checker: what it keeps, narrows, downgrades, rewords and withdraws, how it treats thread replies, its reply, and who calls it.
-Out: how `review` drafts findings and finds spec mismatches (the review spec).
+`review` calls it on the findings it drafts, for a PR or for local changes, and `build` calls it on the findings of the local review it asks for each task. It gets the findings, the diff, the code, and whatever the change was reviewed against (threads, specs, the ticket, the task, findings or the request), and none of the conversation behind them. It edits no files.
 
 ## Behaviour
 
-```gherkin
-Scenario: A spec mismatch stays blocking
-  Given review drafted a blocking finding that a PR makes sessions last 24 hours while docs/specs/auth.md says 1 hour
-  When the checker rechecks it and the claim holds
-  Then it keeps the finding blocking
+- A finding is withdrawn unless its cited code is there, its claim holds when traced afresh, it comes from this change, it matters, and it needs the author's answer (praise, preferences, duplicates and linter rules don't).
+- An overstated finding is narrowed to what the code shows.
+- Blocking stays only for broken behaviour, security, breakage elsewhere, an unmet ticket criterion, or code no longer matching a spec's behaviour or Decision the change didn't update; anything else is downgraded.
+- A finding labelled anything but issue or question is relabelled.
+- A finding whose ask isn't one question, or that tells a fix anywhere, even as a question, is reworded to ask about the problem, with the fix offered after it as one way forward.
+- An offered way forward that isn't there or wouldn't work is cut, and a wrong example fixed or dropped, keeping the finding.
+- A thread's finding is never withdrawn: its summary of the thread is corrected, and a reply that doesn't hold up becomes a note that there's nothing to add, so nothing posts.
+- It never adds findings of its own.
 
-Scenario: Other blocking findings outside the bar are downgraded
-  Given review drafted a blocking finding that an edge case has no test
-  When the checker rechecks it
-  Then it downgrades the finding to non-blocking, since only broken behaviour, security, breakage elsewhere or a spec mismatch the change didn't update stays blocking
+## Sketch
 
-Scenario Outline: A finding that doesn't hold is withdrawn
-  Given review drafted a finding <problem>
-  When the checker rechecks it against the code, and against what was asked where the finding rests on it
-  Then it withdraws the finding, and review never writes it
+Its reply, one line per finding, then every finding it didn't withdraw, word for word but for its changes:
 
-  Examples:
-    | problem                                              |
-    | about a problem the code already had before the change |
-    | citing code that isn't there                         |
-    | whose claim doesn't hold                             |
-    | that doesn't matter                                  |
-    | that repeats another finding                         |
-    | that's a preference                                  |
-    | that praises the code                                |
-    | that a linter rule already covers                    |
-
-Scenario: An overstated finding is narrowed
-  Given review drafted a finding that a change breaks checkout for every cart
-  And the code shows only empty carts reach the broken path
-  When the checker rechecks it
-  Then it keeps the finding, narrowed to empty carts
-
-Scenario Outline: A finding that doesn't ask is reworded
-  Given review drafted a finding <problem>
-  When the checker rechecks it and the problem holds
-  Then it keeps the finding, <reworded>
-
-  Examples:
-    | problem                                                           | reworded                                                                                         |
-    | labelled suggestion                                               | labelled issue or question, whichever fits                                                       |
-    | whose ask is a statement: "This breaks checkout for empty carts." | asking "Could an empty cart reach checkout here?"                                                |
-    | whose ask is a fix: "Could you add a null check here?"            | asking "What would you like to happen when there's no user?", then offering the null check after |
-    | whose summary says how to fix it                                  | with the fix moved after the ask, offered as one way forward                                     |
-
-Scenario Outline: An offered way forward is kept only if it holds
-  Given review drafted a finding that offers requireUser() in auth.ts as one way forward
-  And <what the code shows>
-  When the checker rechecks it and the problem holds
-  Then it keeps the finding, <with the offer>
-
-  Examples:
-    | what the code shows                                   | with the offer |
-    | requireUser() is there and returns early for no user  | offer kept     |
-    | there's no requireUser() in auth.ts                   | offer cut      |
-
-Scenario Outline: A thread reply that doesn't hold up says there's nothing to add
-  Given review drafted a reply for an open thread <problem>
-  When the checker rechecks it
-  Then it keeps the thread's finding, with a note that there's nothing to add in place of the reply, so nothing posts
-
-  Examples:
-    | problem                                   |
-    | whose claim doesn't hold                  |
-    | that repeats what the thread already says |
-
-Scenario: A wrong example is fixed, not the finding
-  Given a finding holds, but its example is wrong
-  When the checker rechecks it
-  Then it fixes or drops the example and keeps the finding
-
-Scenario: Its reply
-  Given the checker rechecked three findings
-  When it replies
-  Then it gives one line per finding, in order, saying kept, narrowed, downgraded, reworded, nothing to add or withdrawn and why in a few words
-  And then every finding it didn't withdraw, word for word apart from those changes and fixed examples
-  And it adds no findings of its own
+```text
+1. kept: an empty cart reaches the null total
+2. downgraded: a missing test isn't broken behaviour
+3. withdrawn: the code had this before the change
 ```
 
 ## Decisions
 
-- **Spec mismatches are part of the blocking bar**: Why: `review` blocks them, and a checker with an older bar would quietly undo that.
-- **Only `review` and `build` call it**: Why: `daily` reaches it only through `review`. Not a direct call from `daily`, or from every skill whose work it touches.
+- **The blocking bar matches `review`'s**: Why: `review` blocks unmet criteria and spec mismatches, and a checker with an older bar would quietly undo that.
+- **Only `review` and `build` call it**: Why: `daily` reaches it only through `review`. Not a direct call from every skill whose work it touches.
 - **Its result is final**: Why: a reviewer who argues with the checker brings back the bias it was there to remove. Not a second round with the reviewer.
-- **Overstated findings are narrowed, and ones that don't ask are reworded, not withdrawn**: Why: the problem under the wording is still real, and the reviewer drafts boldly on purpose. Not withdrawing a finding for its wording.
-- **Thread findings are never withdrawn**: Why: every open thread keeps its finding, so you can see it was read; a reply that fails says there's nothing to add instead. Not dropping the thread from the review.
+- **Overstated findings are narrowed, and ones that don't ask are reworded, not withdrawn**: Why: the problem under the wording is still real, and the reviewer drafts boldly on purpose.
+- **Thread findings are never withdrawn**: Why: every open thread keeps its finding, so you can see it was read. Not dropping the thread from the review.
+
+## Out of scope
+
+- How `review` drafts findings and finds spec mismatches.

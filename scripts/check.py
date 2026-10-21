@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
 orphan files, agents and bin/ scripts, executable scripts run only from bin/ or their own skill, skill and agent word
-budgets, pointers to another skill's rules, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
+budgets, pointers to another skill's rules, no hardcoded spec folder, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
 running lint-md.sh, every skill carrying the voice line, and proposed-improvement statuses."""
 import itertools, json, os, re, shutil, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
@@ -70,6 +70,8 @@ def check_skills():
             if not target.exists() and not (target in run and target.suffix != ".md"):
                 errors.append(f"{rel}: links to missing {os.path.relpath(target, root)}")
             linked.add(target.resolve())
+        if "docs/specs" in t:  # repos keep specs elsewhere too: docs/superpowers/specs, openspec/specs…
+            errors.append(f"{rel}: names docs/specs: find a repo's spec folders with bin/specs-dir.sh")
         if m := re.search(r"(?:as|per) the `[\w-]+` skill \w+", t):
             errors.append(f"{rel}: '{m.group(0)}' points at a skill that may not be loaded: invoke that skill, or inline the rule")
         fm = re.match(r"---\n(.*?)\n---\n", t, re.S)

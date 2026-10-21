@@ -1,53 +1,40 @@
 # Ticket
 
-Before `ticket` files a new ticket, it searches the same project's tickets, open and closed, and acts on the closest match: it adds your case to an open ticket about the same problem, or links a closed or merely related one. One problem stays in one place instead of spreading across duplicates.
+`ticket` files, finds and updates GitHub, GitLab and Jira tickets from your session, for you and other skills. Its tickets say what and why, never how, and it checks for the same problem before filing.
 
-## Context
+## Why
 
-`ticket` files, finds and updates GitHub issues, GitLab issues and Jira work items through each tracker's CLI, and writes directly without showing a draft first. Its tickets say what people see and why it matters, never how to fix it. Each write changes only the ticket you named, never several through a query, and adds links only when asked, except that a parent's children always get their parent.
+Filing by hand means leaving your session, and the duplicate search is easy to skip, so one problem spreads across tickets. A ticket that names a fix ties whoever picks it up to a guess.
 
-## Scope
+## What
 
-In: searching before every new ticket; acting on the match; a named repo other than the current folder's; the README's `ticket` section, which says it looks for a match before filing: an open ticket about the same problem gets your case as a comment, and a closed or merely related one gets linked.
-Out: searching before other writes; searching other repos or projects; follow-up tickets for a match in progress; editing a match's acceptance criteria; giving the match the request's parent or links; filing text another skill hands over; an install link or upgrade hint when a tracker's CLI is missing or too old.
+It works through `gh`, `glab` and `acli`, in the current repo or one you name. `plan` and `review` read tickets through it, and `plan` writes its own with `ticket`'s templates, filing them through it when you ask.
 
 ## Behaviour
 
-```gherkin
-Scenario Outline: Ticket looks for a match before filing
-  Given you file "Empty cart checkout shows 0.00"
-  And <match>
-  When ticket searches the project's tickets in every state by the problem's key terms, then files it
-  Then <result>
-  And the reply says what it did and links each ticket it touched
-
-  Examples:
-    | match                                                 | result                                                                    |
-    | no ticket is about the same thing                     | it files a new ticket                                                     |
-    | closed #99 is about the same problem                  | it files a new ticket linked to #99 as related                            |
-    | open #120 "Cart badge count lags" is only related     | it files a new ticket linked to #120 as related                           |
-    | open #142 is about the same problem                   | it comments the new case on #142, changing nothing else, and files nothing |
-    | open #142 is about the same problem, but the tracker refuses the comment | it files a new ticket, naming #142 as related in its body |
-    | closed #99 is about the same problem, and the tracker has no native related link | it files a new ticket, with a line at the end of its body naming #99 as related |
-    | you file #40's children, and #40 is open              | each child is filed under #40, with no related links to #40 or siblings   |
-    | the search fails                                      | it files a new ticket and says the search didn't run, with the error      |
-
-Scenario: Tickets the request names never match
-  Given you file "Empty cart checkout shows 0.00" linked to #77
-  And #77 is about the same problem
-  When ticket files it
-  Then #77 isn't treated as a match, and the new ticket is filed linked to #77 as asked
-
-Scenario: Filing in another repo
-  Given you're in ~/code/shop
-  When you file a bug in acme/web
-  Then ticket searches acme/web's issues and files it there
-```
+- It picks the tracker from a Jira key, a link, a tracker you name or your branch's ticket; a bare `#123` means origin's host. Otherwise it asks once.
+- Lists and searches only read, showing up to 20 tickets.
+- It writes straight away (a draft only if asked), asking only for what it can't work out, like a Jira project key. New tickets are assigned to you.
+- Titles read `<type>: <Summary>`; on Jira, the summary alone, with the type as the work item's.
+- A feature's body has Description, Why and Acceptance criteria. A bug's has Description, Steps to reproduce, Expected, Actual and Acceptance criteria. A task's is shaped like a feature's. Jira gets no checkboxes.
+- Filing, or writing tickets for a plan with a tracker ticket, reads the project's three latest of that kind; when they share a shape, the new one follows it, keeping the template's content.
+- Nothing it writes names causes, code, files or fixes, even when you do.
+- Before filing, it searches the project's open and closed tickets. An open one about the same problem gets your case as a comment instead; a closed or only related one is linked to the new ticket. Tickets the request names, like its parent, never count.
+- Links are the tracker's own where it has them, else a line ending the body, like `Related: #47`. A parent's children always get their parent; other links and labels only when you ask.
+- Edits change only what you named, one ticket per write, never through a query; nothing is deleted.
+- The reply says what it did and links each ticket it touched.
 
 ## Decisions
 
-- **Every ticket in the project counts, open or closed**: Why: a closed match is history worth linking, and an open one may already hold the work. Not other projects: a match there would touch work you don't own.
-- **Act on the match without asking**: The match counts as the ticket you named for that comment, and the related links a match calls for need no asking. Why: duplicates waste more time than a comment you can edit, and `ticket` already writes directly.
-- **An open ticket about the same problem gets a comment, nothing more**: Why: the case lands where the work is, without changing a ticket someone may be building against. Not a follow-up ticket or an edit to its acceptance criteria.
-- **A match it can't comment on gets a new ticket instead**: Why: the new information has to land somewhere. Not stopping to ask.
-- **A failed search still files**: Why: losing the report is worse than a possible duplicate, and the reply says the search didn't run.
+- **One template per kind**: Why: a bug needs steps and what happened against what was expected, so someone can see it; a feature needs its why.
+- **The team's shape, when its latest tickets share one**: Why: tickets read like the project's own, and a ticket `plan` writes files without a rewrite.
+- **What and why, never how**: Why: whoever picks it up chooses the fix.
+- **Every ticket in the project counts, open or closed**: Why: a closed match is history worth linking, and an open one may already hold the work.
+- **An open match gets a comment, without asking, and nothing more**: Why: duplicates cost more than a comment you can edit, and a ticket someone may be building on stays as it was.
+- **A refused comment or a failed search still files**: naming the match, or saying the search didn't run. Why: losing the report is worse than a possible duplicate.
+
+## Out of scope
+
+- Searching before other writes, or in other projects.
+- Follow-up tickets for a match, editing its acceptance criteria, or giving it the request's parent or links.
+- An install link or upgrade hint when a tracker's CLI is missing or too old.
