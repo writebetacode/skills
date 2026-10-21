@@ -4,25 +4,25 @@
 
 ## Why
 
-What needs you is spread across hosts, trackers, chat and this week's repos, and reviews you started go stale as authors push. Writing up a day means piecing it together from sessions and commits.
+What needs you is spread across hosts, trackers, chat and this week's repos. Reviews you started go stale as authors push. Writing up a day means piecing it together from sessions and commits.
 
 ## Behaviour
 
 - Claude never starts it on its own.
 - The morning lists what's waiting, each linked with why: reviews, replies owed, security, your PRs, tickets, and leftovers from your last recap or last day's sessions.
-- A PR you reviewed with `review` is re-reviewed into its review file, ready to post; one reviewed otherwise is listed once it has new pushes.
-- Unanswered comments on your PRs are listed with what each asks.
-- Security alerts of any severity and Dependabot or Renovate PRs in your active repos are listed, one item per vulnerable package.
-- It proposes a numbered plan (reviews and replies, security, your PRs closest to merging, then tickets by priority), each item naming the skill that starts it, settled with you one question at a time.
-- The recap is a past-tense bullet of 15 words or fewer per thing done or decided, with no secrets, paths or code; plan items it misses carry over.
+- A PR you reviewed with `review` gets re-reviewed into its review file, ready to post. One reviewed another way is listed once it has new pushes.
+- It lists unanswered comments on your PRs, with what each asks.
+- It lists security alerts of any severity and Dependabot or Renovate PRs in your active repos, one item per vulnerable package.
+- It proposes a numbered plan: reviews and replies, security, your PRs closest to merging, then tickets by priority. Each item names the skill that starts it. You settle the plan together, one question at a time.
+- The recap is a past-tense bullet of 15 words or fewer per thing done or decided, with no secrets, paths or code. Plan items it misses carry over.
 - With a notes file set, the plan and recap go into that day's note, unless you ask for the recap elsewhere.
-- A source it can't reach is named as not checked.
+- It names any source it can't reach as not checked.
 - With no sources set, it reads the CLIs you're logged in to and suggests `/wbc:setup`.
 - It never posts, replies, merges or moves a ticket.
 
 ## Sketch
 
-`{date}` becomes the day; a source beyond GitHub, GitLab and Jira names its connected tool.
+`{date}` becomes the day. A source beyond GitHub, GitLab and Jira names its connected tool.
 
 ```md
 ## Daily
