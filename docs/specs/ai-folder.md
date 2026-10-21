@@ -1,67 +1,52 @@
 # The .ai folder
 
-Skills keep the files they make for you (plans, findings, reviews) in one gitignored `.ai/` folder in each repo's main checkout, never inside a linked worktree, so you always know where to look and removing a worktree loses nothing. A bare repo, which has no main checkout, is the one exception.
+Skills keep the files they make for you (plans, research findings, reviews) in one gitignored `.ai/` folder in each repo's main checkout, so you always know where to look and removing a worktree loses nothing. A bare repo, which has no main checkout, is the one exception.
 
-## Context
+## Why
 
-A repo can have a main checkout and any number of linked worktrees, including the ones Claude Code makes for worktree sessions under `<checkout>/.claude/worktrees/`. A bare repo has no main checkout. A common bare layout keeps a folder like `~/code/shop` holding the bare git folder `.bare/`, a `.git` file pointing to it, and the worktrees (`~/code/shop/main`, …) side by side. When Claude Code isolates a session in a worktree, it refuses that session's file tools on paths in the main checkout, while a plain shell write there goes through your permission settings and, when it's on, the sandbox.
+A repo can have a main checkout and many worktrees, including Claude Code's under `.claude/worktrees/`. Files kept in a worktree vanish with it, unseen by other sessions, so a plan written in one couldn't be built from another.
 
-In the repos they work on, skills keep their working files only under `.ai/<area>/` (`plan`, `research`, `reviews`), with `.ai/.gitignore` holding `*`. The other files they write in a repo are ones you commit (code, specs) and `setup`'s `CLAUDE.local.md`, and they never write under `.claude/` or `.git/`, which Claude Code protects, apart from code in a Claude Code worktree.
+## What
 
-## Scope
-
-In: where `.ai/` lives; which repo a folder belongs to; writing into the main checkout from a worktree session, for `.ai/` and for `setup`'s `CLAUDE.local.md`; the AGENTS.md rule on where skills write; the README's mentions of `.ai/` (plans, findings and reviews stay in the repo's main folder, shared by every worktree).
-Out: the throwaway code worktrees `review` and `research` make; a refused-write fallback in `daily`, which writes no `.ai/` files itself.
+`plan` keeps each plan in `.ai/plan/<name>/`: its specs, research, tickets, tasks and status. `research` keeps findings in `.ai/research/<name>/`, and `review` keeps one file per pull request in `.ai/reviews/`. `build` works from the plans there. Only specs leave `.ai/`: `build` commits each into the repo's spec folder with its change. Beyond that, skills write only the code and docs you commit, and `setup`'s gitignored `CLAUDE.local.md`.
 
 ## Behaviour
 
-```gherkin
-Scenario Outline: Files land in the repo's main checkout
-  Given a session in <folder>, <which>
-  When it makes a plan
-  Then the plan lands under <lands>, never inside a git folder or .claude
+- From any worktree, Claude Code's included, files land in the main checkout's `.ai/`.
+- A removed Claude Code worktree's folder still maps to its repo.
+- A submodule gets its own `.ai/`, in the superproject's main checkout when it's checked out there, else where it is.
+- A bare repo's worktree, or a repo whose git folder lives elsewhere, keeps `.ai/` in its own top folder.
+- Outside a repo, `.ai/` goes in the folder itself.
+- In a git folder, like `.git` or a bare layout's `.bare`, or a bare repo's own folder, skills refuse to write `.ai/` and say why.
+- The first write adds `.ai/.gitignore` holding `*`, so git ignores all of `.ai/`; if that fails, the skill writes it itself and carries on. Looking something up creates nothing.
+- In a worktree session, Claude Code refuses file tools in the main checkout, so skills write there with shell commands, which may ask your permission. Refused again, it says it can't reach the main checkout and stops.
+- `setup` writes each repo's `CLAUDE.local.md` in its main checkout the same way.
+- `main-checkout.sh [path]` prints a folder's main checkout, and `ai-dir.sh [--write] <area> [path]` its `.ai/<area>/` folder, `--write` making sure of the ignore file first. Both fail where there's no checkout to write in.
 
-  Examples:
-    | folder                            | which                                                     | lands                             |
-    | ~/code/shop-cart                  | a linked worktree of ~/code/shop                          | ~/code/shop/.ai/plan/             |
-    | ~/code/shop/.claude/worktrees/fix | a Claude Code worktree of ~/code/shop                     | ~/code/shop/.ai/plan/             |
-    | ~/code/shop/main                  | a worktree of the bare repo ~/code/shop                   | ~/code/shop/main/.ai/plan/        |
-    | ~/code/shop/lib                   | a submodule of ~/code/shop                                | ~/code/shop/lib/.ai/plan/         |
-    | ~/code/shop-cart/lib              | a submodule in a linked worktree of shop                  | ~/code/shop/lib/.ai/plan/         |
-    | ~/code/shop-cart/vendor           | a submodule in a linked worktree, not checked out in shop | ~/code/shop-cart/vendor/.ai/plan/ |
-    | ~/code/blog                       | a repo whose git folder lives somewhere else              | ~/code/blog/.ai/plan/             |
-    | ~/notes                           | in no repo                                                | ~/notes/.ai/plan/                 |
+## Sketch
 
-Scenario: A removed Claude Code worktree still maps to its repo
-  Given a session ran in ~/code/shop/.claude/worktrees/fix-cart, since removed
-  When a skill asks which repo that folder belongs to
-  Then the answer is ~/code/shop
+```
+$ bin/ai-dir.sh --write plan ~/code/shop/.claude/worktrees/fix-cart
+/Users/you/code/shop/.ai/plan
 
-Scenario: Git ignores everything in .ai
-  Given ~/code/web has no .ai folder
-  When a skill writes its first review file there
-  Then .ai/.gitignore holding * is written first
-  And if writing it fails, the skill writes it itself, then carries on
-
-Scenario: Looking up .ai changes nothing
-  Given ~/code/web has no .ai folder
-  When a skill looks there for a review file
-  Then no .ai folder or ignore file is created
-
-Scenario: Nothing is written where there's no checkout
-  When a skill runs in a git folder, like ~/code/shop/.git or ~/code/shop/.bare, or in the bare layout's ~/code/shop
-  Then it refuses to write .ai there and says why
-
-Scenario: A worktree session writes .ai with shell commands
-  Given a session Claude Code isolates in ~/code/shop/.claude/worktrees/fix-cart
-  When Claude Code refuses to write a plan's file, or .ai/.gitignore, into ~/code/shop
-  Then the skill writes it under ~/code/shop/.ai/ with shell commands, never under the worktree's .ai/
-  And if the shell write is refused too, it says it can't reach the main checkout and stops
+~/code/shop/.ai/
+  .gitignore                     *
+  plan/empty-cart-total/         status.md, specs/, research/, tickets/, tasks/
+  research/flaky-cart-test/      findings.md
+  reviews/142.md
 ```
 
 ## Decisions
 
-- **`.ai/` lives in the main checkout**: Why: one place to look per repo, and worktrees come and go. Not per worktree.
+- **`.ai/` lives in the main checkout, even when only a shell can reach it**: never the worktree's own. Why: one place to look per repo, and worktrees come and go, taking any copy with them.
 - **A bare repo falls back to the current checkout**: Why: there's no main checkout, and `.ai/` must never land in a git folder.
-- **Outside a repo, `.ai/` goes in the folder itself**: Why: skills plan and research in folders that aren't repos too. Not refusing.
+- **Outside a repo, `.ai/` goes in the folder itself**: Why: skills plan and research in folders that aren't repos too.
 - **The ignore file is written only before a write**: Why: a lookup must leave the repo as it was.
+- **Nothing under `.claude/` or `.git/`**: code in a Claude Code worktree aside. Why: Claude Code protects them, so every write there prompts or is denied.
+- **Only specs leave `.ai/`**: Why: a spec is the team's record of what an area does, which `review` holds pull requests to; plans, findings and reviews are your working files.
+
+## Out of scope
+
+- The throwaway worktrees `review` and `research` check code out into.
+- Where a repo keeps its specs (the shared scripts spec).
+- A refused-write fallback in `daily`, which writes no `.ai/` files itself.

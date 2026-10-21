@@ -1,9 +1,7 @@
-ACs: the plan's `specs/` alone (upgrades: below); how: `research/`, `findings.md`, the code, the user's choices. Per spec, only its change since its `spec:` line commit (`git show <commit>:docs/specs/<area>.md` in its repo; missing → new): new → every scenario; edited → each scenario added or changed in behaviour, each other behaviour change (observable check), each removal Scope's Out names (AC: behaviour gone); slimmed, reworded or merged → none. Each is an AC of exactly one task; never a tests-only or code-only task.
-
-`tasks/NN-<mr>.md`: terse. MR = one branch that works and ships alone. One repo per MR; spanning repos → one MR per repo, each naming the others in `with:`.
+`tasks/NN-<mr>.md`, beside its ticket: terse; the how. MR = one branch that works and ships alone. One repo per MR; spanning repos → one MR per repo, each naming the others in `with:`. How: `research/`, `findings.md`, the code, the user's choices; reuse what the repo has, the way it does things now.
 
 ```
-# <NN>: <MR title>
+# <NN>: <ticket title>
 
 repo: <name> <local path>
 branch: <type>/<ticket>-<short-name>
@@ -16,11 +14,12 @@ from: <branch | none>
 
 <how: components and where, interfaces, data, errors, tests; why behind non-obvious choices>
 
-- [ ] <spec scenario name | observable check when no scenario fits>
+- [ ] <one of its ticket's ACs, verbatim>
 ```
 
+- Each of the ticket's ACs under exactly one task; every task has one. Never a tests-only or code-only task.
 - `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch name, from `<this skill's base directory>/../../bin/default-branch.sh <repo path>`: ✓ `base: trunk`, never `origin/trunk`.
 - `repo:` path: `<this skill's base directory>/../../bin/main-checkout.sh <path>`.
-- `branch:` ticket from `status.md`: ✓ `feat/abc-77-login-lockout`.
-- Each dependency research shows the change needs newer (an API, a bug it'd hit, a security fix, a deprecated version; never unrelated): its own task, first in the MR needing it; breaking changes reaching untouched code → its own MR first. Body: package, both versions, why, each breaking change with `path:line`. ACs: `- [ ] <package> <to>: suite passes (the bump is config: no new test)`, plus one tested AC per breaking change.
+- `branch:` ticket: the MR's on `status.md`, else its `ticket:`: ✓ `feat/abc-77-login-lockout`; none → `<type>/<short-name>`.
+- Each dependency research shows the change needs newer (an API, a bug it'd hit, a security fix, a deprecated version; never unrelated): its own task, first in the MR needing it, with [tickets.md](tickets.md)'s bump ACs; breaking changes reaching untouched code → its own MR and ticket first. Body: package, both versions, why, each breaking change with `path:line`.
 - Another repo's path: Related repos; else ask.

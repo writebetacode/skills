@@ -1,104 +1,44 @@
 # Shared scripts
 
-Answers more than one skill needs (which repos relate, which host a repo is on, its default branch, Markdown lint results) each come from one shared script in the plugin's `bin/` folder, so every skill gets the same answer and none reaches into another skill's folder. It's for the skills that run them and for whoever maintains the skills.
+The plugin's `bin/` folder holds the scripts more than one skill runs, so each shared answer has one source: a repo's related repos, host, default branch and spec folders, and whether Markdown lints clean. It's for the skills that run them and whoever maintains the skills.
 
-## Context
+## Why
 
-`scripts/check.py` checks the skills before each commit: links, word budgets, executable scripts, files nothing points at. In this repo, a markdownlint hook runs `lint-md.sh` on the Markdown Claude changes.
+Skills working out the same answer their own way drift apart: one finds a repo's specs, another starts a second folder beside them. And outside this repo, whose lint hook runs only here, nothing linted the Markdown the skills wrote.
 
-## Scope
+## What
 
-In: the answers shared scripts give skills (related repos, a repo's host, its default branch, Markdown linting); which skills lint the Markdown they write; `check.py`'s checks of shared scripts and of the skills' Markdown templates; the AGENTS.md rules on skill scripts (shared ones live in `bin/`), on where a mechanical rule lives (a `bin/` script) and on linting the Markdown skills write (`lint-md.sh`).
-Out: finding a folder's main checkout and its `.ai/` folder (the ai-folder spec) and cleaning up merged branches (the pr spec); scripts only one skill runs, which stay in that skill's folder; `setup` editing Related repos lines (the setup spec); a skill or script running a script from another skill's folder.
+Each script prints one answer for any skill that asks. `scripts/check.py` checks, before each commit here, that skills run them the right way.
 
 ## Behaviour
 
-```gherkin
-Scenario Outline: The check catches a script run the wrong way
-  Given <problem>
-  When you run scripts/check.py
-  Then it fails, naming <named>
+- `related-repos.sh [path]` prints the Related repos entries in the main checkout's `CLAUDE.md` and `CLAUDE.local.md`, tab-separated: name, absolute path, how they relate. Outside a repo, it reads the folder's own files.
+- An entry with no path gets the folder named for the repo beside the main checkout; missing paths still print.
+- `host.sh` prints `github` or `gitlab` for origin. When it can't tell, the skill asks you, or `daily` marks the repo not checked.
+- `default-branch.sh [path]` prints origin's default branch, read fresh from origin.
+- `specs-dir.sh [path]` prints the repo's spec folders relative to its root, most specs first: each outermost folder named `specs` holding tracked Markdown, like `docs/superpowers/specs` or `openspec/specs`. With none, it prints `docs/specs`; outside a repo, it fails.
+- `plan` puts a new spec in the first folder printed; `plan`, `build` and `review` find specs in all of them.
+- `lint-md.sh <file>…` fixes what it can in just those files, then prints each problem left as `<file>:<line> <rule>`.
+- `plan`, `research`, `review`, `release`, `prompt-writer` and `setup` lint the Markdown they write in a repo; `build` lints only plan files and specs.
+- When a script fails, the skill tells you why in the script's words.
+- `check.py` fails, naming the file, on a shared script that's missing, not executable or run by nothing; a skill running another skill's script, writing `.ai/` files without `lint-md.sh`, or naming `docs/specs`; and a template markdownlint rejects, placeholders like `<name>` aside. Without `npx`, it skips templates and says so.
 
-  Examples:
-    | problem                                                        | named                            |
-    | a skill runs bin's related-repo.sh, a name that doesn't exist  | the skill and the missing script |
-    | a skill runs a bin script that isn't executable                | the skill and the script         |
-    | nothing runs a script in bin                                   | the script                       |
-    | plan runs a script from review's folder                        | plan's file and the script       |
-    | a skill writes .ai files but never runs lint-md.sh             | the skill                        |
+## Sketch
 
-Scenario: Related repos have one parser
-  Given shop's CLAUDE.local.md lists "- acme/web (../web): calls /api/cart/*" under Related repos
-  And its CLAUDE.md lists "- acme/api: serves the cart", with no path
-  When plan, research, review or daily asks for shop's related repos, from shop or any worktree of it
-  Then each gets acme/web with web's absolute path, resolved from shop's main checkout, and how it relates
-  And acme/api with the path of the folder api beside shop's main checkout
-  And a listed path that doesn't exist still comes back, for the skill to check
-
-Scenario: Related repos outside a repo
-  Given ~/notes isn't in a repo, and its CLAUDE.md lists Related repos
-  When a skill asks for ~/notes' related repos
-  Then it gets the entries from ~/notes' own files
-
-Scenario: A repo's default branch comes fresh from origin
-  Given shop's default branch on origin was renamed from master to main
-  When a skill needs shop's default branch
-  Then it gets main, read from origin just now
-
-Scenario Outline: A repo whose host can't be told
-  Given web's origin URL doesn't say GitHub or GitLab, and neither gh nor glab knows it
-  When <skill> needs web's host
-  Then <result>
-
-  Examples:
-    | skill   | result                                       |
-    | pr      | it asks you which host web is on             |
-    | daily   | it marks web as not checked and carries on   |
-
-Scenario: A shared script's failure is passed on
-  Given origin can't be reached
-  When pr asks for shop's default branch
-  Then it tells you why it couldn't get it, in the script's words
-
-Scenario: Markdown a repo commits follows the repo's rules
-  Given shop's .markdownlint.jsonc limits lines to 80 characters
-  When build writes a spec with a 120-character line into shop's docs/specs/
-  Then lint-md.sh reports that line, and build wraps it before committing
-  And lint-md.sh lints only that spec, even if shop's config names files to lint across the repo
-
-Scenario: Markdown git ignores follows the plugin's rules
-  Given shop's .markdownlint.jsonc limits lines to 80 characters
-  When plan writes a status.md with a 120-character line and no blank line under a heading into shop's .ai/plan/
-  Then lint-md.sh adds the blank line and says nothing about the line's length
-
-Scenario Outline: Skills lint the Markdown they write, but never your own files
-  When <skill> writes <file>
-  Then it <does>
-
-  Examples:
-    | skill                                                | file                                       | does                                   |
-    | plan, research, review, release or prompt-writer     | a Markdown file in a repo                  | runs lint-md.sh, then fixes what's left |
-    | setup                                                | a repo's CLAUDE.local.md                   | runs lint-md.sh, then fixes what's left |
-    | build                                                | a spec in docs/specs/ or a plan folder file | runs lint-md.sh, then fixes what's left |
-    | build                                                | any other doc in the repo                  | leaves it to the repo's own linter     |
-    | daily                                                | your notes file                            | leaves it as written                   |
-    | setup                                                | ~/.claude/CLAUDE.md                        | leaves it as written                   |
-
-Scenario: A template that fails markdownlint fails the check
-  Given a skill's template has a heading with no blank line under it
-  When you run scripts/check.py
-  Then it fails, naming the skill file, the line and the rule
-  And a placeholder like <name> in a template never fails it
-
-Scenario: No npx, no template check
-  Given npx isn't installed
-  When you run scripts/check.py
-  Then it skips the templates and says so
+```
+$ bin/specs-dir.sh ~/code/shop
+docs/superpowers/specs
+docs/specs
 ```
 
 ## Decisions
 
-- **Shared scripts in the plugin's `bin/`**: Why: no skill reaches into another skill's folder, and each answer still has one source. Not a copy per skill: copies drift. Not living in whichever skill used it first: every other caller then depends on that skill's folder.
-- **Skills lint the Markdown they write**: Why: outside this repo, whose hook runs only here, nothing linted the specs, changelogs and plan files they wrote. Not a plugin hook: it would run on every edit in every repo and rewrite the user's own Markdown to rules they never picked.
-- **A repo's rules for files it commits, the plugin's for the rest**: A committed file follows the repo's own markdownlint setup, if it has one (a config file in the file's folder or any folder above it up to the repo's top, or markdownlint in its `package.json`), the way the repo's own linter would. Files git ignores (`.ai/`, `CLAUDE.local.md`), files outside a repo, and repos with no setup follow the plugin's rules, which are also this repo's. Why: committed files face the repo's CI, while `.ai/` files and `CLAUDE.local.md` hold formats the skills read back. Not always the plugin's rules: committed specs would fail the repo's linter. Not always the repo's: markdownlint's default 80-character limit would hard-wrap plan files, and a required title heading would break `status.md`.
-- **Your own files are never linted**: `daily`'s notes file and `~/.claude/CLAUDE.md`. Why: fixing them would rewrite lines you wrote.
+- **Shared scripts in the plugin's `bin/`**: Why: each answer has one source, and no skill reaches into another's folder. Not a copy per skill: copies drift.
+- **Spec folders are found, most specs first, from tracked Markdown only**: Why: repos keep specs in many places, and one script means every skill agrees. The folder with the most specs is the one the team uses, and a plan's own `specs/`, under the gitignored `.ai/`, isn't the repo's.
+- **Skills lint the Markdown they write, never your own files**, like your notes file and `~/.claude/CLAUDE.md`. Why: fixing yours would rewrite your lines. Not a plugin hook: it would run on every edit in every repo, rewriting your Markdown to rules you never picked.
+- **A repo's own markdownlint setup for files it commits, the plugin's rules for the rest**: Why: committed files face the repo's CI, while `.ai/` files and `CLAUDE.local.md` hold formats the skills read back. Markdownlint's default 80-character limit would hard-wrap plan files, and a required title heading would break `status.md`.
+
+## Out of scope
+
+- Finding a folder's main checkout and `.ai/` folder (the .ai folder spec), cleaning up merged branches (the pr spec), and `setup` editing Related repos lines (the setup spec).
+- Scripts only one skill runs, which stay in its folder.

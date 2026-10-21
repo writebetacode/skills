@@ -2,15 +2,20 @@
 
 The debug checker challenges a claimed bug cause against its evidence in a fresh context, so a cause that only fits the evidence doesn't pass as proven. It judges and changes nothing.
 
-## Context
+## Why
 
-`research` investigates bugs and hands the checker the problem, the claimed cause with its proof, the evidence notes and the repo, and nothing of the conversation behind them.
+Whoever found a cause has already read the evidence as fitting it. A second look that saw none of that reasoning catches a cause that only fits, before anyone builds a fix on it.
 
-## Scope
+## What
 
-In: who calls it.
-Out: everything else the checker does, until a change touches it; calls from `plan`.
+`research` calls it while chasing a bug, handing over the problem, the claimed cause with its proof, the evidence notes and the repo, and nothing of the conversation behind them.
+
+## Behaviour
+
+- It replies with a verdict (confirmed, weakened or rejected), a confidence, why in a few sentences, and the checks that would settle what's left.
+- It rereads the evidence each claim cites, and names any other cause the evidence fits as well.
+- A cause with no proof (the failure passing once only that cause is patched out) gets medium confidence at most.
 
 ## Decisions
 
-- **`research` is its only caller**: Why: debugging moved from `plan` to `research`. Not `plan`, which now hands bugs to `research`.
+- **Caller**: `research` only. Why: debugging moved from `plan` to `research`. Not `plan`, which now hands bugs to `research`.
