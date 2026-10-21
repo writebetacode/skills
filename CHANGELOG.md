@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.1 — 2026-10-21
+
+**Specs and tickets written in voice**
+[v0.9.0...v0.9.1](https://github.com/writebetacode/skills/compare/v0.9.0...v0.9.1)
+
+### Fixes
+
+- fix: Write specs and tickets in voice, and reword every spec ([88a3a1e](https://github.com/writebetacode/skills/commit/88a3a1e826ef4ab1c32052c8cffcb505cd8f33d3))
+
 ## 0.9.0 — 2026-10-21
 
 **Specs as white papers, with tickets per PR**
