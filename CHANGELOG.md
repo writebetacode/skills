@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.9.2 — 2026-10-22
+
+**Review replies read like a conversation**
+[v0.9.1...v0.9.2](https://github.com/writebetacode/skills/compare/v0.9.1...v0.9.2)
+
+### Fixes
+
+- fix: Reply in review threads as plain follow-ups, without "your call" ([48c5f5e](https://github.com/writebetacode/skills/commit/48c5f5efc8a00ee24835d2207369beb5389a62e9))
+
 ## 0.9.1 — 2026-10-21
 
 **Specs and tickets written in voice**
