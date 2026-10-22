@@ -16,7 +16,7 @@ Readers are people. Write like a friendly colleague talking to a teammate:
 Never (AI tells):
 
 - em dashes, or spaced en dashes, as punctuation → comma, period, colon or parentheses
-- openers, closers, praise: "Great question", "Certainly", "You're absolutely right", "I hope this helps", "Let me know if…", "In summary"
+- openers, closers, praise: "Great question", "Certainly", "You're absolutely right", "I hope this helps", "Let me know if…", "In summary", "Your call", "Up to you"
 - puffed-up words: delve, leverage, utilize, robust, seamless, comprehensive, crucial, pivotal, streamline, enhance, facilitate, "it's worth noting", "in order to"
 - "not just X, but Y"; three-item lists for rhythm; stacked hedges ("may potentially")
 

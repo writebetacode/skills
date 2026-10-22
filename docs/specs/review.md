@@ -19,7 +19,7 @@ It reviews a PR at its head, or uncommitted changes for `build`. A checker agent
 - A finding blocks only for broken behaviour, security, breakage elsewhere, an unmet ticket criterion, or code no longer matching a spec's behaviour or Decision the PR didn't update.
 - Work the PR's merge order or `build`'s brief leaves for later isn't flagged.
 - A spec the PR adds or changes, wherever it lives and whoever wrote it, is held to `plan`'s white-paper bar: build detail or criteria in it get a finding saying they belong in tasks or tickets. A sketched endpoint passes.
-- Every open thread, whoever started it, gets a finding saying where it stands, with a reply ready or a note that there's nothing to add.
+- Every open thread, whoever started it, gets a finding saying where it stands, with a follow-up reply ready or a note that there's nothing to add.
 - A re-review picks up new pushes and replies, and never raises a withdrawn finding again.
 - If the PR or a thread changed since the review, "post it" re-reviews and stops instead.
 - A local review also checks each criterion has a test failing without the change, and the code follows the spec's Decisions and the task's approach.
@@ -32,6 +32,7 @@ It reviews a PR at its head, or uncommitted changes for `build`. A checker agent
 - **Specs found by area, not path**: Why: specs aren't indexed by the files they cover.
 - **Comments on your own PR go to `build`**: Why: `review` keeps replies ready on PRs you reviewed. Not routing them by login.
 - **Every open thread gets a finding, even with nothing to add**: Why: you see where every thread stands, a teammate's too. A nothing-to-add note never posts.
+- **Thread replies are plain follow-ups, adding only what the thread lacks**: Why: everyone in it already knows the problem, so a labelled finding restating it reads like a form.
 - **Draft hard, set aside what isn't worth posting, then let a checker rein in the rest**: Why: holding back misses real problems, and weighing each finding as it's drafted spares the checker, which cuts what doesn't hold. Set-aside ones stay under Withdrawn, saying why.
 - **Withdrawn stays withdrawn**: Why: otherwise you'd withdraw it again after every push.
 - **Every name is followed into every related repo**: Why: a break outside the diff is easiest to miss, and judging a repo by its description misses consumers.
