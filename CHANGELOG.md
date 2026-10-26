@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.0 — 2026-10-25
+
+**One agent with skills over many subagents**
+[v0.9.2...v0.10.0](https://github.com/writebetacode/skills/compare/v0.9.2...v0.10.0)
+
+### Features
+
+- feat: Steer skills toward one agent, and shorten the README ([fdb3cb5](https://github.com/writebetacode/skills/commit/fdb3cb571ffc77dde9cc481bb4668c7c6fff2cd1))
+
 ## 0.9.2 — 2026-10-22
 
 **Review replies read like a conversation**
