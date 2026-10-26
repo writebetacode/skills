@@ -17,10 +17,14 @@ Readers are LLMs. Write the leanest text that produces the behavior:
 - Specify only what was asked or what the reader would get wrong:
   - ✗ `Find unused exports in lib/. Check named and default exports. Ignore tests and re-exports. Sort by file.`
   - ✓ `List exports in lib/ that nothing imports. Read only. One line each: path:line: name.`
+- A line of judgment over a list of rules:
+  - ✗ `No comments. One-line docstrings. No planning docs.`
+  - ✓ `Match the surrounding code's comment density, naming and idiom.`
 - Say each thing once, unless a different reader needs it (e.g. a subagent brief).
-- ✗/✓ example where it beats a rule.
+- Rules that clash, in the text or with the CLAUDE.md/AGENTS.md it loads with → keep one; which unclear → `same-page`.
+- ✗/✓ example only where a rule alone is misread: examples narrow what the reader tries.
 - Telegraphic: fragments, symbols, no filler.
-- Include context the reader lacks; subagents never see the caller's conversation.
+- Include context the reader lacks and can't look up; subagents never see the caller's conversation. Files → paths it reads itself, not pasted contents.
 - Output another agent parses → fixed template.
 - Draft, then cut again. Stop where a shorter line could be misread.
 

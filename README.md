@@ -54,17 +54,19 @@ Nothing is committed, pushed, posted or merged until you say so:
 
 `ticket`, `commit` and `pr` act as soon as you ask them to, since asking is your go. If you'd like to see a ticket before it's filed, ask `ticket` for a draft. Claude never starts `setup`, `daily` or `release` on its own.
 
+Plans, findings and review files stay on your machine in `.ai/` in the repo's main folder, ignored by git and shared by every worktree. From a worktree session, Claude writes them with shell commands, which may ask for your permission.
+
 ---
 
 ## Setup and daily skills
 
 ### wbc:setup
 
-Use it when you install the plugin, and again when you start on another repo, so `plan`, `research` and `review` know which of your repos depend on each other and where to find their logs and errors. It checks that the CLIs the skills need are installed and logged in, and that your git is new enough, works out from the code which of your repos use each other, suggests debug tools for each, and writes them into each repo's `CLAUDE.local.md` (kept out of git), along with `daily`'s sources in your global `~/.claude/CLAUDE.md`, once you confirm. Run it again any time to add repos; it also fixes the path of a repo that moved. Claude never starts it on its own: type `/wbc:setup`.
+Run it when you install the plugin, and again when you start on another repo. It checks the CLIs and logins the skills need, works out which of your repos depend on each other, suggests debug tools for each, and sets up `daily`'s sources, writing nothing until you confirm.
 
 ### wbc:daily
 
-Use it to start your day knowing what's waiting on you, and to end it with a recap you don't have to write. In the morning, `/wbc:daily` gathers review requests, failing CI, new comments on your pull requests, unanswered mentions and messages, security alerts and dependency updates in the repos you've worked in this week and the repos they rely on (checking each vulnerability across all of them), and your open tickets, then helps you settle on a plan for the day. Pull requests you reviewed with `review` that have new pushes or replies get re-reviewed into their review files, ready for you to look over and post. `/wbc:daily recap` (or `/wbc:daily recap yesterday`) turns that day's Claude Code sessions, commits and activity into short bullets and lists what carried over. It only reads, except for your notes file and those review files, and Claude never starts it on its own.
+Use it to start your day knowing what's waiting on you, and to end it with a recap you don't have to write. `/wbc:daily` gathers your reviews, replies owed, failing CI, security alerts and tickets into a plan for the day, and `/wbc:daily recap` turns the day's sessions and commits into short bullets.
 
 To choose your sources and notes file, run `/wbc:setup`, or add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
 
@@ -82,7 +84,7 @@ To choose your sources and notes file, run `/wbc:setup`, or add this to your glo
 
 ### wbc:branch
 
-Use it so every piece of work starts from the latest default branch, with a name your team can read at a glance, like `feat/abc-123-login-lockout`. It can stack on another branch instead, and it never stashes or throws away your changes.
+Use it to start new work from the latest default branch, with a name your team can read at a glance, like `feat/abc-123-login-lockout`. It can stack on another branch instead, and it never stashes or throws away your changes.
 
 ### wbc:commit
 
@@ -90,11 +92,11 @@ Use it so your history explains why things changed, without you writing the mess
 
 ### wbc:pr
 
-Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style, fills your template, squashes on merge by default, and handles drafts and stacked PRs that have to merge in order. It won't open one from your default branch or merge while your branch has commits you haven't pushed, and it deletes a local branch only once all its work has merged. It handles one PR per branch and never comments on its size.
+Use it to open, update or merge a pull request (or GitLab merge request) without hand-writing the title and description. It matches your repo's title style and template, and handles drafts and stacked PRs that have to merge in order.
 
 ### wbc:release
 
-Use it to ship a version without assembling the changelog by hand or forgetting a version file. It drafts the changelog and bumps the version wherever your project keeps it (`package.json` and its lockfile, `pyproject.toml`, `Cargo.toml`, a plugin manifest) for you to edit, then opens, merges, tags and publishes the release. Claude never starts it on its own: type `/wbc:release` to draft, edit the changelog, then `/wbc:release go` to ship. If it stops partway, say on a failing check, `/wbc:release go` picks up where it left off.
+Use it to ship a version without putting the changelog together by hand. `/wbc:release` drafts the changelog and bumps your version files for you to edit, then `/wbc:release go` merges, tags and publishes it, picking up where it left off if anything stops it.
 
 ---
 
@@ -102,13 +104,13 @@ Use it to ship a version without assembling the changelog by hand or forgetting 
 
 ### wbc:ticket
 
-Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving your session. Its tickets say what people see and why it matters, never how to fix it, so whoever picks one up is free to choose the fix. Before filing, it looks for the same problem among the project's open and closed tickets: an open one gets your case as a comment instead of a duplicate, and a closed or merely related one gets linked. Each kind of ticket has its own template, so a bug gets steps to reproduce with what you expected and what happened, and a feature gets the why behind it. When your team's recent tickets of that kind share a shape of their own, yours follows it. `plan` writes its tickets the same way.
+Use it to file, find or update a GitHub, GitLab or Jira ticket without leaving your session. It checks for an existing ticket before filing, and each kind has its own template that says what people see and why, never how to fix it.
 
 ### wbc:research
 
-Use it when you need an answer before you decide, or when something's broken and you need to know why. A plain question, like how something works here, which pattern to follow or which versions you're on, gets a cited report from the code, docs, web and connected tools, with nothing changed. When only trying will tell, like whether swapping a library breaks anything, it tries it in a throwaway worktree and reports what it ran and what happened, then deletes the worktree. For a bug, it first walks the failing code path one step at a time, rubber duck style, citing each line it read and flagging anything it only assumed, then proves the cause with an experiment in a throwaway worktree, has a separate checker agent poke holes in it, and writes the findings to `.ai/research/<name>/findings.md` in the repo's main folder (ignored by git, and shared by every worktree), ready to hand to `build` or `plan`. When `build` hits a CI test that passes on your machine, it hands it here: the test runs up to 50 times alone, then the whole suite a few times, to catch what makes it fail only sometimes, and the findings say whether the pull request caused it.
+Use it when you need an answer before you decide, or need to know why something's broken. It answers with citations from the code, docs and web, tries things in a throwaway worktree when only trying will tell, and for a bug, proves the cause and writes findings you can hand to `plan` or `build`.
 
-To tell it what it can use when it's chasing a bug, run `/wbc:setup`, or list your tools yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
+To tell it which logs, error trackers and databases it can read when it's chasing a bug, run `/wbc:setup`, or list them in the repo's `CLAUDE.md` or `CLAUDE.local.md`:
 
 ```md
 ## Debug tools
@@ -119,15 +121,15 @@ To tell it what it can use when it's chasing a bug, run `/wbc:setup`, or list yo
 
 ### wbc:plan
 
-Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists. It talks the request through with you, then writes or updates a spec for each area of your code the request touches. A spec is a short white paper you can read in a few minutes: what the area does, why it's worth having and how it behaves, with an endpoint or payload sketched in where that helps you picture it, and nothing about how it's built. There's one living spec per area (a skill, a service, a part of your app), named for it and kept true as each change lands, in whichever folder your repo already keeps specs in, like `docs/superpowers/specs/`, or `docs/specs/` if it has none. Once you approve them, it splits the work into tickets, one per pull request, each with its what, why and acceptance criteria, and splits each ticket into tasks, one per commit, which hold the how. Any dependency upgrade the change needs is its own task up front, and the specs ship in the first change. Before you see anything, a separate checker agent reads the whole plan: each spec against the spec rules, your repo's rules and the other specs, each ticket's criteria against the specs, and each ticket's tasks against its criteria. It also searches your code and your related repos, so the tasks reuse what's already there and follow the way your code does things now. Tickets stay in the plan folder until you ask to file them, and they're written with `ticket`'s templates, so they file as they are. In a codebase that has no specs yet, ask it to spec an area as it works today: you get a spec of what it does and why, approved like any other, so `review` can hold pull requests to it. Ask it to split a branch that grew too big to review, and it plans pieces that each ship alone, reusing the branch's code and tests; the branch itself is left as it was. Bugs and questions go to `research` first; hand it the findings and it plans the fix. Each plan folder, `.ai/plan/<name>/`, stays on your machine in the repo's main folder, ignored by git and shared by every worktree, so `build` finds it wherever you run it. In a worktree session, Claude Code keeps its file tools out of the main folder, so skills write there with shell commands, which may ask for your permission.
+Use it before anything bigger than a quick fix, so you and Claude agree on what you're building before any code exists. It talks the request through with you, writes a short spec for each area it touches, and once you approve them, splits the work into tickets (one per pull request) and tasks (one per commit).
 
 ### wbc:build
 
-Use it to turn a plan, a bug write-up or a small change into tested, reviewed pull requests while you stay in charge of every commit; anything unclear, or too big for one pull request, goes to `plan` first, so it never has to ask what you meant. A pull request someone else wrote goes to `review` instead. It builds one task at a time, tests first, has a fresh agent review each change and a separate checker agent confirm each finding, and waits for your go before committing. Changes you ask for at that point reshape only the tasks still to come, and one that would change a ticket or a spec goes back to `plan` first. Then it lands the pull requests: it rebases them after earlier ones merge, fixes failing CI from the job logs (a test that passes on your machine goes to `research` to find out why, and one the pull request didn't cause is reported with its findings) and drafts replies to review comments, and waits for your go again before it pushes or posts anything. Along the way, it fixes whatever its changes make untrue in your specs, README and other docs, in the same commit, and leaves your changelog's history alone.
+Use it to turn a plan, a bug's findings or a small change into tested, reviewed pull requests while you stay in charge of every commit. It builds one task at a time, tests first, has a fresh agent review each change and waits for your go before each commit or push, then gets the pull requests through CI and review.
 
 ### wbc:review
 
-Use it to get a thorough review of a pull request or merge request that you can edit before anyone sees it. It hunts for everything that should change (never praise), following every name the change touches (functions, fields, config keys, env vars, routes) to each place that uses it, here and in your related repos. Each finding is an issue or a question, asked warmly the way a good mentor would, so the review starts a conversation instead of telling the author what to do. When there's a known way forward, like a helper that already does the job, it offers it for the author to take or leave. Any finding that isn't worth the author's time is set aside under Withdrawn, with a note saying why. Then a separate checker agent, which sees none of the review's reasoning, rechecks the rest, cutting what doesn't hold up and toning down what's overstated. What's left lands in `.ai/reviews/<number>.md` in the repo's main folder (ignored by git, and shared by every worktree), under a link to the pull request, and nothing posts until you say so. Each line of code or spec a finding points to links to that line on GitHub or GitLab, at the commit it reviewed, so a finding can name the code, like `requireUser()`, without spelling out where it lives. Every open thread, whoever started it, gets a finding with a reply ready, or a note that there's nothing to add, which never posts. A reply reads like the next message in the conversation, in plain sentences, adding only what the thread is missing. It holds every pull request to its ticket's acceptance criteria and to your repo's specs, wherever they live: an unmet criterion is blocking, and so is code that no longer matches a spec the pull request didn't update, asked as a question about which should change. A spec the pull request adds or changes, whoever wrote it, is held to the same short white-paper standard `plan` writes to, so build detail in it gets flagged as belonging in tasks. Run it again to pick up new pushes and replies (anything withdrawn, by you or by the review, stays withdrawn), or point it at your uncommitted changes for a local review, against a spec if you have one.
+Use it to review a pull request, merge request or your uncommitted changes into a file you can edit before anything posts. It traces every name the change touches, in this repo and your related ones, holds the change to its ticket and your specs, and has a separate checker agent cut any finding that doesn't hold up.
 
 To have it check repos that depend on this one, run `/wbc:setup`, or list them yourself in the repo's `CLAUDE.md` or `CLAUDE.local.md` (`plan` and `research` read the same list):
 
@@ -142,12 +144,12 @@ To have it check repos that depend on this one, run `/wbc:setup`, or list them y
 
 ### wbc:voice
 
-Use it when text is for people, so it reads like a warm teammate wrote it rather than an AI, one who asks instead of telling and points to a way forward when there's a known one. It drafts and rewrites replies, notes and docs, explains terse output in plain words, and every other skill runs what it says to you or writes for people through it, from questions and replies to commits, PRs, tickets, reviews, changelogs and specs.
+Use it when text is for people, so it reads like a warm teammate wrote it rather than an AI. It drafts and rewords replies, notes and docs, explains terse output in plain words, and every other skill runs what it writes for people through it.
 
 ### wbc:prompt-writer
 
-Use it to write or slim down a skill, agent, prompt or subagent brief so it costs fewer tokens and behaves the same. It keeps only the lines that change what the agent does, and never drops one of your rules when tightening.
+Use it to write or slim down a skill, agent, prompt or subagent brief so it costs fewer tokens and behaves the same. It keeps only the lines that change what the agent does, never drops one of your rules when tightening, and suggests a skill instead of a new agent unless the job needs a fresh context of its own.
 
 ### wbc:same-page
 
-Use it so you and Claude agree on what you mean before work starts, with one question at a time instead of a list. It plays your request back in plain words, with examples that would catch a misreading, and asks the one question that matters most until you confirm; Claude and the other skills use it whenever they need something from you.
+Use it so you and Claude agree on what you mean before work starts. It plays your request back with examples that would catch a misreading and asks one question at a time until you confirm; the other skills use it whenever they need something from you.

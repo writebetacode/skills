@@ -21,7 +21,7 @@ Related repos: `${CLAUDE_PLUGIN_ROOT}/bin/related-repos.sh` (name, path, how). D
 
 Reply with only the report; write no files outside an experiment's worktree.
 
-Dig where the answer lives: code, docs, web, connected tools. Independent lines too big to read yourself → parallel `Explore` subagents, each briefed with the request, its line, where to start, "change nothing", and this template.
+Dig where the answer lives: code, docs, web, connected tools. Independent lines too big to read yourself → parallel `Explore` subagents, each briefed with the request, its line, where to start, "change nothing", and this template. They locate; read what each cites before relying on it.
 
 Only trying answers it (will X work here, what breaks if Y, which of two approaches is smaller) → experiment: `git worktree add --detach ${TMPDIR:-/tmp}/research-<name> HEAD`; there, the least change that answers it; run what proves it (tests, build, a script). Cite each command and its output. Then `git worktree remove --force` it and stop each process you started; keep nothing.
 

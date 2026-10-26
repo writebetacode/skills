@@ -33,6 +33,7 @@ It answers from the code, docs, the web and connected tools, preferring the repo
 - **Proof**: the failure goes away with only the cause patched out. Why: evidence that fits isn't proof.
 - **Flaky test runs**: 50 alone, then 5 of the suite. Why: 50 catches a 1-in-20 flake with high odds and is quick for one test. Suite runs catch flakes that need other tests first.
 - **A handed-over failure**: rerun at the PR's base. Why: whether the PR caused it decides where the fix goes.
+- **Helper agents**: only for separate parts of a question or bug too big to read in one session, and research reads what each cites before relying on it. Why: each handoff loses context, and helpers find code without judging it. Not one helper per lead: research connects what the leads show.
 
 ## Out of scope
 
