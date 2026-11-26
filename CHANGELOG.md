@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.11.0 — 2026-11-25
+
+**Skills tuned for Opus 5.5**
+[v0.10.0...v0.11.0](https://github.com/writebetacode/skills/compare/v0.10.0...v0.11.0)
+
+### Breaking
+
+- feat!: Tune skills for Opus 5.5 and drop daily's security alerts ([5f4a8a2](https://github.com/writebetacode/skills/commit/5f4a8a28b60d8645166f579445da236bd722af9d))
+
 ## 0.10.0 — 2026-10-25
 
 **One agent with skills over many subagents**
