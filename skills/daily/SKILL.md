@@ -16,7 +16,7 @@ Sources: `## Daily` in the loaded `~/.claude/CLAUDE.md`, a line each:
 
 No section → GitHub and Jira if their login check in sources.md passes, and each GitLab host `glab auth status --all` shows logged in; end the reply suggesting `/wbc:setup`.
 
-Read only: change nothing but the notes file and review files (re-reviewed through `review`); never post, reply, merge or move a ticket. A source you can't reach → `Not checked: <source>: <why>` in the reply; carry on.
+Read only: change nothing but the notes file and review files (re-reviewed through `review`); never post, reply, merge or move a ticket: acting is for the skill each plan item names. A source you can't reach → `Not checked: <source>: <why>` in the reply; carry on.
 
 ## Plan
 
@@ -24,12 +24,12 @@ Read only: change nothing but the notes file and review files (re-reviewed throu
    - Waiting on the user: review requests, unanswered mentions, threads, DMs, to-dos.
    - Active repos, for the next two: `${CLAUDE_SKILL_DIR}/active-repos.sh`, one main checkout per line.
    - PRs they reviewed, and comments on their own PRs (each unresolved thread or comment whose last word isn't theirs → Replies owed, with what it asks): [reviews.md](reviews.md).
-   - Security in each active repo: [security.md](security.md).
+   - Update PRs (Dependabot, Renovate) in each active repo: [updates.md](updates.md).
    - Their open PRs/MRs: failing CI, changes requested, approved, conflicts.
    - Tickets assigned to them and not done, with status.
    - Leftovers: the latest earlier recap in the notes (≤7 days back): its `Carried over` list, if any. No recap → `${CLAUDE_SKILL_DIR}/sessions.sh <day>` for the last earlier day with sessions (≤7 days back), unfinished work only.
-2. Show what's waiting under Reviews (re-reviewed PRs included), Replies owed, Security, Your PRs, Tickets, Carried over (empty → leave out): each item linked, then why it's there in ≤15 words.
-3. Propose today's plan, numbered, never checkboxes: unblocking others first (reviews, replies), then security fixes, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
+2. Show what's waiting under Reviews (re-reviewed PRs included), Replies owed, Updates, Your PRs, Tickets, Carried over (empty → leave out): each item linked, then why it's there in ≤15 words.
+3. Propose today's plan, numbered, never checkboxes (the recap, not ticks, records what got done): unblocking others first (reviews, replies), then update PRs, then their PRs closest to merging, then tickets by priority. Each item names the skill to start it with: `/wbc:review 42`, `/wbc:build`, `/wbc:plan ABC-123`.
 4. Settle it via `same-page`; show the changed plan in full outside it. Agreed → notes file set → write it per Notes as `Plan`. Reply: the plan, and the notes path if written.
 
 ## Recap

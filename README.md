@@ -66,7 +66,7 @@ Run it when you install the plugin, and again when you start on another repo. It
 
 ### wbc:daily
 
-Use it to start your day knowing what's waiting on you, and to end it with a recap you don't have to write. `/wbc:daily` gathers your reviews, replies owed, failing CI, security alerts and tickets into a plan for the day, and `/wbc:daily recap` turns the day's sessions and commits into short bullets.
+Use it to start your day knowing what's waiting on you, and to end it with a recap you don't have to write. `/wbc:daily` gathers your reviews, replies owed, failing CI, dependency update PRs and tickets into a plan for the day, and `/wbc:daily recap` turns the day's sessions and commits into short bullets.
 
 To choose your sources and notes file, run `/wbc:setup`, or add this to your global `~/.claude/CLAUDE.md` (`{date}` becomes the day, like `2026-10-13`):
 
@@ -148,7 +148,7 @@ Use it when text is for people, so it reads like a warm teammate wrote it rather
 
 ### wbc:prompt-writer
 
-Use it to write or slim down a skill, agent, prompt or subagent brief so it costs fewer tokens and behaves the same. It keeps only the lines that change what the agent does, never drops one of your rules when tightening, and suggests a skill instead of a new agent unless the job needs a fresh context of its own.
+Use it to write or tighten a skill, agent, prompt or subagent brief so every line earns its place. It cuts what doesn't change what the agent does but keeps the reasons and context the agent needs, never drops one of your rules when tightening, and suggests a skill instead of a new agent unless the job needs a fresh context of its own.
 
 ### wbc:same-page
 

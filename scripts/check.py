@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Skill checks, free and quick: host-table flags vs each CLI's --help (CLIs not installed are skipped), skill links,
 orphan files, agents and bin/ scripts, executable scripts run only from bin/ or their own skill, skill and agent word
-budgets, pointers to another skill's rules, no hardcoded spec folder, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
+budgets (bodies only warn), pointers to another skill's rules, no hardcoded spec folder, Markdown templates vs markdownlint (no npx: skipped), skills writing .ai/
 running lint-md.sh, every skill carrying the voice line, and proposed-improvement statuses."""
 import itertools, json, os, re, shutil, subprocess, sys, tempfile
 from concurrent.futures import ThreadPoolExecutor
@@ -10,7 +10,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 errors = []
 # Word budgets: descriptions sit in every session's context, except user-only skills' (disable-model-invocation), which
-# the total skips; bodies load on each call. Raise only with the user's OK.
+# the total skips; bodies load on each call. Raise only with the user's OK. Bodies only warn: shortness isn't the goal,
+# and a reason or context the reader needs is worth its words.
 DESC_MAX, DESCS_MAX, BODY_MAX, SIBLING_MAX = 55, 520, 750, 300
 VOICE_LINE = ("Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per "
               "session. Never for text only an agent reads.")
@@ -82,7 +83,7 @@ def check_skills():
             if n > DESC_MAX:
                 errors.append(f"{rel}: description is {n} words (budget {DESC_MAX})")
         if (n := len(t[fm.end():].split()) if fm else len(t.split())) > (cap := BODY_MAX if fm else SIBLING_MAX):
-            errors.append(f"{rel}: {n} words (budget {cap})")
+            print(f"· {rel}: {n} words, over its {cap}-word budget: cut what changes nothing, never a reason", flush=True)
     if descs > DESCS_MAX:
         errors.append(f"skills: descriptions in Claude's context total {descs} words (budget {DESCS_MAX})")
     for f in sorted(p for p in [*root.glob("skills/*/*"), *root.glob("bin/*")] if p.is_file() and p.suffix != ".md"):

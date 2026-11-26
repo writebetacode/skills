@@ -14,5 +14,5 @@ GitHub, via `gh`. Never add a flag not shown. `{owner}`/`{repo}` stay literal; g
 
 `batch` JSON, built with `jq -n --rawfile`, never by hand: `{"commit_id": "<head sha>", "event": "COMMENT" | "APPROVE" | "REQUEST_CHANGES", "comments": [{"path": "<path>", "line": <n>, "side": "RIGHT", "body": <body>}]}`; `"side": "LEFT"` for a removed line.
 
-- Each line must be in the diff: one rejected entry fails the whole review → report it; stop; never resubmit without it.
-- A missing-body error → report it; never add a summary.
+- Each line must be in the diff: one rejected entry fails the whole review → report it; stop; never resubmit without it: that drops a finding the user approved.
+- A missing-body error → report it; never add a summary: only what the user saw in the file posts.

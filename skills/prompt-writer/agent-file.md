@@ -5,4 +5,5 @@ Agent = one `<name>.md`: YAML frontmatter (camelCase) + body.
 - Required: `name` (no `:`), `description` (when to delegate; "use proactively" invites auto-delegation).
 - Body = its whole system prompt (no Claude Code prompt): state role, scope, exact return format.
 - `tools`: only what the job needs (omitted = all). `model`: `haiku`/`sonnet`/`opus`/`fable`/`inherit`. `skills`: preloads full content; not `disable-model-invocation: true` skills.
-- Optional, only if needed: `disallowedTools`, `permissionMode`, `maxTurns`, `effort`, `memory`, `isolation: worktree`, `background`, `omitClaudeMd`, `mcpServers`, `hooks`.
+- `effort`: unset → the session's level, often `xhigh`. Extra depth there pays off only where measured, so a check of a bounded set of files gets `high`.
+- Optional, only if needed: `disallowedTools`, `permissionMode`, `maxTurns`, `memory`, `isolation: worktree`, `background`, `omitClaudeMd`, `mcpServers`, `hooks`.

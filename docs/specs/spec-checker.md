@@ -20,7 +20,7 @@ A plan's writer reads what they meant and fills its gaps without noticing. Anyth
 - It flags a ticket criterion under no task, or under more than one.
 - It searches the code and related repos past the paths tasks name, and flags a task that adds what already exists (reuse) or builds on a way the repo is moving away from (pattern).
 - It flags only what it can cite, never style or wording.
-- `plan` fixes the findings it agrees with and reruns it at most twice. Whatever's left comes to you as open questions.
+- `plan` runs it once per draft and fixes the findings it agrees with. Whatever's left comes to you as open questions.
 
 ## Sketch
 
@@ -35,7 +35,7 @@ Verdict: ready | gaps
 - **The whole plan at once**: Why: criteria trace to specs and tasks to criteria, and clashes between a plan's own specs show up in one read. Not once per spec: tickets and tasks span specs.
 - **Two runs, the second skipping approved specs**: Why: tickets are written against settled specs, and the second run doesn't reopen what you approved.
 - **It searches past the paths tasks name**: Why: tasks shouldn't add a second way to do something, and what they'd duplicate lives outside the files they name.
-- **At most two reruns, then open questions**: Why: it stops a loop, and what's left is yours to decide. Not blocking until it's clean.
+- **One run per draft, then open questions**: Why: `plan` checks its own fixes, so a rerun mostly costs time, and what's left is yours to decide. Not rerunning until it's clean.
 - **It only reports**: Why: it judges and never edits.
 
 ## Out of scope

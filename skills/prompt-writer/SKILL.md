@@ -11,7 +11,7 @@ After writing or editing a `.md` file: `${CLAUDE_PLUGIN_ROOT}/bin/lint-md.sh <fi
 
 Several readings → `same-page`. Missing conventions → `research` skill; use its report, don't relay it.
 
-Readers are LLMs. Write the leanest text that produces the behavior:
+Readers are LLMs. Write only what produces the behavior; short is the result, never the goal:
 
 - Every line, rationale included, must change behavior vs the model's default.
 - Specify only what was asked or what the reader would get wrong:
@@ -23,10 +23,11 @@ Readers are LLMs. Write the leanest text that produces the behavior:
 - Say each thing once, unless a different reader needs it (e.g. a subagent brief).
 - Rules that clash, in the text or with the CLAUDE.md/AGENTS.md it loads with → keep one; which unclear → `same-page`.
 - ✗/✓ example only where a rule alone is misread: examples narrow what the reader tries.
-- Telegraphic: fragments, symbols, no filler.
+- Compact, plain sentences, no filler; a symbol only where it can't be misread. The reader's output drifts toward the prompt's style.
+- A rule whose purpose isn't obvious keeps its reason: knowing why, the reader applies it to the cases it's for, and only those.
 - Include context the reader lacks and can't look up; subagents never see the caller's conversation. Files → paths it reads itself, not pasted contents.
 - Output another agent parses → fixed template.
-- Draft, then cut again. Stop where a shorter line could be misread.
+- Draft, then cut what changes nothing. Never cut a reason or context to save words; stop where a shorter line could be misread.
 
 Tightening: keep every original behavior; check each.
 
