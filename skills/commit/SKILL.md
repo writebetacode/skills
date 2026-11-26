@@ -16,10 +16,10 @@ Co-Authored-By: <model, e.g. Claude Opus 5.5>, ${CLAUDE_EFFORT} effort, <today, 
 ```
 
 - Subject ≤80 chars with prefix; summary starts with a capital.
-- Skill, agent or prompt `.md` changes are code: `feat`/`fix`, never `docs`.
-- Removes or renames something people rely on that the last release tag has → `!` just before the `:`: `feat(ABC-123)!:`; a bullet says what breaks. Added since that tag, or no tag → not breaking.
+- Skill, agent or prompt `.md` changes are code, since they change what an agent does: `feat`/`fix`, never `docs`.
+- Removes or renames something people rely on that the last release tag has → `!` just before the `:`: `feat(ABC-123)!:`; a bullet says what breaks. Added since that tag, or no tag → not breaking: no release has it, so nobody relies on it yet.
 - Ticket: key or number at the branch start or right after its type: `feat/abc-123-x` → `ABC-123`, `feat-123` → `#123`, `fix/login-142` → none. None → drop `(<ticket>)`.
-- ≤5 bullets, ≤80 chars each, why only:
+- ≤5 bullets, ≤80 chars each, why only (the diff shows what):
   - ✗ `- Add retry to fetchOrders`
   - ✓ `- Survive the payment API's 502s mid-deploy`
 - No other trailer.

@@ -33,7 +33,7 @@ It reviews a PR at its head, or uncommitted changes for `build`. A checker agent
 - **Comments on your own PR go to `build`**: Why: `review` keeps replies ready on PRs you reviewed. Not routing them by login.
 - **Every open thread gets a finding, even with nothing to add**: Why: you see where every thread stands, a teammate's too. A nothing-to-add note never posts.
 - **Thread replies are plain follow-ups, adding only what the thread lacks**: Why: everyone in it already knows the problem, so a labelled finding restating it reads like a form.
-- **Draft hard, set aside what isn't worth posting, then let a checker rein in the rest**: Why: holding back misses real problems, and weighing each finding as it's drafted spares the checker, which cuts what doesn't hold. Set-aside ones stay under Withdrawn, saying why.
+- **Draft hard, set aside what isn't worth posting, then let a checker rein in the rest**: Why: holding back misses real problems, and weighing each finding as it's drafted spares the checker, which cuts what doesn't hold. Set-aside ones stay under Withdrawn, saying why. A local review sets nothing aside: with no file to keep them in, its checker weighs every finding.
 - **Withdrawn stays withdrawn**: Why: otherwise you'd withdraw it again after every push.
 - **Every name is followed into every related repo**: Why: a break outside the diff is easiest to miss, and judging a repo by its description misses consumers.
 - **Findings are issues or questions that ask, never tell**: Why: a review should start a conversation, as a good mentor's would. The fix is the author's call, so a known way forward comes after the question.

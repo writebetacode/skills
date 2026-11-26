@@ -8,7 +8,7 @@ Writing a title in the repo's style and filling its description template by hand
 
 ## What
 
-It works on GitHub and GitLab, saying "pull request" or "merge request" to match. It matches the repo's title style, fills the repo's template, and squashes on merge unless asked for a merge commit. For stacked PRs, its caller gives the base and the order they merge in. `build` cleans up merged branches the same way when it closes a plan.
+It works on GitHub and GitLab, saying "pull request" or "merge request" to match. It matches the repo's title style unless its caller gives a title, fills the repo's template, and squashes on merge unless asked for a merge commit. For stacked PRs, its caller gives the base and the order they merge in. `build` cleans up merged branches the same way when it closes a plan.
 
 ## Behaviour
 

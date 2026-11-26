@@ -14,7 +14,7 @@ It builds from `plan`'s folder (approved specs, a ticket per PR, tasks), `resear
 
 - A request or findings that fit one PR, with nothing in doubt, are built without questions. Anything else goes to `plan`.
 - Each acceptance criterion gets a failing test, then the least code that passes. A bug's repro is the first test.
-- `review` and its checker vet each change against its ticket, task and specs.
+- `review` and its checker vet each change against its ticket, task and specs, once. The tests cover the fixes for what they find.
 - After each task it shows what it did and waits for your go-ahead to commit.
 - Changes you then ask for reshape only uncommitted tasks (a rename means later tasks use the new name).
 - Changing a ticket's what, why or criteria, or a spec, goes back to `plan`, whether you ask then or in a review thread.
@@ -29,6 +29,7 @@ It builds from `plan`'s folder (approved specs, a ticket per PR, tasks), `resear
 
 - **`build` never asks what you mean**: Why: doubt means planning isn't finished.
 - **A direct request is one PR's worth**: Why: splitting work into PRs is planning, however exact the request.
+- **One review per change**: Why: the checker already cut what doesn't hold and the tests cover the fixes, so a second review mostly costs time. Not reviewing again until nothing's left.
 - **The plan's ticket file, not the tracker's**: Why: it's what `plan` checked and split into tasks. A filed copy can drift or not exist yet. A plan without tickets goes back to `plan`.
 - **At a pause, changes reshape only later tasks, and a ticket or spec change needs replanning**: Why: committed work stays as reviewed, and tickets and specs are what you approved.
 - **Docs a change makes untrue are fixed in its commit, unasked, never history or the plan's specs**: Why: whoever makes a change knows what it made untrue. A changelog records the past, and the plan's specs are what the code must match.

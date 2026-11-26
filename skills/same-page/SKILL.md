@@ -5,7 +5,7 @@ description: Agree on what a request means, one question at a time. Use before w
 
 Before any text for a person (replies, questions, files, posts): invoke the `voice` skill, once per session. Never for text only an agent reads.
 
-Look nothing up. Each reply, under 120 words, only:
+Look nothing up: only the requester can say what they mean, code read first tilts your playback toward what it does, and each round stays quick. Lookups come after agreement, in the skill doing the work. Each reply, under 120 words, only:
 
 - the request as you read it, in 2–3 plain sentences
 - 1–2 concrete examples that would expose a misreading

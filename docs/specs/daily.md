@@ -9,11 +9,11 @@ What needs you is spread across hosts, trackers, chat and this week's repos. Rev
 ## Behaviour
 
 - Claude never starts it on its own.
-- The morning lists what's waiting, each linked with why: reviews, replies owed, security, your PRs, tickets, and leftovers from your last recap or last day's sessions.
+- The morning lists what's waiting, each linked with why: reviews, replies owed, dependency update PRs, your PRs, tickets, and leftovers from your last recap or last day's sessions.
 - A PR you reviewed with `review` gets re-reviewed into its review file, ready to post. One reviewed another way is listed once it has new pushes.
 - It lists unanswered comments on your PRs, with what each asks.
-- It lists security alerts of any severity and Dependabot or Renovate PRs in your active repos, one item per vulnerable package.
-- It proposes a numbered plan: reviews and replies, security, your PRs closest to merging, then tickets by priority. Each item names the skill that starts it. You settle the plan together, one question at a time.
+- It lists the Dependabot and Renovate PRs open in your active repos, one item each.
+- It proposes a numbered plan: reviews and replies, update PRs, your PRs closest to merging, then tickets by priority. Each item names the skill that starts it. You settle the plan together, one question at a time.
 - The recap is a past-tense bullet of 15 words or fewer per thing done or decided, with no secrets, paths or code. Plan items it misses carry over.
 - With a notes file set, the plan and recap go into that day's note, unless you ask for the recap elsewhere.
 - It names any source it can't reach as not checked.
@@ -40,9 +40,9 @@ What needs you is spread across hosts, trackers, chat and this week's repos. Rev
 - **Plan and recap as headed sections of your note, the plan numbered**: Why: the note is yours to edit, a heading lets a rerun replace that day's, and the recap, not checkboxes, records what got done.
 - **Re-reviews only where a review file exists, through `review`, one at a time in your session**: Why: a first review is a bigger job you ask for, `review` alone decides whether one is current, and its checker agent can't start from a subagent.
 - **Active repos: the main checkouts of the past 7 days' sessions, plus their related repos**: Why: it's where you work and what that touches.
-- **Security right after reviews and replies, checked across every active repo, fixed with `/wbc:build`**: Why: one package tends to sit in every repo sharing a stack, a fix left with tickets slips, and most fixes are one bump.
+- **Update PRs right after reviews and replies**: Why: most merge once CI passes, and one left with tickets slips.
 - **Review files stay where `review` puts them**: Why: `daily` lists only open PRs, and moving files is `review`'s job.
 
 ## Out of scope
 
-- Recaps longer than a day, calendars, and reading old `## Recap` sections.
+- Recaps longer than a day, calendars, security alerts, and reading old `## Recap` sections.

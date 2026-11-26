@@ -17,7 +17,7 @@ from: <branch | none>
 - [ ] <one of its ticket's ACs, verbatim>
 ```
 
-- Each of the ticket's ACs under exactly one task; every task has one. Never a tests-only or code-only task.
+- Each of the ticket's ACs under exactly one task; every task has one. Never a tests-only or code-only task: `build` writes each AC's failing test, then its code, in one commit.
 - `base:` an earlier MR's branch only when this MR needs its code (stacked); else that repo's default branch name, from `<this skill's base directory>/../../bin/default-branch.sh <repo path>`: ✓ `base: trunk`, never `origin/trunk`.
 - `repo:` path: `<this skill's base directory>/../../bin/main-checkout.sh <path>`.
 - `branch:` ticket: the MR's on `status.md`, else its `ticket:`: ✓ `feat/abc-77-login-lockout`; none → `<type>/<short-name>`.

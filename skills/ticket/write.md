@@ -7,6 +7,6 @@ Links (parent, blocks, blocked by, related): native where the tracker file has a
 - New tickets: assigned to the user; refused only for that → create unassigned, saying so.
 - Edits: change only what's named; keep the rest byte-for-byte.
 - Bodies and comments → temp file outside the repo.
-- One named ticket per write (the match [match.md](match.md) finds counts as named): never delete, never write via a query or filter.
+- One named ticket per write (the match [match.md](match.md) finds counts as named): never delete, never write via a query or filter, which can reach tickets nobody named.
 - After a write, show its key or number and URL.
-- No AI attribution.
+- No AI attribution: teammates read the ticket as the user's, and the commits already credit Claude.

@@ -18,7 +18,7 @@ It answers from the code, docs, the web and connected tools, preferring the repo
 - A request with several readings gets agreed with you first, unless another skill already did.
 - A question that only trying can answer gets an experiment. Its report cites each command and what it printed.
 - A bug gets a folder with the failing path walked step by step, each step cited or marked assumed, plus findings anyone can follow: the cause, its proof and confidence, and ways to fix it, one recommended.
-- A separate debug checker agent challenges each cause. Its verdict sets the confidence, at most medium for one that won't reproduce. Research checks the gaps it names, at most twice, and drops a cause it rejects.
+- A separate debug checker agent challenges each cause. Its verdict sets the confidence, at most medium for one that won't reproduce. Research checks the gaps it names, asks it once more only when those checks changed the evidence, and drops a cause it rejects.
 - Outside the repo it only reads, it redacts secrets and personal data, and never makes a branch.
 - Asked by you, it replies with the findings' path and cause, suggesting `build` for a fix that fits one PR with nothing left to decide, or `plan` otherwise.
 - A test from `build` runs alone up to 50 times. If it never fails, it runs in the whole suite, in CI's order, up to 5 times. A failure is rerun at the PR's base to tell whether the PR caused it. Other PRs' findings for that test are leads, never the answer.
